@@ -27,7 +27,7 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
     boot: [
       
-      
+      'axios',
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
@@ -152,8 +152,8 @@ module.exports = configure(function (ctx) {
       
 
       manifest: {
-        name: `Runtimy`,
-        short_name: `Runtimy`,
+        name: `Runtimy Delivery`,
+        short_name: `Runtimy Delivery`,
         description: `Delivery App`,
         display: 'standalone',
         orientation: 'portrait',
@@ -219,7 +219,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'mobile'
+        appId: 'runtimy'
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

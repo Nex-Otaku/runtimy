@@ -1,4 +1,4 @@
-# Runtimy (mobile)
+# Runtimy Delivery (runtimy)
 
 Delivery App
 

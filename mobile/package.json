@@ -1,8 +1,8 @@
 {
-  "name": "mobile",
+  "name": "runtimy",
   "version": "0.0.1",
   "description": "Delivery App",
-  "productName": "Runtimy",
+  "productName": "Runtimy Delivery",
   "author": "Nex <nex@otaku.ru>",
   "private": true,
   "scripts": {
@@ -11,6 +11,8 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "vuex": "^4.0.1",
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
     "quasar": "^2.6.0",
