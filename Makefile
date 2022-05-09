@@ -58,6 +58,10 @@ deploy-demo:
 fast-deploy-demo:
 	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/fast-deploy.sh'
 
+# Выкатываем обновление фронтенда на демо
+deploy-demo-frontend:
+	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/static-demo-deploy.sh'
+
 # Обновляем контейнеры в демо:
 rebuild-docker-on-demo:
 	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/rebuild-docker.sh'
@@ -69,7 +73,7 @@ show-ssh-key-demo:
 # Устанавливаем проект на демо
 install-demo:
 	$(RUN_SSH_DEMO) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_USER}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
-	$(RUN_SSH_DEMO) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
+#	$(RUN_SSH_DEMO) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
 
 # Тянем изменения из Git
 pull-demo:
