@@ -60,7 +60,8 @@ fast-deploy-demo:
 
 # Выкатываем обновление фронтенда на демо
 deploy-demo-frontend:
-	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/static-demo-deploy.sh'
+	$(RUN_SSH_DEMO) 'rm -rf /home/nex/runtimy-spa/*'
+	scp -r /home/nex/projects/runtimy/mobile/dist/spa/* ${DEMO_SSH_USER}@${DEMO_SSH_HOST}:/home/nex/runtimy-spa
 
 # Обновляем контейнеры в демо:
 rebuild-docker-on-demo:
@@ -72,8 +73,8 @@ show-ssh-key-demo:
 
 # Устанавливаем проект на демо
 install-demo:
-	$(RUN_SSH_DEMO) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_USER}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
-#	$(RUN_SSH_DEMO) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
+	$(RUN_SSH_DEMO) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_NAMESPACE}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
+	$(RUN_SSH_DEMO) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
 
 # Тянем изменения из Git
 pull-demo:
@@ -98,7 +99,7 @@ show-ssh-key-prod:
 
 # Устанавливаем проект на прод
 install-prod:
-	$(RUN_SSH_PROD) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_USER}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
+	$(RUN_SSH_PROD) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_NAMESPACE}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
 	$(RUN_SSH_PROD) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
 
 # Тянем изменения из Git
