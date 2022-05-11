@@ -59,7 +59,7 @@ fast-deploy-demo:
 	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/fast-deploy.sh'
 
 # Выкатываем обновление фронтенда на демо
-deploy-demo-frontend:
+deploy-spa:
 	$(RUN_SSH_DEMO) 'rm -rf /home/nex/runtimy-spa/*'
 	scp -r /home/nex/projects/runtimy/mobile/dist/spa/* ${DEMO_SSH_USER}@${DEMO_SSH_HOST}:/home/nex/runtimy-spa
 
