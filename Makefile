@@ -60,6 +60,7 @@ fast-deploy-demo:
 
 # Выкатываем обновление фронтенда на демо
 deploy-spa:
+	cd mobile && quasar build
 	$(RUN_SSH_DEMO) 'rm -rf /home/nex/runtimy-spa/*'
 	scp -r /home/nex/projects/runtimy/mobile/dist/spa/* ${DEMO_SSH_USER}@${DEMO_SSH_HOST}:/home/nex/runtimy-spa
 
