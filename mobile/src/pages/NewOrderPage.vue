@@ -205,6 +205,7 @@
             color="primary"
             label="Отправить заказ"
             style="width: 100%; max-width: 300px"
+            @click="handleSubmitButtonClicked"
           />
         </div>
       </div>
@@ -217,8 +218,10 @@
 
 <script>
 import { ref } from 'vue'
+import {defineComponent} from 'vue'
 
-export default {
+export default defineComponent({
+  name: 'NewOrderPage',
   setup () {
     return {
       model: ref(null),
@@ -275,6 +278,16 @@ export default {
       description: ref(null),
       price_of_package: ref(null),
     }
+  },
+  methods: {
+    handleSubmitButtonClicked () {
+      this.$q.notify({
+        message: 'Заказ отправлен!',
+        icon: 'check',
+        color: 'positive'
+      })
+    }
   }
-}
+})
+
 </script>
