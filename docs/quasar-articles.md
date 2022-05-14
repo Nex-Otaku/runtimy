@@ -13,3 +13,6 @@ https://www.youtube.com/watch?v=LaQtwZRQO_Y
 Pinia Vue 3 State Management
 Учебник сложной системы на Pinia, на примере банковского приложения
 https://www.youtube.com/watch?v=XdRcFsoJAWQ
+
+Подключение сторонней библиотеки в Boot файле
+https://www.youtube.com/watch?time_continue=413&v=OgIKhFNIvRc
