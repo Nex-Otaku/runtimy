@@ -39,7 +39,7 @@
       </div>
 
       <q-select
-        v-model="transport_type"
+        v-model="orderFormStore.transport_type"
         :options="transport_options"
         label="Транспорт"
         class="q-ma-sm"
@@ -47,7 +47,7 @@
         outlined
       />
       <q-select
-        v-model="size_type"
+        v-model="orderFormStore.size_type"
         :options="size_options"
         label="Габариты"
         class="q-ma-sm"
@@ -55,7 +55,7 @@
         outlined
       />
       <q-select
-        v-model="weight_type"
+        v-model="orderFormStore.weight_type"
         :options="weight_options"
         label="Вес"
         class="q-ma-sm"
@@ -162,14 +162,14 @@
       </div>
 
       <q-input
-        v-model="text"
+        v-model="orderFormStore.description"
         label="Что везём?"
         style="width: 100%; max-width: 300px"
       >
       </q-input>
 
       <q-input
-        v-model="text"
+        v-model="orderFormStore.price_of_package"
         label="Ценность (Сумма)"
         style="width: 100%; max-width: 300px"
         bottom-slots
@@ -217,18 +217,30 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import {defineComponent} from 'vue'
+import {useOrderForm} from 'src/stores/order-form'
+import {useQuasar} from 'quasar'
 
 export default defineComponent({
   name: 'NewOrderPage',
-  setup () {
+  setup() {
+    const $q = useQuasar();
+    const orderFormStore = useOrderForm();
+
+    const handleSubmitButtonClicked = () => {
+      orderFormStore.createOrder();
+
+      $q.notify({
+        message: 'Заказ отправлен!',
+        icon: 'check',
+        color: 'positive'
+      })
+    }
+
     return {
-      model: ref(null),
       text: ref(null),
-      transport_type: ref(null),
-      size_type: ref(null),
-      weight_type: ref(null),
+      orderFormStore: orderFormStore,
       transport_options: [
         {
           label: 'Пешком',
@@ -275,17 +287,7 @@ export default defineComponent({
           value: '10kg'
         },
       ],
-      description: ref(null),
-      price_of_package: ref(null),
-    }
-  },
-  methods: {
-    handleSubmitButtonClicked () {
-      this.$q.notify({
-        message: 'Заказ отправлен!',
-        icon: 'check',
-        color: 'positive'
-      })
+      handleSubmitButtonClicked: handleSubmitButtonClicked,
     }
   }
 })
