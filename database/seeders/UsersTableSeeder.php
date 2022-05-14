@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'name' => 'Demo User',
-                'password' => bcrypt(config('secret')),
+                'password' => bcrypt('secret'),
             ]
         );
     }
