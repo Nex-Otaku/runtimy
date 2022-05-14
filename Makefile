@@ -54,12 +54,12 @@ RUN_SSH_DEMO = ssh ${DEMO_SSH_USER}@${DEMO_SSH_HOST} -p 22
 deploy-demo:
 	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/deploy.sh'
 
+seed-demo:
+	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/seed.sh'
+
 # Выкатываем быстрое обновление на демо
 fast-deploy-demo:
 	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/fast-deploy.sh'
-
-# Выкатываем обновление фронтенда на демо
-deploy-spa:
 	cd mobile && quasar build
 	$(RUN_SSH_DEMO) 'rm -rf /home/nex/runtimy-spa/*'
 	scp -r /home/nex/projects/runtimy/mobile/dist/spa/* ${DEMO_SSH_USER}@${DEMO_SSH_HOST}:/home/nex/runtimy-spa
