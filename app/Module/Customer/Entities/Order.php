@@ -3,8 +3,9 @@
 namespace App\Module\Customer\Entities;
 
 use App\Models\Order as OrderModel;
+use App\Module\Customer\SerializableItem;
 
-class Order
+class Order implements SerializableItem
 {
     private const TRANSPORT_TYPE_FEET = 'feet';
     private const TRANSPORT_TYPE_PASSENGER = 'passenger';
@@ -29,10 +30,11 @@ class Order
         $this->order = $order;
     }
 
-    public static function create(array $params): self
+    public static function create(Customer $customer, array $params): self
     {
         $order = new OrderModel(
             [
+                'customer_id' => $customer->getSpaUserId(),
                 'transport_type' => $params['transport_type'] ?? self::TRANSPORT_TYPE_FEET,
                 'size_type' => $params['size_type'] ?? self::SIZE_TYPE_SMALL,
                 'weight_type' => $params['weight_type'] ?? self::WEIGHT_TYPE_UNDER_1_KG,
@@ -71,6 +73,33 @@ class Order
             self::WEIGHT_TYPE_UNDER_1_KG,
             self::WEIGHT_TYPE_UNDER_5_KG,
             self::WEIGHT_TYPE_UNDER_10_KG,
+        ];
+    }
+
+    /**
+     * @param Customer $customer
+     * @return Order[]
+     */
+    public static function findForCustomer(Customer $customer): array
+    {
+        $items = [];
+        $records = OrderModel::where(['customer_id' => $customer->getSpaUserId()])->get();
+
+        foreach ($records as $record) {
+            $items []= new self($record);
+        }
+
+        return $items;
+    }
+
+    public function serialize(): array
+    {
+        return [
+            'transport_type' => $this->order->transport_type,
+            'size_type' => $this->order->size_type,
+            'weight_type' => $this->order->weight_type,
+            'description' => $this->order->description,
+            'price_of_package' => $this->order->price_of_package,
         ];
     }
 }
