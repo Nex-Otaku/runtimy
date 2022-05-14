@@ -8,3 +8,8 @@ https://www.youtube.com/watch?v=G2fnlWaJNFE
 
 Live coding Laravel, PHP, Vue, Quasar
 https://www.youtube.com/watch?v=LaQtwZRQO_Y
+
+
+Pinia Vue 3 State Management
+Учебник сложной системы на Pinia, на примере банковского приложения
+https://www.youtube.com/watch?v=XdRcFsoJAWQ
