@@ -18,6 +18,9 @@ const routes = [
       {
         path: '', component: () => import('pages/NewOrderPage.vue')
       },
+      {
+        path: 'pinia', component: () => import('pages/PiniaPage.vue')
+      },
     ]
   },
 
