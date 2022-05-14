@@ -8,7 +8,7 @@
 
 <script>
 import {defineComponent} from "vue";
-import axios from "axios";
+import {api} from 'src/boot/axios'
 
 export default defineComponent({
   name: 'LoginPage',
@@ -19,20 +19,20 @@ export default defineComponent({
     }
 
     const login = () => {
-      axios.post(process.env.API_URL + '/api/login', form)
+      api.post('/api/login', form)
     }
 
     const logout = () => {
-      axios.post(process.env.API_URL + '/api/logout')
+      api.post('/api/logout')
     }
 
-    axios.get(process.env.API_URL + '/sanctum/csrf-cookie')
+    api.get('/sanctum/csrf-cookie')
       .then(response => {
         console.log(response)
       })
 
     const getUser = () => {
-      axios.get(process.env.API_URL + '/api/user')
+      api.get('/api/user')
         .then(response => {
           console.log(response.data)
         })
