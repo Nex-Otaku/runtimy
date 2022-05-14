@@ -1,5 +1,3 @@
-Video
-
 Creating "Quasar Content Form" (Laravel and Sanctum)
 https://www.youtube.com/watch?v=IfQDdIUoH10
 
@@ -16,3 +14,6 @@ https://www.youtube.com/watch?v=XdRcFsoJAWQ
 
 Подключение сторонней библиотеки в Boot файле
 https://www.youtube.com/watch?time_continue=413&v=OgIKhFNIvRc
+
+Пример стейта авторизации на Pinia
+https://stackblitz.com/github/piniajs/example-vue-3-vite?file=src%2Fstores%2Fcart.js
