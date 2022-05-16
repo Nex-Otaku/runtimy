@@ -20,12 +20,14 @@ export const useOrderForm = defineStore(
       places: [
         {
           'title': 'Откуда',
+          'sort_index': 1,
           'street_address': '',
           'phone_number': '',
           'courier_comment': ''
         },
         {
           'title': 'Куда',
+          'sort_index': 2,
           'street_address': '',
           'phone_number': '',
           'courier_comment': ''
@@ -37,12 +39,27 @@ export const useOrderForm = defineStore(
 
     getters: {
       form: (state) => {
+        const resultPlaces = [];
+        let sort_index = 1;
+
+        for (const place of state.places) {
+          resultPlaces.push({
+            sort_index: sort_index,
+            street_address: place.street_address,
+            phone_number: place.phone_number,
+            courier_comment: place.courier_comment
+          });
+
+          sort_index++;
+        }
+
         return {
           transport_type: state.transport_type.value,
           size_type: state.size_type.value,
           weight_type: state.weight_type.value,
           description: state.description,
           price_of_package: state.price_of_package,
+          places: resultPlaces
         }
       }
     },
