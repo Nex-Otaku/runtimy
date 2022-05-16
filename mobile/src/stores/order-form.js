@@ -17,6 +17,20 @@ export const useOrderForm = defineStore(
         label: 'До 1 кг',
         value: '1kg'
       },
+      places: [
+        {
+          'title': 'Откуда',
+          'street_address': '',
+          'phone_number': '',
+          'courier_comment': ''
+        },
+        {
+          'title': 'Куда',
+          'street_address': '',
+          'phone_number': '',
+          'courier_comment': ''
+        },
+      ],
       description: '',
       price_of_package: ''
     }),

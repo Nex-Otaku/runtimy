@@ -64,78 +64,60 @@
         outlined
       />
 
-      <div
-        class="text-h6 text-left q-mt-md"
+
+      <!-- Начало блока адресов -->
+
+      <q-list
         style="width: 100%; max-width: 300px"
       >
-        Откуда
-      </div>
+        <q-item
+          v-for="place in orderFormStore.places" :key="place.sort_index"
+          class="q-pl-none"
+        >
+          <q-item-section
+            style="border-left: solid 3px black; flex-grow: 0"
+          >
+          </q-item-section>
 
-      <q-input
-        v-model="text"
-        label="Улица и номер дома"
-        style="width: 100%; max-width: 300px"
-      >
-        <template #append>
-          <q-icon name="place"/>
-        </template>
-      </q-input>
+          <q-item-section>
+            <div
+              class="text-h6 text-left"
+              style="width: 100%; max-width: 300px"
+            >
+              {{ place.title }}
+            </div>
 
-      <q-input
-        v-model="text"
-        label="Телефон"
-        style="width: 100%; max-width: 300px"
-      >
-        <template #append>
-          <q-icon name="phone"/>
-        </template>
-      </q-input>
+            <q-input
+              v-model="place.street_address"
+              label="Улица и номер дома"
+              style="width: 100%; max-width: 300px"
+            >
+              <template #append>
+                <q-icon name="place"/>
+              </template>
+            </q-input>
 
-      <q-input
-        v-model="text"
-        type="textarea"
-        label="Поручение для курьера"
-        style="width: 100%; max-width: 300px"
-        autogrow
-      >
-      </q-input>
+            <q-input
+              v-model="place.phone_number"
+              label="Телефон"
+              style="width: 100%; max-width: 300px"
+            >
+              <template #append>
+                <q-icon name="phone"/>
+              </template>
+            </q-input>
 
-      <div
-        class="text-h6 text-left q-mt-md"
-        style="width: 100%; max-width: 300px"
-      >
-        Куда
-      </div>
-
-      <q-input
-        v-model="text"
-        label="Улица и номер дома"
-        style="width: 100%; max-width: 300px"
-      >
-        <template #append>
-          <q-icon name="place"/>
-        </template>
-      </q-input>
-
-      <q-input
-        v-model="text"
-        label="Телефон"
-        style="width: 100%; max-width: 300px"
-      >
-        <template #append>
-          <q-icon name="phone"/>
-        </template>
-      </q-input>
-
-      <q-input
-        v-model="text"
-        type="textarea"
-        label="Поручение для курьера"
-        style="width: 100%; max-width: 300px"
-        autogrow
-      >
-      </q-input>
-
+            <q-input
+              v-model="place.courier_comment"
+              type="textarea"
+              label="Поручение для курьера"
+              style="width: 100%; max-width: 300px"
+              autogrow
+            >
+            </q-input>
+          </q-item-section>
+        </q-item>
+      </q-list>
       <!--
       <div
         class="text-left q-mt-md q-pa-md text-grey-6 text-weight-bold"
@@ -154,6 +136,9 @@
         style="width: 100%; max-width: 300px"
       />
       -->
+
+      <!-- Конец блока адресов -->
+
 
       <div
         class="text-h6 text-left q-mt-md"
