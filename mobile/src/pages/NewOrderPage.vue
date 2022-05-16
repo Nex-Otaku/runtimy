@@ -18,6 +18,7 @@
           flat
           dense
           no-caps
+          @click="orderFormStore.$reset()"
         >
           Очистить
         </q-btn>
