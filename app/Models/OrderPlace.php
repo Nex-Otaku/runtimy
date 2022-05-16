@@ -24,4 +24,9 @@ class OrderPlace extends Model
         'phone_number',
         'courier_comment',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
