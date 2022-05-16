@@ -40,17 +40,13 @@ export const useOrderForm = defineStore(
     getters: {
       form: (state) => {
         const resultPlaces = [];
-        let sort_index = 1;
 
         for (const place of state.places) {
           resultPlaces.push({
-            sort_index: sort_index,
             street_address: place.street_address,
             phone_number: place.phone_number,
             courier_comment: place.courier_comment
           });
-
-          sort_index++;
         }
 
         return {

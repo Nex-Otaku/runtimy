@@ -4,6 +4,7 @@ namespace App\Module\Customer\Entities;
 
 use App\Models\Order as OrderModel;
 use App\Module\Customer\SerializableItem;
+use App\Models\OrderPlace;
 
 class Order implements SerializableItem
 {
@@ -44,6 +45,23 @@ class Order implements SerializableItem
         );
 
         $order->saveOrFail();
+        $sortIndex = 1;
+
+        foreach ($params['places'] as $placeParams) {
+            $place = new OrderPlace(
+                [
+                    'order_id' => $order->id,
+                    'sort_index' => $sortIndex,
+                    'street_address' => $placeParams['street_address'] ?? '',
+                    'phone_number' => $placeParams['phone_number'] ?? '',
+                    'courier_comment' => $placeParams['courier_comment'] ?? '',
+                ]
+            );
+
+            $place->saveOrFail();
+
+            $sortIndex++;
+        }
 
         return new self($order);
     }
