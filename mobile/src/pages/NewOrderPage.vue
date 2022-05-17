@@ -209,6 +209,7 @@ import {ref} from 'vue'
 import {defineComponent} from 'vue'
 import {useOrderForm} from 'src/stores/order-form'
 import {useQuasar} from 'quasar'
+import {nextTick} from 'vue'
 
 export default defineComponent({
   name: 'NewOrderPage',
@@ -220,23 +221,46 @@ export default defineComponent({
       return domElement.__vueParentComponent.proxy;
     }
 
+    const getAddressInputForPlace = (place) => {
+      return getQuasarComponent(
+        document.querySelectorAll('[data-id="streetAddressInput' + place.sort_index + '"]')[0]
+      );
+    }
+
     const resetForm = () => {
       orderFormStore.$reset();
 
-      for (const place of orderFormStore.places) {
-        const addressInput = getQuasarComponent(
-          document.querySelectorAll('[data-id="streetAddressInput' + place.sort_index + '"]')[0]
-        );
-
-        addressInput.resetValidation();
-      }
+      nextTick(function () {
+        for (const place of orderFormStore.places) {
+          const addressInput = getAddressInputForPlace(place);
+          addressInput.resetValidation();
+        }
+      })
     }
 
     const handleResetButtonClicked = () => {
       resetForm();
     }
 
+    const validateForm = () => {
+      let isValidForm = true;
+
+      for (const place of orderFormStore.places) {
+        const addressInput = getAddressInputForPlace(place);
+        const isValid = addressInput.validate();
+        isValidForm = isValidForm && isValid;
+      }
+
+      return isValidForm;
+    }
+
     const handleSubmitButtonClicked = () => {
+      const isValidForm = validateForm();
+
+      if (!isValidForm) {
+        return;
+      }
+
       orderFormStore.createOrder();
 
       $q.notify({
