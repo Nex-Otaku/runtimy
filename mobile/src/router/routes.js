@@ -1,7 +1,7 @@
 const routes = [
   {
     path: '/home',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/GuestLayout.vue'),
     children: [
       {
         path: '', component: () => import('pages/IndexPage.vue')
@@ -12,17 +12,26 @@ const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/dialog',
     component: () => import('layouts/DialogPageLayout.vue'),
     children: [
       {
-        path: '', component: () => import('pages/NewOrderPage.vue')
+        path: 'new-order', component: () => import('pages/NewOrderPage.vue')
       },
       {
         path: 'pinia', component: () => import('pages/PiniaPage.vue')
       },
       {
         path: 'loop', component: () => import('pages/LoopPage.vue')
+      },
+    ]
+  },
+  {
+    path: '/my',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: 'orders', component: () => import('pages/OrdersListPage.vue')
       },
     ]
   },
