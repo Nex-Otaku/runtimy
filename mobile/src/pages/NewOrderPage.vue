@@ -30,7 +30,7 @@
   <q-page-container>
 
     <q-page
-      class="flex flex-center column"
+      class="flex flex-center column q-pb-md"
     >
       <div
         class="text-caption q-ma-sm text-grey-7"
