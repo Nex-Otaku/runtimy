@@ -21,6 +21,9 @@ const routes = [
       {
         path: 'pinia', component: () => import('pages/PiniaPage.vue')
       },
+      {
+        path: 'loop', component: () => import('pages/LoopPage.vue')
+      },
     ]
   },
 
