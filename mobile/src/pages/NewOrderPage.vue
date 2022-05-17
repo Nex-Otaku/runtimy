@@ -18,7 +18,7 @@
           flat
           dense
           no-caps
-          @click="orderFormStore.$reset()"
+          @click="handleResetButtonClicked"
         >
           Очистить
         </q-btn>
@@ -89,8 +89,10 @@
 
             <q-input
               v-model="place.street_address"
+              :data-id="'streetAddressInput' + place.sort_index"
               label="Улица и номер дома"
               style="width: 100%; max-width: 300px"
+              :rules="[val => !!val || 'Адрес обязателен']"
             >
               <template #append>
                 <q-icon name="place"/>
@@ -214,6 +216,26 @@ export default defineComponent({
     const $q = useQuasar();
     const orderFormStore = useOrderForm();
 
+    const getQuasarComponent = (domElement) => {
+      return domElement.__vueParentComponent.proxy;
+    }
+
+    const resetForm = () => {
+      orderFormStore.$reset();
+
+      for (const place of orderFormStore.places) {
+        const addressInput = getQuasarComponent(
+          document.querySelectorAll('[data-id="streetAddressInput' + place.sort_index + '"]')[0]
+        );
+
+        addressInput.resetValidation();
+      }
+    }
+
+    const handleResetButtonClicked = () => {
+      resetForm();
+    }
+
     const handleSubmitButtonClicked = () => {
       orderFormStore.createOrder();
 
@@ -222,6 +244,8 @@ export default defineComponent({
         icon: 'check',
         color: 'positive'
       })
+
+      resetForm();
     }
 
     return {
@@ -274,8 +298,9 @@ export default defineComponent({
         },
       ],
       handleSubmitButtonClicked: handleSubmitButtonClicked,
+      handleResetButtonClicked: handleResetButtonClicked,
     }
-  }
+  },
 })
 
 </script>
