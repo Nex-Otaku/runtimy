@@ -63,6 +63,19 @@ export const useOrderForm = defineStore(
     actions: {
       createOrder() {
         api.post('/api/new-order', this.form)
+      },
+      addPlace() {
+        const places = this.places;
+        const placesCount = this.places.length;
+        const newIndex = placesCount + 1;
+
+        places.push({
+          'title': 'Место #' + newIndex,
+          'sort_index': newIndex,
+          'street_address': '',
+          'phone_number': '',
+          'courier_comment': ''
+        })
       }
     }
   },

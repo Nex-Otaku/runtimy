@@ -120,7 +120,7 @@
           </q-item-section>
         </q-item>
       </q-list>
-      <!--
+
       <div
         class="text-left q-mt-md q-pa-md text-grey-6 text-weight-bold"
         style="width: 100%; max-width: 300px"
@@ -136,8 +136,8 @@
         icon="add"
         label="Добавить адрес"
         style="width: 100%; max-width: 300px"
+        @click="handleAddPlaceButtonClicked"
       />
-      -->
 
       <!-- Конец блока адресов -->
 
@@ -272,6 +272,10 @@ export default defineComponent({
       resetForm();
     }
 
+    const handleAddPlaceButtonClicked = () => {
+      orderFormStore.addPlace();
+    }
+
     return {
       text: ref(null),
       orderFormStore: orderFormStore,
@@ -323,6 +327,7 @@ export default defineComponent({
       ],
       handleSubmitButtonClicked: handleSubmitButtonClicked,
       handleResetButtonClicked: handleResetButtonClicked,
+      handleAddPlaceButtonClicked: handleAddPlaceButtonClicked,
     }
   },
 })
