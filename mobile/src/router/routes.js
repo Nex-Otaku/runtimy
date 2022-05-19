@@ -18,12 +18,6 @@ const routes = [
       {
         path: 'new-order', component: () => import('pages/NewOrderPage.vue')
       },
-      {
-        path: 'pinia', component: () => import('pages/PiniaPage.vue')
-      },
-      {
-        path: 'loop', component: () => import('pages/LoopPage.vue')
-      },
     ]
   },
   {
@@ -35,6 +29,21 @@ const routes = [
         path: 'orders',
         meta: { title: 'Заказы' },
         component: () => import('pages/OrdersListPage.vue'),
+      },
+    ]
+  },
+  {
+    path: '/test',
+    component: () => import('layouts/GuestLayout.vue'),
+    children: [
+      {
+        path: 'pinia', component: () => import('pages/PiniaPage.vue')
+      },
+      {
+        path: 'loop', component: () => import('pages/LoopPage.vue')
+      },
+      {
+        path: 'router', component: () => import('pages/RouterPage.vue')
       },
     ]
   },
