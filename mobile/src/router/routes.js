@@ -30,6 +30,12 @@ const routes = [
         meta: { title: 'Заказы' },
         component: () => import('pages/OrdersListPage.vue'),
       },
+      {
+        name: 'chat',
+        path: 'chat',
+        meta: { title: 'Чат' },
+        component: () => import('pages/ChatPage.vue'),
+      },
     ]
   },
   {
