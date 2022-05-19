@@ -1,49 +1,70 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf">
+    <q-header bordered class="bg-white text-black">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
         <q-toolbar-title>
-          Runtimy
+          {{ $route.meta.title }}
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>
+          <q-btn
+            flat
+            dense
+            round
+            class="shadow-5"
+            icon="man"
+            aria-label="Профиль"
+          >
+          </q-btn>
+        </div>
       </q-toolbar>
+
+      <!--
+      <q-tabs align="left" no-caps>
+        <q-route-tab to="/page1" label="Page One" />
+        <q-route-tab to="/page2" label="Page Two" />
+        <q-route-tab to="/page3" label="Page Three" />
+      </q-tabs>
+      -->
     </q-header>
+
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
+
+    <q-footer bordered class="bg-white text-black">
+      <q-toolbar class="justify-between">
+
+        <FooterActionButton
+          icon="man"
+          link="/#/my/orders"
+          title="Заказы"
+        />
+        <FooterActionButton
+          icon="add"
+          link="/#/dialog/new-order"
+          title="Новый заказ"
+        />
+        <FooterActionButton
+          icon="message"
+          link="/#/my/chat"
+          title="Чат"
+        />
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import {defineComponent} from 'vue'
+import FooterActionButton from "components/FooterActionButton";
 
 export default defineComponent({
   name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
+  components: {FooterActionButton},
+  setup() {
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      // TODO
     }
   }
 })

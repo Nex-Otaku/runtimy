@@ -3,7 +3,13 @@
   <q-header elevated>
     <q-toolbar>
       <div class="col">
-        <q-btn flat round dense icon="west"/>
+        <q-btn
+          :to="{ name: 'orders' }"
+          flat
+          round
+          dense
+          icon="west"
+        />
       </div>
       <div class="col">
         <q-toolbar-title class="absolute-center">

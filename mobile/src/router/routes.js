@@ -31,7 +31,10 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        path: 'orders', component: () => import('pages/OrdersListPage.vue')
+        name: 'orders',
+        path: 'orders',
+        meta: { title: 'Заказы' },
+        component: () => import('pages/OrdersListPage.vue'),
       },
     ]
   },
