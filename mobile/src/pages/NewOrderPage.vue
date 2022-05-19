@@ -287,7 +287,6 @@ export default defineComponent({
     }
 
     return {
-      text: ref(null),
       orderFormStore: orderFormStore,
       transport_options: [
         {
