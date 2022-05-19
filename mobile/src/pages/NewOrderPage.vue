@@ -216,12 +216,14 @@ import {defineComponent} from 'vue'
 import {useOrderForm} from 'src/stores/order-form'
 import {useQuasar} from 'quasar'
 import {nextTick} from 'vue'
+import {useRouter} from 'vue-router'
 
 export default defineComponent({
   name: 'NewOrderPage',
   setup() {
     const $q = useQuasar();
     const orderFormStore = useOrderForm();
+    const router = useRouter();
 
     const getQuasarComponent = (domElement) => {
       return domElement.__vueParentComponent.proxy;
@@ -268,14 +270,16 @@ export default defineComponent({
       }
 
       orderFormStore.createOrder();
-
-      $q.notify({
-        message: 'Заказ отправлен!',
-        icon: 'check',
-        color: 'positive'
-      })
-
       resetForm();
+      router.push({name: 'orders'});
+
+      nextTick(function () {
+        $q.notify({
+          message: 'Заказ отправлен!',
+          icon: 'check',
+          color: 'positive'
+        })
+      });
     }
 
     const handleAddPlaceButtonClicked = () => {
