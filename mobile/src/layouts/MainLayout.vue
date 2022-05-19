@@ -36,7 +36,7 @@
       <q-toolbar class="justify-between">
 
         <FooterActionButton
-          icon="man"
+          icon="list"
           link="/#/my/orders"
           title="Заказы"
         />
