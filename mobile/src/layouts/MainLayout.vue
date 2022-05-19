@@ -12,7 +12,7 @@
             dense
             round
             class="shadow-5"
-            icon="man"
+            icon="person"
             aria-label="Профиль"
           >
           </q-btn>
