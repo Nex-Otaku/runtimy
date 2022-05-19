@@ -211,7 +211,6 @@
 </template>
 
 <script>
-import {ref} from 'vue'
 import {defineComponent} from 'vue'
 import {useOrderForm} from 'src/stores/order-form'
 import {useQuasar} from 'quasar'
