@@ -35,175 +35,149 @@
 
   <q-page-container>
 
-    <q-page
-      class="flex flex-center column q-pb-md"
-    >
-      <div
-        class="text-caption q-ma-sm text-grey-7"
-        style="width: 100%; max-width: 300px"
-      >
+    <q-page class="fit column wrap justify-center items-start content-center q-pb-md">
+      <div style="width: 100%; max-width: 300px;">
+
+      <div class="text-caption q-ma-sm text-grey-7">
         Заказ заберёт и доставит ближайший свободный курьер
       </div>
 
-      <q-select
-        v-model="orderFormStore.transport_type"
-        :options="transport_options"
-        label="Транспорт"
-        class="q-ma-sm"
-        style="width: 100%; max-width: 300px"
-        outlined
-      />
-      <q-select
-        v-model="orderFormStore.size_type"
-        :options="size_options"
-        label="Габариты"
-        class="q-ma-sm"
-        style="width: 100%; max-width: 300px"
-        outlined
-      />
-      <q-select
-        v-model="orderFormStore.weight_type"
-        :options="weight_options"
-        label="Вес"
-        class="q-ma-sm"
-        style="width: 100%; max-width: 300px"
-        outlined
-      />
+      <q-form ref="newOrderForm" class="column">
+
+        <q-select
+          v-model="orderFormStore.transport_type"
+          :options="transport_options"
+          label="Транспорт"
+          class="q-ma-sm"
+          outlined
+        />
+        <q-select
+          v-model="orderFormStore.size_type"
+          :options="size_options"
+          label="Габариты"
+          class="q-ma-sm"
+          outlined
+        />
+        <q-select
+          v-model="orderFormStore.weight_type"
+          :options="weight_options"
+          label="Вес"
+          class="q-ma-sm"
+          outlined
+        />
 
 
-      <!-- Начало блока адресов -->
+        <!-- Начало блока адресов -->
 
-      <q-list
-        style="width: 100%; max-width: 300px"
-      >
-        <q-item
-          v-for="place in orderFormStore.places" :key="place.sort_index"
-          class="q-pl-none"
-        >
-          <q-item-section
-            style="border-left: solid 3px black; flex-grow: 0"
+        <q-list>
+          <q-item
+            v-for="place in orderFormStore.places" :key="place.sort_index"
+            class="q-pl-none"
           >
-          </q-item-section>
-
-          <q-item-section>
-            <div
-              class="text-h6 text-left"
-              style="width: 100%; max-width: 300px"
+            <q-item-section
+              style="border-left: solid 3px black; flex-grow: 0"
             >
-              {{ place.title }}
-            </div>
+            </q-item-section>
 
-            <q-input
-              v-model="place.street_address"
-              :data-id="'streetAddressInput' + place.sort_index"
-              label="Улица и номер дома"
-              style="width: 100%; max-width: 300px"
-              :rules="[val => !!val || 'Адрес обязателен']"
-            >
-              <template #append>
-                <q-icon name="place"/>
-              </template>
-            </q-input>
+            <q-item-section>
+              <div class="text-h6 text-left">
+                {{ place.title }}
+              </div>
 
-            <q-input
-              v-model="place.phone_number"
-              label="Телефон"
-              style="width: 100%; max-width: 300px"
-            >
-              <template #append>
-                <q-icon name="phone"/>
-              </template>
-            </q-input>
+              <q-input
+                v-model="place.street_address"
+                label="Улица и номер дома"
+                :rules="[val => !!val || 'Адрес обязателен']"
+              >
+                <template #append>
+                  <q-icon name="place"/>
+                </template>
+              </q-input>
 
-            <q-input
-              v-model="place.courier_comment"
-              type="textarea"
-              label="Поручение для курьера"
-              style="width: 100%; max-width: 300px"
-              autogrow
-            >
-            </q-input>
-          </q-item-section>
-        </q-item>
-      </q-list>
+              <q-input
+                v-model="place.phone_number"
+                label="Телефон"
+              >
+                <template #append>
+                  <q-icon name="phone"/>
+                </template>
+              </q-input>
 
-      <div
-        class="text-left q-mt-md q-pa-md text-grey-6 text-weight-bold"
-        style="width: 100%; max-width: 300px"
-      >
-        Дополнительно
-      </div>
+              <q-input
+                v-model="place.courier_comment"
+                type="textarea"
+                label="Поручение для курьера"
+                autogrow
+              >
+              </q-input>
+            </q-item-section>
+          </q-item>
+        </q-list>
 
-      <q-btn
-        outline
-        align="left"
-        class="btn-fixed-width"
-        color="primary"
-        icon="add"
-        label="Добавить адрес"
-        style="width: 100%; max-width: 300px"
-        @click="handleAddPlaceButtonClicked"
-      />
-
-      <!-- Конец блока адресов -->
-
-
-      <div
-        class="text-h6 text-left q-mt-md"
-        style="width: 100%; max-width: 300px"
-      >
-        Содержимое заказа
-      </div>
-
-      <q-input
-        v-model="orderFormStore.description"
-        label="Что везём?"
-        style="width: 100%; max-width: 300px"
-      >
-      </q-input>
-
-      <q-input
-        v-model="orderFormStore.price_of_package"
-        label="Ценность (Сумма)"
-        style="width: 100%; max-width: 300px"
-        bottom-slots
-      >
-        <template #hint>
-          Если груз потеряется или будет повреждён, вернём до 50000₽ в течение трёх рабочих дней.
-        </template>
-      </q-input>
-
-      <!-- TODO Блок оплаты -->
-      <div
-        class="q-mt-xl q-mb-sm bg-grey-5"
-        style="height: 1px;
-      width: 100%;
-      max-width: 300px"
-      >
-      </div>
-
-      <div
-        class="row items-center"
-        style="width: 100%; max-width: 300px"
-      >
-        <div class="col-sm">
-          от 500₽
+        <div class="text-left q-mt-md q-pa-md text-grey-6 text-weight-bold">
+          Дополнительно
         </div>
-        <q-space></q-space>
-        <div class="col-8">
-          <q-btn
-            no-caps
-            outline
-            align="center"
-            class="btn-fixed-width"
-            color="primary"
-            label="Отправить заказ"
-            style="width: 100%; max-width: 300px"
-            @click="handleSubmitButtonClicked"
-          />
-        </div>
-      </div>
 
+        <q-btn
+          outline
+          align="left"
+          class="btn-fixed-width"
+          color="primary"
+          icon="add"
+          label="Добавить адрес"
+          @click="handleAddPlaceButtonClicked"
+        />
+
+        <!-- Конец блока адресов -->
+
+
+        <div class="text-h6 text-left q-mt-md">
+          Содержимое заказа
+        </div>
+
+        <q-input
+          v-model="orderFormStore.description"
+          label="Что везём?"
+        >
+        </q-input>
+
+        <q-input
+          v-model="orderFormStore.price_of_package"
+          label="Ценность (Сумма)"
+          bottom-slots
+        >
+          <template #hint>
+            Если груз потеряется или будет повреждён, вернём до 50000₽ в течение трёх рабочих дней.
+          </template>
+        </q-input>
+
+        <!-- TODO Блок оплаты -->
+        <div
+          class="q-mt-xl q-mb-sm bg-grey-5"
+          style="height: 1px;width: 100%;"
+        >
+        </div>
+
+        <div class="row items-center">
+          <div class="col-sm">
+            от 500₽
+          </div>
+          <q-space></q-space>
+          <div class="col-8">
+            <q-btn
+              no-caps
+              outline
+              align="center"
+              class="btn-fixed-width"
+              color="primary"
+              label="Отправить заказ"
+              @click="handleSubmitButtonClicked"
+            />
+          </div>
+        </div>
+
+      </q-form>
+      </div>
     </q-page>
 
   </q-page-container>
@@ -212,6 +186,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import {ref} from 'vue'
 import {useOrderForm} from 'src/stores/order-form'
 import {useQuasar} from 'quasar'
 import {nextTick} from 'vue'
@@ -223,25 +198,13 @@ export default defineComponent({
     const $q = useQuasar();
     const orderFormStore = useOrderForm();
     const router = useRouter();
-
-    const getQuasarComponent = (domElement) => {
-      return domElement.__vueParentComponent.proxy;
-    }
-
-    const getAddressInputForPlace = (place) => {
-      return getQuasarComponent(
-        document.querySelectorAll('[data-id="streetAddressInput' + place.sort_index + '"]')[0]
-      );
-    }
+    const newOrderForm = ref(null);
 
     const resetForm = () => {
       orderFormStore.$reset();
 
       nextTick(function () {
-        for (const place of orderFormStore.places) {
-          const addressInput = getAddressInputForPlace(place);
-          addressInput.resetValidation();
-        }
+        newOrderForm.value.resetValidation();
       })
     }
 
@@ -249,25 +212,7 @@ export default defineComponent({
       resetForm();
     }
 
-    const validateForm = () => {
-      let isValidForm = true;
-
-      for (const place of orderFormStore.places) {
-        const addressInput = getAddressInputForPlace(place);
-        const isValid = addressInput.validate();
-        isValidForm = isValidForm && isValid;
-      }
-
-      return isValidForm;
-    }
-
-    const handleSubmitButtonClicked = () => {
-      const isValidForm = validateForm();
-
-      if (!isValidForm) {
-        return;
-      }
-
+    const submitValidForm = () => {
       orderFormStore.createOrder();
       resetForm();
       router.push({name: 'orders'});
@@ -281,11 +226,22 @@ export default defineComponent({
       });
     }
 
+    const handleSubmitButtonClicked = () => {
+      newOrderForm.value.validate().then(success => {
+        if (!success) {
+          return;
+        }
+
+        submitValidForm();
+      })
+    }
+
     const handleAddPlaceButtonClicked = () => {
       orderFormStore.addPlace();
     }
 
     return {
+      newOrderForm: newOrderForm,
       orderFormStore: orderFormStore,
       transport_options: [
         {
