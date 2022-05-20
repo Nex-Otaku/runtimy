@@ -43,6 +43,9 @@ const routes = [
     component: () => import('layouts/GuestLayout.vue'),
     children: [
       {
+        path: 'blank', component: () => import('pages/BlankPage.vue')
+      },
+      {
         path: 'pinia', component: () => import('pages/PiniaPage.vue')
       },
       {
