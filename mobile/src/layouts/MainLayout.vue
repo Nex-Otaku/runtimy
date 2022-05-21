@@ -2,7 +2,10 @@
   <q-layout view="hHh lpR fFf">
     <q-header bordered class="bg-white text-black">
       <q-toolbar>
-        <q-toolbar-title>
+        <q-toolbar-title
+          class="q-ml-sm q-mt-md q-mb-md"
+          style="font-size: 28px; font-weight: bold"
+        >
           {{ $route.meta.title }}
         </q-toolbar-title>
 
