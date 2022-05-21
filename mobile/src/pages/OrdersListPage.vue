@@ -30,9 +30,13 @@
             </div>
 
             <div
-              v-if="orderStatus.isCanceled"
+              v-else-if="orderStatus.isCanceled"
               class="text-grey-7"
             >
+              {{ orderStatus.label }}
+            </div>
+
+            <div v-else>
               {{ orderStatus.label }}
             </div>
           </div>
