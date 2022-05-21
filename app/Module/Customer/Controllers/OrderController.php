@@ -5,7 +5,7 @@ namespace App\Module\Customer\Controllers;
 use App\Http\Controllers\Controller;
 use App\Module\Customer\Entities\Customer;
 use App\Module\Customer\Entities\Order;
-use App\Module\Customer\SerializableItem;
+use App\Module\Customer\Entities\OrderStatus;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,8 @@ class OrderController extends Controller
     public function newOrder(Request $request)
     {
         try {
-            Order::create(Customer::takeLogined(), $request->post());
+            $order = Order::create(Customer::takeLogined(), $request->post());
+            $order->confirmPayment();
         } catch (\Throwable $throwable) {
             return $this->failResponse($throwable->getMessage());
         }
@@ -22,29 +23,33 @@ class OrderController extends Controller
         return $this->successResponse();
     }
 
-    public function getOrders()
+    public function getOrderStatusList()
     {
         try {
-            $orders = $this->serializeList(Order::findForCustomer(Customer::takeLogined()));
+            $orderStatuses = $this->serializeStatusList(OrderStatus::findForCustomer(Customer::takeLogined()));
         } catch (\Throwable $throwable) {
             return $this->failResponse($throwable->getMessage());
         }
 
         return $this->successResponse(
-            $orders
+            $orderStatuses
         );
     }
 
     /**
-     * @param SerializableItem[] $items
+     * @param OrderStatus[] $items
      * @return array
      */
-    private function serializeList(array $items): array
+    private function serializeStatusList(array $items): array
     {
         $result = [];
+        $sortIndex = 1;
 
         foreach ($items as $item) {
-            $result [] = $item->serialize();
+            $itemSerialized = $item->serialize();
+            $itemSerialized['sort_index'] = $sortIndex;
+            $result [] = $itemSerialized;
+            $sortIndex++;
         }
 
         return $result;

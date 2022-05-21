@@ -25,5 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/new-order', [OrderController::class, 'newOrder']);
-    Route::get('/orders', [OrderController::class, 'getOrders']);
+    Route::get('/order-status-list', [OrderController::class, 'getOrderStatusList']);
 });

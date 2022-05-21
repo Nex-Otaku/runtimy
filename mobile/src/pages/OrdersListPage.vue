@@ -94,6 +94,7 @@ export default defineComponent({
   setup() {
 
     const orderStatusStore = useOrderStatus();
+    orderStatusStore.fetch();
 
     return {
       orderStatusStore: orderStatusStore,

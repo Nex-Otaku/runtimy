@@ -3,10 +3,8 @@
 namespace App\Module\Customer\Entities;
 
 use App\Models\Order as OrderModel;
-use App\Module\Customer\SerializableItem;
-use App\Models\OrderPlace;
 
-class Order implements SerializableItem
+class Order
 {
     private const TRANSPORT_TYPE_FEET = 'feet';
     private const TRANSPORT_TYPE_PASSENGER = 'passenger';
@@ -45,25 +43,11 @@ class Order implements SerializableItem
         );
 
         $order->saveOrFail();
-        $sortIndex = 1;
+        $entity = new self($order);
 
-        foreach ($params['places'] as $placeParams) {
-            $place = new OrderPlace(
-                [
-                    'order_id' => $order->id,
-                    'sort_index' => $sortIndex,
-                    'street_address' => $placeParams['street_address'] ?? '',
-                    'phone_number' => $placeParams['phone_number'] ?? '',
-                    'courier_comment' => $placeParams['courier_comment'] ?? '',
-                ]
-            );
+        OrderPlace::createPlacesForOrder($entity, $params);
 
-            $place->saveOrFail();
-
-            $sortIndex++;
-        }
-
-        return new self($order);
+        return $entity;
     }
 
     public static function getTransportTypes(): array
@@ -95,6 +79,26 @@ class Order implements SerializableItem
     }
 
     /**
+     * @return OrderPlace[]
+     */
+    public function getPlaces(): array
+    {
+        return OrderPlace::forOrder($this);
+    }
+
+    public function getModelId(): int
+    {
+        return $this->order->id;
+    }
+
+    public static function get(int $modelId): self
+    {
+        $model = OrderModel::where(['id' => $modelId])->firstOrFail();
+
+        return new self($model);
+    }
+
+    /**
      * @param Customer $customer
      * @return Order[]
      */
@@ -110,14 +114,8 @@ class Order implements SerializableItem
         return $items;
     }
 
-    public function serialize(): array
+    public function confirmPayment(): void
     {
-        return [
-            'transport_type' => $this->order->transport_type,
-            'size_type' => $this->order->size_type,
-            'weight_type' => $this->order->weight_type,
-            'description' => $this->order->description,
-            'price_of_package' => $this->order->price_of_package,
-        ];
+        OrderStatus::create($this);
     }
 }
