@@ -7,12 +7,14 @@ use App\Models\OrderStatusPlace;
 
 class OrderStatus
 {
+    private const PHASE_WAITING_FOR_PAYMENT = 'waiting-for-payment';
     private const PHASE_WAITING_FOR_COURIER = 'waiting-for-courier';
-    private const PHASE_COMING = 'coming';
-    private const PHASE_CANCELED = 'canceled';
-    private const PHASE_COMPLETED = 'completed';
+    private const PHASE_COMING              = 'coming';
+    private const PHASE_CANCELED            = 'canceled';
+    private const PHASE_COMPLETED           = 'completed';
 
     private const PHASE_LABELS = [
+        self::PHASE_WAITING_FOR_PAYMENT => 'Ждём оплату',
         self::PHASE_WAITING_FOR_COURIER => 'Ищем курьера',
         self::PHASE_COMING => 'Курьер в пути',
         self::PHASE_CANCELED => 'Отменён',
@@ -24,8 +26,7 @@ class OrderStatus
 
     private function __construct(
         OrderStatusModel $orderStatus
-    )
-    {
+    ) {
         $this->orderStatus = $orderStatus;
     }
 
@@ -34,7 +35,7 @@ class OrderStatus
         $orderStatus = new OrderStatusModel(
             [
                 'order_id' => $order->getModelId(),
-                'phase' => self::PHASE_WAITING_FOR_COURIER,
+                'phase' => self::PHASE_WAITING_FOR_PAYMENT,
             ]
         );
 
@@ -65,22 +66,31 @@ class OrderStatus
      * @param Customer $customer
      * @return OrderStatus[]
      */
-    public static function findForCustomer(Customer $customer): array
+    public static function findActiveForCustomer(Customer $customer): array
     {
         $orders = Order::findForCustomer($customer);
         $items = [];
 
         foreach ($orders as $order) {
-            $record = OrderStatusModel::where(['order_id' => $order->getModelId()])->first();
+            $record = OrderStatusModel::where(['order_id' => $order->getModelId()])
+                                      ->where('phase', '<>', self::PHASE_WAITING_FOR_PAYMENT)
+                                      ->first();
 
             if ($record === null) {
                 continue;
             }
 
-            $items []= new self($record);
+            $items [] = new self($record);
         }
 
         return $items;
+    }
+
+    public static function get(Order $order): self
+    {
+        $model = OrderStatusModel::where(['order_id' => $order->getModelId()])->firstOrFail();
+
+        return new self($model);
     }
 
     public function serialize(): array
@@ -125,7 +135,7 @@ class OrderStatus
                 ],
             )->firstOrFail();
 
-            $result []= [
+            $result [] = [
                 'sort_index' => $sortIndex,
                 'street_address' => $place->getStreetAddress(),
             ];
@@ -146,5 +156,19 @@ class OrderStatus
     private function toLocalDayTime($time)
     {
         return '{' . var_export($time, true) . '}';
+    }
+
+    public function confirmPayment(): void
+    {
+        if ($this->orderStatus->phase === self::PHASE_WAITING_FOR_COURIER) {
+            return;
+        }
+
+        if ($this->orderStatus->phase !== self::PHASE_WAITING_FOR_PAYMENT) {
+            throw new \LogicException('Нельзя оплатить заказ, который не ожидает оплаты');
+        }
+
+        $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER;
+        $this->orderStatus->saveOrFail();
     }
 }

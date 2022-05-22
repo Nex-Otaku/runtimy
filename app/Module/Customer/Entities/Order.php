@@ -46,6 +46,7 @@ class Order
         $entity = new self($order);
 
         OrderPlace::createPlacesForOrder($entity, $params);
+        OrderStatus::create($entity);
 
         return $entity;
     }
@@ -116,6 +117,6 @@ class Order
 
     public function confirmPayment(): void
     {
-        OrderStatus::create($this);
+        OrderStatus::get($this)->confirmPayment();
     }
 }

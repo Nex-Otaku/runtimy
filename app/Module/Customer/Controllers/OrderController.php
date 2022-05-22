@@ -26,7 +26,7 @@ class OrderController extends Controller
     public function getOrderStatusList()
     {
         try {
-            $orderStatuses = $this->serializeStatusList(OrderStatus::findForCustomer(Customer::takeLogined()));
+            $orderStatuses = $this->serializeStatusList(OrderStatus::findActiveForCustomer(Customer::takeLogined()));
         } catch (\Throwable $throwable) {
             return $this->failResponse($throwable->getMessage());
         }
