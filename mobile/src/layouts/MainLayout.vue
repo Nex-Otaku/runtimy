@@ -11,6 +11,7 @@
 
         <div>
           <q-btn
+            :to="{ name: 'profile' }"
             flat
             dense
             round
@@ -35,36 +36,17 @@
       <router-view/>
     </q-page-container>
 
-    <q-footer bordered class="bg-white text-black">
-      <q-toolbar class="justify-between">
-
-        <FooterActionButton
-          icon="list"
-          link="/#/my/orders"
-          title="Заказы"
-        />
-        <FooterActionButton
-          icon="add"
-          link="/#/dialog/new-order"
-          title="Новый заказ"
-        />
-        <FooterActionButton
-          icon="message"
-          link="/#/my/chat"
-          title="Чат"
-        />
-      </q-toolbar>
-    </q-footer>
+    <MainPageFooter/>
   </q-layout>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import FooterActionButton from "components/FooterActionButton";
+import MainPageFooter from "components/MainPageFooter";
 
 export default defineComponent({
   name: 'MainLayout',
-  components: {FooterActionButton},
+  components: {MainPageFooter},
   setup() {
     return {
       // TODO

@@ -39,6 +39,17 @@ const routes = [
     ]
   },
   {
+    path: '/my/profile',
+    component: () => import('layouts/ProfileLayout.vue'),
+    children: [
+      {
+        name: 'profile',
+        path: '',
+        component: () => import('pages/ProfilePage.vue'),
+      },
+    ]
+  },
+  {
     path: '/test',
     component: () => import('layouts/GuestLayout.vue'),
     children: [
