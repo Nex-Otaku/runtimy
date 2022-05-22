@@ -1,35 +1,46 @@
 <template>
-
-  <q-header elevated>
-    <q-toolbar>
-      <div class="col">
-        <q-btn
-          :to="{ name: 'orders' }"
-          flat
-          round
-          dense
-          icon="west"
-        />
-      </div>
-      <div class="col">
-        <q-toolbar-title class="absolute-center">
-          Новый заказ
-        </q-toolbar-title>
-      </div>
-      <div
-        class="col"
-        style="text-align: end"
+  <q-header
+    class="bg-white text-black"
+    style="height: 83px"
+  >
+    <div
+      class="row q-pt-lg"
+    >
+      <q-toolbar
+        class="q-pa-none"
+        style="height: 100%"
       >
-        <q-btn
-          flat
-          dense
-          no-caps
-          @click="handleResetButtonClicked"
+        <div class="col">
+          <q-btn
+            :to="{ name: 'orders' }"
+            flat
+            round
+            icon="west"
+          />
+        </div>
+        <div class="col q-pt-lg">
+          <q-toolbar-title
+            class="absolute-center"
+            style="font-size: 19px; font-weight: bold"
+          >
+            Новый заказ
+          </q-toolbar-title>
+        </div>
+        <div
+          class="col"
+          style="text-align: end"
         >
-          Очистить
-        </q-btn>
-      </div>
-    </q-toolbar>
+          <q-btn
+            flat
+            no-caps
+            @click="handleResetButtonClicked"
+          >
+            Очистить
+          </q-btn>
+        </div>
+      </q-toolbar>
+
+    </div>
   </q-header>
 
 
