@@ -84,7 +84,7 @@
             <div
               style="font-size: 15px;"
             >
-              {{ orderViewStore.orderInfo.next_place_coming_time_from }}
+              {{ orderViewStore.orderInfo.next_place_coming_time }}
             </div>
           </div>
 

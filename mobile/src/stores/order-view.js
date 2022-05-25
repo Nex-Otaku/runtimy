@@ -12,7 +12,7 @@ export const useOrderView = defineStore(
         order_price: 500,
         is_coming_next_place: true,
         order_next_place_address: 'ул Бронная М., д 24',
-        next_place_coming_time_from: 'с 13:50 до 15:30',
+        next_place_coming_time: 'с 13:50 до 15:30',
         courier_name: 'Иван Иванов',
         courier_avatar: '',
         courier_phone_number: '+7 (920) 777 55 44',
