@@ -41,8 +41,8 @@ export const useOrderView = defineStore(
     },
 
     actions: {
-      async fetch() {
-        const response = await api.get('/api/view-order');
+      async fetch(orderId) {
+        const response = await api.get('/api/view-order/' + orderId);
 
         if (response.data.result !== 'success') {
           console.error(response.data.message);

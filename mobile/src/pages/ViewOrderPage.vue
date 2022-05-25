@@ -1,5 +1,6 @@
 <template>
   <q-header
+    v-if="orderViewStore.orderInfo"
     class="bg-white text-black"
     style="height: 83px"
   >
@@ -23,7 +24,7 @@
             class="absolute-center"
             style="font-size: 19px; font-weight: bold"
           >
-            №{{ orderInfo.order_number }}
+            №{{ orderViewStore.orderInfo.order_number }}
           </q-toolbar-title>
         </div>
       </q-toolbar>
@@ -32,7 +33,9 @@
   </q-header>
 
 
-  <q-page-container>
+  <q-page-container
+    v-if="orderViewStore.orderInfo"
+  >
 
     <q-page class="fit column wrap items-start content-center q-pb-md">
       <div style="width: 100%;">
@@ -41,7 +44,7 @@
           class="bg-black text-white q-pl-lg q-pt-xs"
           style="height: 31px; font-size: 15px; font-weight: bold;"
         >
-          {{ orderInfo.order_status_label }}
+          {{ orderViewStore.orderInfo.order_status_label }}
         </div>
 
         <div
@@ -51,11 +54,11 @@
             class="q-mt-sm"
             style="font-size: 20px;"
           >
-            {{ orderInfo.order_price }}₽
+            {{ orderViewStore.orderInfo.order_price }}₽
           </div>
 
           <div
-            v-if="orderInfo.is_coming_next_place"
+            v-if="orderViewStore.orderInfo.is_coming_next_place"
             class="q-mb-md"
           >
             <div
@@ -68,7 +71,7 @@
             <div
               style="font-size: 18px;"
             >
-              {{ orderInfo.order_next_place_address }}
+              {{ orderViewStore.orderInfo.order_next_place_address }}
             </div>
 
             <div
@@ -81,7 +84,7 @@
             <div
               style="font-size: 15px;"
             >
-              {{ orderInfo.next_place_coming_time_from }}
+              {{ orderViewStore.orderInfo.next_place_coming_time_from }}
             </div>
           </div>
 
@@ -149,7 +152,7 @@
             >
             </div>
             <!-- Аватар -->
-            {{ orderInfo.courier_avatar }}
+            {{ orderViewStore.orderInfo.courier_avatar }}
 
             <!--
             <q-item-section avatar>
@@ -170,14 +173,14 @@
                       line-height: 20px;
                       "
               >
-                {{ orderInfo.courier_name }}
+                {{ orderViewStore.orderInfo.courier_name }}
               </div>
               <div
                 style="font-size: 18px;
                       line-height: 20px;
                       "
               >
-                {{ orderInfo.courier_phone_number }}
+                {{ orderViewStore.orderInfo.courier_phone_number }}
               </div>
             </div>
           </div>
@@ -217,7 +220,7 @@
           <div
             style="font-size: 15px;"
           >
-            {{ orderInfo.order_created_at }}
+            {{ orderViewStore.orderInfo.order_created_at }}
           </div>
 
           <div
@@ -230,7 +233,7 @@
           <div
             style="font-size: 18px;"
           >
-            {{ orderInfo.transport_type_and_weight_type }}
+            {{ orderViewStore.orderInfo.transport_type_and_weight_type }}
           </div>
 
           <div
@@ -243,7 +246,7 @@
           <div
             style="font-size: 18px;"
           >
-            {{ orderInfo.description }}
+            {{ orderViewStore.orderInfo.description }}
           </div>
 
           <div
@@ -256,7 +259,7 @@
           <div
             style="font-size: 18px;"
           >
-            {{ orderInfo.payment_type }}
+            {{ orderViewStore.orderInfo.payment_type }}
           </div>
         </div>
 
@@ -267,7 +270,7 @@
 
         <q-list>
           <q-expansion-item
-            v-for="place in orderInfo.places" :key="place.sort_index"
+            v-for="place in orderViewStore.orderInfo.places" :key="place.sort_index"
             header-class="q-pl-none"
             style="border-bottom: solid 1px rgba(0, 0, 0, 0.22);"
           >
@@ -342,16 +345,18 @@
 
 <script>
 import {defineComponent} from 'vue'
-import {ref} from 'vue'
 import {useOrderView} from 'src/stores/order-view'
+import {useRoute} from 'vue-router'
 
 export default defineComponent({
   name: 'ViewOrderPage',
   setup() {
+    const route = useRoute();
     const orderViewStore = useOrderView();
+    orderViewStore.fetch(route.params.id);
 
     return {
-      orderInfo: orderViewStore.orderInfo,
+      orderViewStore: orderViewStore
     }
   },
 })

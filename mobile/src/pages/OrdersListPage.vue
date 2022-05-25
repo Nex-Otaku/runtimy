@@ -5,6 +5,8 @@
       <q-item
         v-for="orderStatus in orderStatusStore.orderStatuses" :key="orderStatus.sort_index"
         style="border-bottom: solid 1px rgba(0, 0, 0, 0.12); flex-grow: 0"
+        clickable
+        @click="clickOrderItem(orderStatus.order_number)"
       >
         <div class="column col-12">
 
@@ -92,16 +94,23 @@
 <script>
 import {defineComponent} from 'vue'
 import {useOrderStatus} from "stores/order-status";
+import {useRouter} from "vue-router";
 
 export default defineComponent({
   name: 'OrdersListPage',
   setup() {
-
     const orderStatusStore = useOrderStatus();
     orderStatusStore.fetch();
 
+    const router = useRouter();
+
+    const clickOrderItem = (orderId) => {
+      router.push({name: 'view-order', params: {id: orderId}});
+    }
+
     return {
       orderStatusStore: orderStatusStore,
+      clickOrderItem: clickOrderItem
     }
   },
 })

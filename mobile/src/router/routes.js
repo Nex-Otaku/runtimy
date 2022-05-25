@@ -19,7 +19,9 @@ const routes = [
         path: 'new-order', component: () => import('pages/NewOrderPage.vue')
       },
       {
-        path: 'view-order', component: () => import('pages/ViewOrderPage.vue')
+        name: 'view-order',
+        path: 'view-order/:id',
+        component: () => import('pages/ViewOrderPage.vue')
       },
     ]
   },
@@ -30,13 +32,13 @@ const routes = [
       {
         name: 'orders',
         path: 'orders',
-        meta: { title: 'Заказы' },
+        meta: {title: 'Заказы'},
         component: () => import('pages/OrdersListPage.vue'),
       },
       {
         name: 'chat',
         path: 'chat',
-        meta: { title: 'Чат' },
+        meta: {title: 'Чат'},
         component: () => import('pages/ChatPage.vue'),
       },
     ]
@@ -67,6 +69,14 @@ const routes = [
       },
       {
         path: 'router', component: () => import('pages/RouterPage.vue')
+      },
+      {
+        name: 'counter1',
+        path: 'counter1', component: () => import('pages/CounterFirstPage.vue')
+      },
+      {
+        name: 'counter2',
+        path: 'counter2', component: () => import('pages/CounterSecondPage.vue')
       },
     ]
   },
