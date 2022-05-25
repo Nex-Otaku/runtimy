@@ -18,6 +18,9 @@ const routes = [
       {
         path: 'new-order', component: () => import('pages/NewOrderPage.vue')
       },
+      {
+        path: 'view-order', component: () => import('pages/ViewOrderPage.vue')
+      },
     ]
   },
   {

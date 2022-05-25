@@ -36,6 +36,19 @@ class OrderController extends Controller
         );
     }
 
+    public function viewOrder(int $id)
+    {
+        try {
+            $order = Order::findForCustomerById(Customer::takeLogined(), $id);
+        } catch (\Throwable $throwable) {
+            return $this->failResponse($throwable->getMessage());
+        }
+
+        return $this->successResponse(
+            $order->serializeInfo()
+        );
+    }
+
     /**
      * @param OrderStatus[] $items
      * @return array

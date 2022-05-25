@@ -6,17 +6,17 @@ use App\Models\Order as OrderModel;
 
 class Order
 {
-    private const TRANSPORT_TYPE_FEET = 'feet';
+    private const TRANSPORT_TYPE_FEET      = 'feet';
     private const TRANSPORT_TYPE_PASSENGER = 'passenger';
-    private const TRANSPORT_TYPE_CARGO = 'cargo';
+    private const TRANSPORT_TYPE_CARGO     = 'cargo';
 
-    private const SIZE_TYPE_SMALL = 'small';
-    private const SIZE_TYPE_MEDIUM = 'medium';
-    private const SIZE_TYPE_LARGE = 'large';
+    private const SIZE_TYPE_SMALL       = 'small';
+    private const SIZE_TYPE_MEDIUM      = 'medium';
+    private const SIZE_TYPE_LARGE       = 'large';
     private const SIZE_TYPE_EXTRA_LARGE = 'extra-large';
 
-    private const WEIGHT_TYPE_UNDER_1_KG = '1kg';
-    private const WEIGHT_TYPE_UNDER_5_KG = '5kg';
+    private const WEIGHT_TYPE_UNDER_1_KG  = '1kg';
+    private const WEIGHT_TYPE_UNDER_5_KG  = '5kg';
     private const WEIGHT_TYPE_UNDER_10_KG = '10kg';
 
     /** @var OrderModel */
@@ -24,8 +24,7 @@ class Order
 
     private function __construct(
         OrderModel $order
-    )
-    {
+    ) {
         $this->order = $order;
     }
 
@@ -79,6 +78,16 @@ class Order
         ];
     }
 
+    public static function findForCustomerById(Customer $customer, int $orderModelId): self
+    {
+        $model = OrderModel::where([
+                                       'id' => $orderModelId,
+                                       'customer_id' => $customer->getSpaUserId(),
+                                   ])->firstOrFail();
+
+        return new self($model);
+    }
+
     /**
      * @return OrderPlace[]
      */
@@ -109,7 +118,7 @@ class Order
         $records = OrderModel::where(['customer_id' => $customer->getSpaUserId()])->get();
 
         foreach ($records as $record) {
-            $items []= new self($record);
+            $items[] = new self($record);
         }
 
         return $items;
@@ -118,5 +127,12 @@ class Order
     public function confirmPayment(): void
     {
         OrderStatus::get($this)->confirmPayment();
+    }
+
+    public function serializeInfo(): array
+    {
+        return [
+            // TODO
+        ];
     }
 }
