@@ -17,3 +17,8 @@ https://www.youtube.com/watch?time_continue=413&v=OgIKhFNIvRc
 
 Пример стейта авторизации на Pinia
 https://stackblitz.com/github/piniajs/example-vue-3-vite?file=src%2Fstores%2Fcart.js
+
+
+Пример редиректа на страницу логина для любого неавторизованного пользователя через роутер
+
+https://quasar.dev/quasar-cli-vite/routing
