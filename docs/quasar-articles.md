@@ -22,3 +22,7 @@ https://stackblitz.com/github/piniajs/example-vue-3-vite?file=src%2Fstores%2Fcar
 Пример редиректа на страницу логина для любого неавторизованного пользователя через роутер
 
 https://quasar.dev/quasar-cli-vite/routing
+
+Пример навигации по страницам Quasar + Pinia
+
+https://blog.logrocket.com/complex-vue-3-state-management-pinia/#creating-a-single-author-view
