@@ -56,6 +56,7 @@ class Order
         $order = new OrderModel(
             [
                 'customer_id' => $customer->getSpaUserId(),
+                'assigned_courier_id' => null,
                 'transport_type' => $params['transport_type'] ?? self::TRANSPORT_TYPE_FEET,
                 'size_type' => $params['size_type'] ?? self::SIZE_TYPE_SMALL,
                 'weight_type' => $params['weight_type'] ?? self::WEIGHT_TYPE_UNDER_1_KG,

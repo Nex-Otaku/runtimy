@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $customer_id
+ * @property int|null $assigned_courier_id
  * @property string $transport_type
  * @property string $size_type
  * @property string $weight_type
@@ -21,6 +22,7 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
+        'assigned_courier_id',
         'transport_type',
         'size_type',
         'weight_type',
