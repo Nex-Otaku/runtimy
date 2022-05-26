@@ -34,11 +34,6 @@ class Order
     // TODO Сделать поле цены заказа
     private const STUB_PRICE = 500;
 
-    // TODO Сделать поле для назначенного курьера
-    private const COURIER_NAME         = 'Иван Иванов';
-    private const COURIER_AVATAR       = '';
-    private const COURIER_PHONE_NUMBER = '+7 (920) 777 55 44';
-
     // TODO Сделать тип оплаты заказа
     private const PAYMENT_TYPE = 'Картой онлайн';
 
