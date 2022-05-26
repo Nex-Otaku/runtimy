@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $weight_type
  * @property string $description
  * @property int|null $price_of_package
+ * @property \DateTimeInterface $created_at
  */
 class Order extends Model
 {

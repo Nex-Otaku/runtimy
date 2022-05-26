@@ -10,6 +10,12 @@ class Order
     private const TRANSPORT_TYPE_PASSENGER = 'passenger';
     private const TRANSPORT_TYPE_CARGO     = 'cargo';
 
+    private const TRANSPORT_LABELS = [
+        self::TRANSPORT_TYPE_FEET => 'Пешком',
+        self::TRANSPORT_TYPE_PASSENGER => 'Легковой',
+        self::TRANSPORT_TYPE_CARGO => 'Грузовой',
+    ];
+
     private const SIZE_TYPE_SMALL       = 'small';
     private const SIZE_TYPE_MEDIUM      = 'medium';
     private const SIZE_TYPE_LARGE       = 'large';
@@ -18,6 +24,23 @@ class Order
     private const WEIGHT_TYPE_UNDER_1_KG  = '1kg';
     private const WEIGHT_TYPE_UNDER_5_KG  = '5kg';
     private const WEIGHT_TYPE_UNDER_10_KG = '10kg';
+
+    private const WEIGHT_LABELS = [
+        self::WEIGHT_TYPE_UNDER_1_KG => 'До 1 кг',
+        self::WEIGHT_TYPE_UNDER_5_KG => 'До 5 кг',
+        self::WEIGHT_TYPE_UNDER_10_KG => 'До 10 кг',
+    ];
+
+    // TODO Сделать поле цены заказа
+    private const STUB_PRICE = 500;
+
+    // TODO Сделать поле для назначенного курьера
+    private const COURIER_NAME         = 'Иван Иванов';
+    private const COURIER_AVATAR       = '';
+    private const COURIER_PHONE_NUMBER = '+7 (920) 777 55 44';
+
+    // TODO Сделать тип оплаты заказа
+    private const PAYMENT_TYPE = 'Картой онлайн';
 
     /** @var OrderModel */
     private $order;
@@ -131,8 +154,55 @@ class Order
 
     public function serializeInfo(): array
     {
+        $places = [];
+        $sortIndex = 1;
+
+        foreach ($this->getPlaces() as $place) {
+            $places[] = [
+                'sort_index' => $sortIndex,
+                'street_address' => $place->getStreetAddress(),
+                'phone_number' => $place->getPhoneNumber(),
+                'courier_comment' => $place->getCourierComment(),
+            ];
+
+            $sortIndex++;
+        }
+
+        $orderStatus = $this->getOrderStatus();
+
         return [
-            // TODO
+            'order_number' => $this->getModelId(),
+            'order_status_label' => $orderStatus->getStatusLabel(),
+            'order_price' => self::STUB_PRICE,
+            'is_coming_next_place' => $orderStatus->isComing(),
+            'order_next_place_address' => $orderStatus->getNextPlaceStreetAddress(),
+            'next_place_coming_time' => $orderStatus->getNextPlaceComingTime(),
+            'courier_name' => self::COURIER_NAME,
+            'courier_avatar' => self::COURIER_AVATAR,
+            'courier_phone_number' => self::COURIER_PHONE_NUMBER,
+            'order_created_at' => $this->order->created_at->format('d.m.Y H:i'),
+            'transport_type_and_weight_type' =>
+                $this->getTransportTypeLabel()
+                . ', '
+                . $this->getWeightTypeLabel(),
+            'description' => $this->order->description,
+            'payment_type' => self::PAYMENT_TYPE,
+            'places' => $places,
         ];
+    }
+
+    private function getOrderStatus(): OrderStatus
+    {
+        return OrderStatus::get($this);
+    }
+
+    private function getTransportTypeLabel(): string
+    {
+        return self::TRANSPORT_LABELS[$this->order->transport_type] ?? '';
+    }
+
+    private function getWeightTypeLabel(): string
+    {
+        return self::WEIGHT_LABELS[$this->order->weight_type] ?? '';
     }
 }

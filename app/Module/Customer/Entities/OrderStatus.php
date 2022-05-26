@@ -104,7 +104,7 @@ class OrderStatus
         ];
     }
 
-    private function isComing(): bool
+    public function isComing(): bool
     {
         return $this->orderStatus->phase === self::PHASE_COMING;
     }
@@ -114,7 +114,7 @@ class OrderStatus
         return $this->orderStatus->phase === self::PHASE_CANCELED;
     }
 
-    private function getStatusLabel(): string
+    public function getStatusLabel(): string
     {
         return self::PHASE_LABELS[$this->orderStatus->phase] ?? '';
     }
@@ -127,7 +127,7 @@ class OrderStatus
         $sortIndex = 1;
 
         foreach ($places as $place) {
-            /** @var OrderStatusPlace|null $orderStatusPlace */
+            /** @var OrderStatusPlace $orderStatusPlace */
             $orderStatusPlace = OrderStatusPlace::where(
                 [
                     'order_status_id' => $this->orderStatus->id,
@@ -141,10 +141,7 @@ class OrderStatus
             ];
 
             if ($orderStatusPlace->is_estimated_coming_time) {
-                $result['will_come_at'] = 'с '
-                    . $this->toLocalDayTime($orderStatusPlace->will_come_from)
-                    . ' до '
-                    . $this->toLocalDayTime($orderStatusPlace->will_come_to);
+                $result['will_come_at'] = $this->getComingTime($orderStatusPlace);
             }
 
             $sortIndex++;
@@ -170,5 +167,43 @@ class OrderStatus
 
         $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER;
         $this->orderStatus->saveOrFail();
+    }
+
+    public function getNextPlaceStreetAddress(): string
+    {
+        $nextPlaceModel = $this->findNextPlaceModel();
+
+        if ($nextPlaceModel === null) {
+            return '';
+        }
+
+        $orderPlace = OrderPlace::getByModelId($nextPlaceModel->order_place_id);
+
+        return $orderPlace->getStreetAddress();
+    }
+
+    public function getNextPlaceComingTime(): string
+    {
+        $nextPlaceModel = $this->findNextPlaceModel();
+
+        if ($nextPlaceModel === null) {
+            return '';
+        }
+
+        return $this->getComingTime($nextPlaceModel);
+    }
+
+    private function findNextPlaceModel(): ?OrderStatusPlace
+    {
+        // TODO Сделать определение следующей точки маршрута
+        return null;
+    }
+
+    private function getComingTime(OrderStatusPlace $orderStatusPlace): string
+    {
+        return 'с '
+            . $this->toLocalDayTime($orderStatusPlace->will_come_from)
+            . ' до '
+            . $this->toLocalDayTime($orderStatusPlace->will_come_to);
     }
 }

@@ -52,6 +52,15 @@ class OrderPlace
         return $items;
     }
 
+    public static function getByModelId(int $orderPlaceId): self
+    {
+        $model = OrderPlaceModel::where([
+                                       'id' => $orderPlaceId,
+                                   ])->firstOrFail();
+
+        return new self($model);
+    }
+
     public function getModelId(): int
     {
         return $this->orderPlace->id;
@@ -60,5 +69,15 @@ class OrderPlace
     public function getStreetAddress(): string
     {
         return $this->orderPlace->street_address;
+    }
+
+    public function getPhoneNumber(): string
+    {
+        return $this->orderPlace->phone_number;
+    }
+
+    public function getCourierComment(): string
+    {
+        return $this->orderPlace->courier_comment;
     }
 }

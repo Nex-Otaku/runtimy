@@ -237,6 +237,7 @@
           </div>
 
           <div
+            v-if="orderViewStore.orderInfo.description"
             class="q-mt-sm text-grey-7"
             style="font-size: 15px;"
           >
@@ -308,6 +309,15 @@
               style="border-top: solid 1px rgba(0, 0, 0, 0.22);"
             >
               <div
+                v-if="!place.phone_number && !place.courier_comment"
+                class="q-mt-sm text-grey-7"
+                style="font-size: 15px;"
+              >
+                Дополнительных данных нет
+              </div>
+
+              <div
+                v-if="place.phone_number"
                 class="q-mt-sm text-grey-7"
                 style="font-size: 15px;"
               >
