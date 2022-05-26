@@ -1,5 +1,14 @@
 const routes = [
   {
+    path: '/',
+    component: () => import('layouts/GuestLayout.vue'),
+    children: [
+      {
+        path: '', component: () => import('pages/FastLoginPage.vue')
+      },
+    ]
+  },
+  {
     path: '/home',
     component: () => import('layouts/GuestLayout.vue'),
     children: [
