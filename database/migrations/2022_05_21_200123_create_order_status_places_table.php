@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('order_status_id');
             $table->unsignedBigInteger('order_place_id');
+            $table->integer('sort_index');
             $table->boolean('is_estimated_coming_time');
             $table->timestamp('will_come_from')->nullable();
             $table->timestamp('will_come_to')->nullable();

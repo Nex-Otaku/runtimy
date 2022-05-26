@@ -50,6 +50,7 @@ class OrderStatus
                 [
                     'order_status_id' => $orderStatus->id,
                     'order_place_id' => $place->getModelId(),
+                    'sort_index' => $place->getSortIndex(),
                     'is_estimated_coming_time' => false,
                     'will_come_from' => null,
                     'will_come_to' => null,
@@ -125,7 +126,6 @@ class OrderStatus
         $order = Order::get($this->orderStatus->order_id);
         $places = $order->getPlaces();
         $result = [];
-        $sortIndex = 1;
 
         foreach ($places as $place) {
             /** @var OrderStatusPlace $orderStatusPlace */
@@ -137,15 +137,13 @@ class OrderStatus
             )->firstOrFail();
 
             $result [] = [
-                'sort_index' => $sortIndex,
+                'sort_index' => $orderStatusPlace->sort_index,
                 'street_address' => $place->getStreetAddress(),
             ];
 
             if ($orderStatusPlace->is_estimated_coming_time) {
                 $result['will_come_at'] = $this->getComingTime($orderStatusPlace);
             }
-
-            $sortIndex++;
         }
 
         return $result;
@@ -221,5 +219,57 @@ class OrderStatus
     {
         $this->orderStatus->phase = self::PHASE_COMING;
         $this->orderStatus->saveOrFail();
+    }
+
+    public function setNextPlace()
+    {
+        $nextIndex = $this->getNextIndex();
+
+        if ($nextIndex === null) {
+            return;
+        }
+
+        $nextOrderStatusPlace = OrderStatusPlace::where([
+                                                            'order_status_id' => $this->orderStatus->id,
+                                                            'sort_index' => $nextIndex,
+                                                        ])
+                                                ->firstOrFail();
+
+        $this->orderStatus->next_place_id = $nextOrderStatusPlace->id;
+        $this->orderStatus->saveOrFail();
+    }
+
+    private function getNextIndex(): ?int
+    {
+        $minIndex = OrderStatusPlace::where(['order_status_id' => $this->orderStatus->id])
+                                    ->min('sort_index');
+
+        if ($minIndex === null) {
+            return null;
+        }
+
+        $maxIndex = OrderStatusPlace::where(['order_status_id' => $this->orderStatus->id])
+                                    ->max('sort_index');
+
+        if ($maxIndex === null) {
+            return null;
+        }
+
+        $currentIndex = $this->orderStatus->next_place_id !== null
+            ? OrderStatusPlace::where([
+                                          'id' => $this->orderStatus->next_place_id,
+                                      ])
+                              ->firstOrFail()->sort_index
+            : null;
+
+        if ($currentIndex === null) {
+            return $minIndex;
+        }
+
+        if ($currentIndex === $maxIndex) {
+            return null;
+        }
+
+        return $currentIndex + 1;
     }
 }

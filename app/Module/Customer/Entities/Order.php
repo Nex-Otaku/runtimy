@@ -237,5 +237,6 @@ class Order
         $this->order->saveOrFail();
 
         $this->getOrderStatus()->setIsComing();
+        $this->getOrderStatus()->setNextPlace();
     }
 }

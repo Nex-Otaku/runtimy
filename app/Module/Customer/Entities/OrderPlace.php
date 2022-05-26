@@ -80,4 +80,9 @@ class OrderPlace
     {
         return $this->orderPlace->courier_comment;
     }
+
+    public function getSortIndex(): int
+    {
+        return $this->orderPlace->sort_index;
+    }
 }
