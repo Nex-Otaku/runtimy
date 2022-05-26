@@ -78,4 +78,14 @@ class Courier
     {
         return $this->courier->phone_number;
     }
+
+    public function getModelId(): int
+    {
+        return $this->courier->id;
+    }
+
+    public function getPhoneNumberUri(): string
+    {
+        return preg_replace('/[^0-9+]/', '', $this->getPhoneNumber());
+    }
 }

@@ -179,6 +179,7 @@ class Order
             'courier_name' => $isAssignedCourier ? $courier->getName() : '',
             'courier_avatar' => $isAssignedCourier ? $courier->getAvatarUrl() : '',
             'courier_phone_number' => $isAssignedCourier ? $courier->getPhoneNumber() : '',
+            'courier_phone_number_uri' => $isAssignedCourier ? $courier->getPhoneNumberUri() : '',
             'order_created_at' => $this->order->created_at->format('d.m.Y H:i'),
             'transport_type_and_weight_type' =>
                 $this->getTransportTypeLabel()
@@ -222,5 +223,19 @@ class Order
     public function cancel(): void
     {
         $this->getOrderStatus()->setCanceled();
+    }
+
+    public function assignCourier(): void
+    {
+        $courier = Courier::findFirstAvailableCourier();
+
+        if ($courier === null) {
+            return;
+        }
+
+        $this->order->assigned_courier_id = $courier->getModelId();
+        $this->order->saveOrFail();
+
+        $this->getOrderStatus()->setIsComing();
     }
 }

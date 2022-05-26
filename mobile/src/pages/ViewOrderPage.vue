@@ -154,7 +154,7 @@
             >
             </div>
             <!-- Аватар -->
-            {{ orderViewStore.orderInfo.courier_avatar }}
+            <!-- {{ orderViewStore.orderInfo.courier_avatar }} -->
 
             <!--
             <q-item-section avatar>
@@ -194,6 +194,7 @@
               icon="phone_in_talk"
               flat
               round
+              @click="clickCallCourier"
             ></q-btn>
           </div>
         </div>
@@ -374,6 +375,7 @@ import {useOrderView} from 'src/stores/order-view'
 import {useRoute} from 'vue-router'
 import {api} from "boot/axios";
 import {useQuasar} from "quasar";
+import {openURL} from 'quasar'
 
 export default defineComponent({
   name: 'ViewOrderPage',
@@ -397,9 +399,14 @@ export default defineComponent({
         })
     }
 
+    const clickCallCourier = () => {
+      openURL('tel:' + orderViewStore.orderInfo.courier_phone_number_uri);
+    }
+
     return {
       orderViewStore: orderViewStore,
       clickCancelOrder: clickCancelOrder,
+      clickCallCourier: clickCallCourier,
     }
   },
 })
