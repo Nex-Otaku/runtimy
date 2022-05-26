@@ -56,4 +56,26 @@ class Courier
 
         return new self($courier);
     }
+
+    public static function getByModelId(int $courierId): self
+    {
+        $model = CourierModel::where(['id' => $courierId])->firstOrFail();
+
+        return new self($model);
+    }
+
+    public function getName(): string
+    {
+        return $this->courier->name;
+    }
+
+    public function getAvatarUrl(): string
+    {
+        return $this->courier->avatar_url;
+    }
+
+    public function getPhoneNumber(): string
+    {
+        return $this->courier->phone_number;
+    }
 }

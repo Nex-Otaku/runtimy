@@ -130,6 +130,7 @@
         </div>
 
         <div
+          v-if="orderViewStore.orderInfo.is_assigned_courier"
           class="row content-stretch"
           style="padding-top: 16px;
                 padding-bottom: 22px;
@@ -193,6 +194,19 @@
               flat
               round
             ></q-btn>
+          </div>
+        </div>
+
+
+        <div
+          v-if="!orderViewStore.orderInfo.is_assigned_courier"
+          class="row content-stretch q-pl-lg q-pt-md q-pb-md"
+        >
+          <div
+            class="text-grey-7"
+            style="font-size: 18px; line-height: 20px;"
+          >
+            Курьер не назначен
           </div>
         </div>
 

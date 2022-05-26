@@ -170,6 +170,8 @@ class Order
         }
 
         $orderStatus = $this->getOrderStatus();
+        $isAssignedCourier = $this->isAssignedCourier();
+        $courier = $this->getAssignedCourier();
 
         return [
             'order_number' => $this->getModelId(),
@@ -178,9 +180,10 @@ class Order
             'is_coming_next_place' => $orderStatus->isComing(),
             'order_next_place_address' => $orderStatus->getNextPlaceStreetAddress(),
             'next_place_coming_time' => $orderStatus->getNextPlaceComingTime(),
-            'courier_name' => self::COURIER_NAME,
-            'courier_avatar' => self::COURIER_AVATAR,
-            'courier_phone_number' => self::COURIER_PHONE_NUMBER,
+            'is_assigned_courier' => $isAssignedCourier,
+            'courier_name' => $isAssignedCourier ? $courier->getName() : '',
+            'courier_avatar' => $isAssignedCourier ? $courier->getAvatarUrl() : '',
+            'courier_phone_number' => $isAssignedCourier ? $courier->getPhoneNumber() : '',
             'order_created_at' => $this->order->created_at->format('d.m.Y H:i'),
             'transport_type_and_weight_type' =>
                 $this->getTransportTypeLabel()
@@ -205,5 +208,19 @@ class Order
     private function getWeightTypeLabel(): string
     {
         return self::WEIGHT_LABELS[$this->order->weight_type] ?? '';
+    }
+
+    private function getAssignedCourier(): ?Courier
+    {
+        if (!$this->isAssignedCourier()) {
+            return null;
+        }
+
+        return Courier::getByModelId($this->order->assigned_courier_id);
+    }
+
+    private function isAssignedCourier(): bool
+    {
+        return $this->order->assigned_courier_id !== null;
     }
 }
