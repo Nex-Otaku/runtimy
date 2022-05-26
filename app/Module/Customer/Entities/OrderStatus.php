@@ -216,4 +216,10 @@ class OrderStatus
         $this->orderStatus->phase = self::PHASE_CANCELED;
         $this->orderStatus->saveOrFail();
     }
+
+    public function setIsComing(): void
+    {
+        $this->orderStatus->phase = self::PHASE_COMING;
+        $this->orderStatus->saveOrFail();
+    }
 }
