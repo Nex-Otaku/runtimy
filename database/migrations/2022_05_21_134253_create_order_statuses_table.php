@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('order_statuses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('next_place_id')->nullable();
             $table->string('phase');
             $table->timestamps();
         });

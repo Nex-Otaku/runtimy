@@ -35,6 +35,7 @@ class OrderStatus
         $orderStatus = new OrderStatusModel(
             [
                 'order_id' => $order->getModelId(),
+                'next_place_id' => null,
                 'phase' => self::PHASE_WAITING_FOR_PAYMENT,
             ]
         );
@@ -195,8 +196,11 @@ class OrderStatus
 
     private function findNextPlaceModel(): ?OrderStatusPlace
     {
-        // TODO Сделать определение следующей точки маршрута
-        return null;
+        if ($this->orderStatus->next_place_id === null) {
+            return null;
+        }
+
+        return OrderStatusPlace::where(['id' => $this->orderStatus->next_place_id])->firstOrFail();
     }
 
     private function getComingTime(OrderStatusPlace $orderStatusPlace): string
