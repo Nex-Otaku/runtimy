@@ -49,6 +49,18 @@ class OrderController extends Controller
         );
     }
 
+    public function cancelOrder(int $id)
+    {
+        try {
+            $order = Order::findForCustomerById(Customer::takeLogined(), $id);
+            $order->cancel();
+        } catch (\Throwable $throwable) {
+            return $this->failResponse($throwable->getMessage());
+        }
+
+        return $this->successResponse();
+    }
+
     /**
      * @param OrderStatus[] $items
      * @return array

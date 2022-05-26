@@ -223,4 +223,9 @@ class Order
     {
         return $this->order->assigned_courier_id !== null;
     }
+
+    public function cancel(): void
+    {
+        $this->getOrderStatus()->setCanceled();
+    }
 }

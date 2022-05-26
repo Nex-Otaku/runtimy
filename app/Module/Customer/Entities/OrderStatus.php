@@ -206,4 +206,10 @@ class OrderStatus
             . ' до '
             . $this->toLocalDayTime($orderStatusPlace->will_come_to);
     }
+
+    public function setCanceled(): void
+    {
+        $this->orderStatus->phase = self::PHASE_CANCELED;
+        $this->orderStatus->saveOrFail();
+    }
 }

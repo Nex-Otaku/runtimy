@@ -113,6 +113,7 @@
               align="left"
               class="q-pl-none full-width"
               style="font-size: 18px;"
+              @click="clickCancelOrder"
             >
               Отменить доставку
             </q-btn>
@@ -371,16 +372,34 @@
 import {defineComponent} from 'vue'
 import {useOrderView} from 'src/stores/order-view'
 import {useRoute} from 'vue-router'
+import {api} from "boot/axios";
+import {useQuasar} from "quasar";
 
 export default defineComponent({
   name: 'ViewOrderPage',
   setup() {
+    const $q = useQuasar();
     const route = useRoute();
     const orderViewStore = useOrderView();
-    orderViewStore.fetch(route.params.id);
+    const orderId = route.params.id;
+    orderViewStore.fetch(orderId);
+
+    const clickCancelOrder = () => {
+      api.post('/api/cancel-order/' + orderId)
+        .then(() => {
+          orderViewStore.fetch(orderId);
+
+          $q.notify({
+            message: 'Заказ отменен!',
+            icon: 'check',
+            color: 'positive'
+          })
+        })
+    }
 
     return {
-      orderViewStore: orderViewStore
+      orderViewStore: orderViewStore,
+      clickCancelOrder: clickCancelOrder,
     }
   },
 })
