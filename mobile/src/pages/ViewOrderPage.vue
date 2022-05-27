@@ -190,12 +190,14 @@
             class="col"
             style="max-width: 48px;"
           >
-            <q-btn
-              icon="phone_in_talk"
-              flat
-              round
-              @click="clickCallCourier"
-            ></q-btn>
+            <div class="column full-height justify-center">
+              <q-btn
+                icon="phone_in_talk"
+                flat
+                round
+                @click="clickCallCourier"
+              ></q-btn>
+            </div>
           </div>
         </div>
 
