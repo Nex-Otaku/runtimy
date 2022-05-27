@@ -24,16 +24,15 @@ export default defineComponent({
     }
 
     const login = () => {
-      api.post('/api/login', form)
+      api.get('/sanctum/csrf-cookie')
         .then(() => {
-          router.push({name: 'orders'});
+          api.post('/api/login', form)
+            .then(() => {
+              router.push({name: 'orders'});
+            })
         })
     }
 
-    api.get('/sanctum/csrf-cookie')
-      .then(response => {
-        console.log(response)
-      })
 
     return {
       login,
