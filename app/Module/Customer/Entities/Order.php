@@ -150,8 +150,6 @@ class Order
 
     public function serializeInfo(): array
     {
-        $places = $this->serializePlaces();
-
         $orderStatus = $this->getOrderStatus();
         $isAssignedCourier = $this->isAssignedCourier();
         $courier = $this->getAssignedCourier();
@@ -175,14 +173,12 @@ class Order
                 . $this->getWeightTypeLabel(),
             'description' => $this->order->description,
             'payment_type' => self::PAYMENT_TYPE,
-            'places' => $places,
+            'places' => $this->serializePlaces(),
         ];
     }
 
     public function serializeEditFields(): array
     {
-        $places = $this->serializePlaces();
-
         return [
             'order_number' => $this->getModelId(),
             'transport_type' => $this->order->transport_type,
@@ -190,7 +186,7 @@ class Order
             'weight_type' => $this->order->weight_type,
             'price_of_package' => $this->order->price_of_package,
             'description' => $this->order->description,
-            'places' => $places,
+            'places' => $this->serializePlaces(),
         ];
     }
 
