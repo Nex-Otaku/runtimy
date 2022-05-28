@@ -72,6 +72,18 @@ const getWeightTypeOption = (weightType) => {
   return getOptionByCode(weight_options, weightType);
 }
 
+const getPlaceTitle = (sortIndex) => {
+  if (sortIndex === 1) {
+    return 'Откуда';
+  }
+
+  if (sortIndex === 2) {
+    return 'Куда';
+  }
+
+  return 'Место #' + sortIndex;
+}
+
 export const useOrderForm = defineStore(
   'order-form',
   {
@@ -145,6 +157,17 @@ export const useOrderForm = defineStore(
             }
 
             const orderFields = response.data.data;
+            const places = [];
+
+            for (const place of orderFields.places) {
+              places.push({
+                title: getPlaceTitle(place.sort_index),
+                sort_index: place.sort_index,
+                street_address: place.street_address,
+                phone_number: place.phone_number,
+                courier_comment: place.courier_comment,
+              })
+            }
 
             this.$patch({
               isLoaded: true,
@@ -154,6 +177,7 @@ export const useOrderForm = defineStore(
               weight_type: getWeightTypeOption(orderFields.weight_type),
               price_of_package: orderFields.price_of_package,
               description: orderFields.description,
+              places: places,
             })
           });
       },
