@@ -191,16 +191,11 @@ export default defineComponent({
       })
     }
 
-    const handleAddPlaceButtonClicked = () => {
-      orderFormStore.addPlace();
-    }
-
     return {
       editOrderForm: editOrderForm,
       orderFormStore: orderFormStore,
       handleSubmitButtonClicked: handleSubmitButtonClicked,
       handleResetButtonClicked: handleResetButtonClicked,
-      handleAddPlaceButtonClicked: handleAddPlaceButtonClicked,
     }
   },
 })
