@@ -75,6 +75,18 @@ class OrderController extends Controller
         return $this->successResponse();
     }
 
+    public function updateOrder(Request $request, int $id)
+    {
+        try {
+            $order = Order::findForCustomerById(Customer::takeLogined(), $id);
+            $order->updateFields($request->post());
+        } catch (\Throwable $throwable) {
+            return $this->failResponse($throwable->getMessage());
+        }
+
+        return $this->successResponse();
+    }
+
     /**
      * @param OrderStatus[] $items
      * @return array

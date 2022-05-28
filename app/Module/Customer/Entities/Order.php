@@ -69,6 +69,22 @@ class Order
         return $entity;
     }
 
+    public function updateFields(array $params): void
+    {
+        $this->order->updateOrFail([
+                                 'transport_type' => $params['transport_type'] ?? $this->order->transport_type,
+                                 'size_type' => $params['size_type'] ?? $this->order->size_type,
+                                 'weight_type' => $params['weight_type'] ?? $this->order->weight_type,
+                                 'description' => $params['description'] ?? $this->order->description,
+                                 'price_of_package' => $params['price_of_package'] ?? $this->order->price_of_package,
+                             ]);
+
+        foreach ($params['places'] as $place) {
+            $orderPlace = $this->getOrderPlaceByIndex($place['sort_index'] ?? 0);
+            $orderPlace->updateFields($place);
+        }
+    }
+
     public static function getTransportTypes(): array
     {
         return [
@@ -255,5 +271,10 @@ class Order
 
         $this->getOrderStatus()->setIsComing();
         $this->getOrderStatus()->setNextPlace();
+    }
+
+    private function getOrderPlaceByIndex(int $sortIndex): OrderPlace
+    {
+        return OrderPlace::forOrderWithIndex($this, $sortIndex);
     }
 }

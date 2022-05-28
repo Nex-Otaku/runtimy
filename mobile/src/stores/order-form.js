@@ -128,6 +128,7 @@ export const useOrderForm = defineStore(
 
         for (const place of state.places) {
           resultPlaces.push({
+            sort_index: place.sort_index,
             street_address: place.street_address,
             phone_number: place.phone_number,
             courier_comment: place.courier_comment
@@ -146,11 +147,11 @@ export const useOrderForm = defineStore(
     },
 
     actions: {
-      createOrder() {
-        api.post('/api/new-order', this.form)
+      async createOrder() {
+        return api.post('/api/new-order', this.form)
       },
-      loadOrder(orderId) {
-        api.get('/api/load-order/' + orderId)
+      async loadOrder(orderId) {
+        return api.get('/api/load-order/' + orderId)
           .then(response => {
             if (response.data.result !== 'success') {
               console.error(response.data.message);
@@ -180,6 +181,9 @@ export const useOrderForm = defineStore(
               places: places,
             })
           });
+      },
+      async updateOrder(orderId) {
+        return api.post('/api/update-order/' + orderId, this.form);
       },
       addPlace() {
         const places = this.places;

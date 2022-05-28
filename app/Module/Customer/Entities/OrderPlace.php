@@ -11,8 +11,7 @@ class OrderPlace
 
     private function __construct(
         OrderPlaceModel $orderPlace
-    )
-    {
+    ) {
         $this->orderPlace = $orderPlace;
     }
 
@@ -46,7 +45,7 @@ class OrderPlace
         $records = OrderPlaceModel::where(['order_id' => $order->getModelId()])->get();
 
         foreach ($records as $record) {
-            $items []= new self($record);
+            $items [] = new self($record);
         }
 
         return $items;
@@ -55,10 +54,20 @@ class OrderPlace
     public static function getByModelId(int $orderPlaceId): self
     {
         $model = OrderPlaceModel::where([
-                                       'id' => $orderPlaceId,
-                                   ])->firstOrFail();
+                                            'id' => $orderPlaceId,
+                                        ])->firstOrFail();
 
         return new self($model);
+    }
+
+    public static function forOrderWithIndex(Order $order, int $sortIndex): self
+    {
+        $place = OrderPlaceModel::where([
+                                            'order_id' => $order->getModelId(),
+                                            'sort_index' => $sortIndex,
+                                        ])->firstOrFail();
+
+        return new self($place);
     }
 
     public function getModelId(): int
@@ -84,5 +93,13 @@ class OrderPlace
     public function getSortIndex(): int
     {
         return $this->orderPlace->sort_index;
+    }
+
+    public function updateFields(array $fields): void
+    {
+        $this->orderPlace->street_address = $fields['street_address'] ?? $this->orderPlace->street_address;
+        $this->orderPlace->phone_number = $fields['phone_number'] ?? $this->orderPlace->phone_number;
+        $this->orderPlace->courier_comment = $fields['courier_comment'] ?? $this->orderPlace->courier_comment;
+        $this->orderPlace->saveOrFail();
     }
 }

@@ -117,15 +117,15 @@
           </div>
 
           <div class="row justify-center">
-              <q-btn
-                no-caps
-                outline
-                align="center"
-                class="btn-fixed-width"
-                color="primary"
-                label="Сохранить заказ"
-                @click="handleSubmitButtonClicked"
-              />
+            <q-btn
+              no-caps
+              outline
+              align="center"
+              class="btn-fixed-width"
+              color="primary"
+              label="Сохранить заказ"
+              @click="handleSubmitButtonClicked"
+            />
           </div>
 
         </q-form>
@@ -168,17 +168,19 @@ export default defineComponent({
     }
 
     const submitValidForm = () => {
-      orderFormStore.updateOrder(orderId);
-      resetForm();
-      router.push({name: 'orders'});
+      orderFormStore.updateOrder(orderId)
+        .then(() => {
+          resetForm();
+          router.push({name: 'orders'});
 
-      nextTick(function () {
-        $q.notify({
-          message: 'Заказ обновлён!',
-          icon: 'check',
-          color: 'positive'
-        })
-      });
+          nextTick(function () {
+            $q.notify({
+              message: 'Заказ обновлён!',
+              icon: 'check',
+              color: 'positive'
+            })
+          });
+        });
     }
 
     const handleSubmitButtonClicked = () => {
