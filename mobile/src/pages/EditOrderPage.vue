@@ -86,20 +86,6 @@
             </q-item>
           </q-list>
 
-          <div class="text-left q-mt-md q-pa-md text-grey-6 text-weight-bold">
-            Дополнительно
-          </div>
-
-          <q-btn
-            outline
-            align="left"
-            class="btn-fixed-width"
-            color="primary"
-            icon="add"
-            label="Добавить адрес"
-            @click="handleAddPlaceButtonClicked"
-          />
-
           <!-- Конец блока адресов -->
 
 
@@ -130,22 +116,16 @@
           >
           </div>
 
-          <div class="row items-center">
-            <div class="col-sm">
-              от 500₽
-            </div>
-            <q-space></q-space>
-            <div class="col-8">
+          <div class="row justify-center">
               <q-btn
                 no-caps
                 outline
                 align="center"
                 class="btn-fixed-width"
                 color="primary"
-                label="Отправить заказ"
+                label="Сохранить заказ"
                 @click="handleSubmitButtonClicked"
               />
-            </div>
           </div>
 
         </q-form>
@@ -164,7 +144,6 @@ import {useQuasar} from 'quasar'
 import {nextTick} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import OrderFormHeader from "components/order-form/OrderFormHeader";
-import {useOrderView} from "stores/order-view";
 
 export default defineComponent({
   name: 'EditOrderPage',
