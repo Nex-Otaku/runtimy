@@ -50,6 +50,19 @@ class OrderController extends Controller
         );
     }
 
+    public function loadOrder(int $id)
+    {
+        try {
+            $order = Order::findForCustomerById(Customer::takeLogined(), $id);
+        } catch (\Throwable $throwable) {
+            return $this->failResponse($throwable->getMessage());
+        }
+
+        return $this->successResponse(
+            $order->serializeEditFields()
+        );
+    }
+
     public function cancelOrder(int $id)
     {
         try {

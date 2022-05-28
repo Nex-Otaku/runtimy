@@ -1,22 +1,86 @@
 import {defineStore} from 'pinia'
 import {api} from 'src/boot/axios'
 
+const transport_options = [
+  {
+    label: 'Пешком',
+    value: 'feet'
+  },
+  {
+    label: 'Легковой',
+    value: 'passenger'
+  },
+  {
+    label: 'Грузовой',
+    value: 'cargo'
+  },
+];
+
+const size_options = [
+  {
+    label: 'Мелкий',
+    value: 'small'
+  },
+  {
+    label: 'Средний',
+    value: 'medium'
+  },
+  {
+    label: 'Крупный',
+    value: 'large'
+  },
+  {
+    label: 'Очень крупный',
+    value: 'extra-large'
+  },
+];
+
+const weight_options = [
+  {
+    label: 'До 1 кг',
+    value: '1kg'
+  },
+  {
+    label: 'До 5 кг',
+    value: '5kg'
+  },
+  {
+    label: 'До 10 кг',
+    value: '10kg'
+  },
+];
+
+const getOptionByCode = (options, code) => {
+  for (const option of options) {
+    if (option.value === code) {
+      return option;
+    }
+  }
+
+  throw new Error('Неизвестная опция: ' + code);
+}
+
+const getTransportTypeOption = (transportType) => {
+  return getOptionByCode(transport_options, transportType);
+}
+
+const getSizeTypeOption = (sizeType) => {
+  return getOptionByCode(size_options, sizeType);
+}
+
+const getWeightTypeOption = (weightType) => {
+  return getOptionByCode(weight_options, weightType);
+}
+
 export const useOrderForm = defineStore(
   'order-form',
   {
     state: () => ({
-      transport_type: {
-        label: 'Пешком',
-        value: 'feet'
-      },
-      size_type: {
-        label: 'Мелкий',
-        value: 'small'
-      },
-      weight_type: {
-        label: 'До 1 кг',
-        value: '1kg'
-      },
+      isLoaded: false,
+      orderNumber: null,
+      transport_type: getTransportTypeOption('feet'),
+      size_type: getSizeTypeOption('small'),
+      weight_type: getWeightTypeOption('1kg'),
       places: [
         {
           'title': 'Откуда',
@@ -38,6 +102,15 @@ export const useOrderForm = defineStore(
     }),
 
     getters: {
+      transport_options: () => {
+        return transport_options;
+      },
+      size_options: () => {
+        return size_options;
+      },
+      weight_options: () => {
+        return weight_options;
+      },
       form: (state) => {
         const resultPlaces = [];
 
@@ -63,6 +136,26 @@ export const useOrderForm = defineStore(
     actions: {
       createOrder() {
         api.post('/api/new-order', this.form)
+      },
+      loadOrder(orderId) {
+        api.get('/api/load-order/' + orderId)
+          .then(response => {
+            if (response.data.result !== 'success') {
+              console.error(response.data.message);
+            }
+
+            const orderFields = response.data.data;
+
+            this.$patch({
+              isLoaded: true,
+              orderNumber: orderFields.order_number,
+              transport_type: getTransportTypeOption(orderFields.transport_type),
+              size_type: getSizeTypeOption(orderFields.size_type),
+              weight_type: getWeightTypeOption(orderFields.weight_type),
+              price_of_package: orderFields.price_of_package,
+              description: orderFields.description,
+            })
+          });
       },
       addPlace() {
         const places = this.places;

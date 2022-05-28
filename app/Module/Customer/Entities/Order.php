@@ -150,19 +150,7 @@ class Order
 
     public function serializeInfo(): array
     {
-        $places = [];
-        $sortIndex = 1;
-
-        foreach ($this->getPlaces() as $place) {
-            $places[] = [
-                'sort_index' => $sortIndex,
-                'street_address' => $place->getStreetAddress(),
-                'phone_number' => $place->getPhoneNumber(),
-                'courier_comment' => $place->getCourierComment(),
-            ];
-
-            $sortIndex++;
-        }
+        $places = $this->serializePlaces();
 
         $orderStatus = $this->getOrderStatus();
         $isAssignedCourier = $this->isAssignedCourier();
@@ -189,6 +177,39 @@ class Order
             'payment_type' => self::PAYMENT_TYPE,
             'places' => $places,
         ];
+    }
+
+    public function serializeEditFields(): array
+    {
+        $places = $this->serializePlaces();
+
+        return [
+            'order_number' => $this->getModelId(),
+            'transport_type' => $this->order->transport_type,
+            'size_type' => $this->order->size_type,
+            'weight_type' => $this->order->weight_type,
+            'price_of_package' => $this->order->price_of_package,
+            'description' => $this->order->description,
+            'places' => $places,
+        ];
+    }
+
+    private function serializePlaces(): array
+    {
+        $places = [];
+        $sortIndex = 1;
+
+        foreach ($this->getPlaces() as $place) {
+            $places[] = [
+                'sort_index' => $sortIndex,
+                'street_address' => $place->getStreetAddress(),
+                'phone_number' => $place->getPhoneNumber(),
+                'courier_comment' => $place->getCourierComment(),
+            ];
+
+            $sortIndex++;
+        }
+        return $places;
     }
 
     private function getOrderStatus(): OrderStatus

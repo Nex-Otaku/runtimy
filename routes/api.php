@@ -28,4 +28,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/order-status-list', [OrderController::class, 'getOrderStatusList']);
     Route::get('/view-order/{id}', [OrderController::class, 'viewOrder']);
     Route::post('/cancel-order/{id}', [OrderController::class, 'cancelOrder']);
+    Route::get('/load-order/{id}', [OrderController::class, 'loadOrder']);
 });

@@ -98,6 +98,7 @@
               align="left"
               class="q-pl-none full-width"
               style="font-size: 18px;"
+              @click="clickEditOrder"
             >
               Редактировать
             </q-btn>
@@ -401,6 +402,10 @@ export default defineComponent({
         })
     }
 
+    const clickEditOrder = () => {
+      router.push({name: 'edit-order', params: {id: orderId}});
+    }
+
     const clickCallCourier = () => {
       openURL('tel:' + orderViewStore.orderInfo.courier_phone_number_uri);
     }
@@ -408,6 +413,7 @@ export default defineComponent({
     return {
       orderViewStore: orderViewStore,
       clickCancelOrder: clickCancelOrder,
+      clickEditOrder: clickEditOrder,
       clickCallCourier: clickCallCourier,
     }
   },

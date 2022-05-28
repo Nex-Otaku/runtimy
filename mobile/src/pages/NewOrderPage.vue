@@ -57,21 +57,21 @@
 
         <q-select
           v-model="orderFormStore.transport_type"
-          :options="transport_options"
+          :options="orderFormStore.transport_options"
           label="Транспорт"
           class="q-ma-sm"
           outlined
         />
         <q-select
           v-model="orderFormStore.size_type"
-          :options="size_options"
+          :options="orderFormStore.size_options"
           label="Габариты"
           class="q-ma-sm"
           outlined
         />
         <q-select
           v-model="orderFormStore.weight_type"
-          :options="weight_options"
+          :options="orderFormStore.weight_options"
           label="Вес"
           class="q-ma-sm"
           outlined
@@ -254,52 +254,6 @@ export default defineComponent({
     return {
       newOrderForm: newOrderForm,
       orderFormStore: orderFormStore,
-      transport_options: [
-        {
-          label: 'Пешком',
-          value: 'feet'
-        },
-        {
-          label: 'Легковой',
-          value: 'passenger'
-        },
-        {
-          label: 'Грузовой',
-          value: 'cargo'
-        },
-      ],
-      size_options: [
-        {
-          label: 'Мелкий',
-          value: 'small'
-        },
-        {
-          label: 'Средний',
-          value: 'medium'
-        },
-        {
-          label: 'Крупный',
-          value: 'large'
-        },
-        {
-          label: 'Очень крупный',
-          value: 'extra-large'
-        },
-      ],
-      weight_options: [
-        {
-          label: 'До 1 кг',
-          value: '1kg'
-        },
-        {
-          label: 'До 5 кг',
-          value: '5kg'
-        },
-        {
-          label: 'До 10 кг',
-          value: '10kg'
-        },
-      ],
       handleSubmitButtonClicked: handleSubmitButtonClicked,
       handleResetButtonClicked: handleResetButtonClicked,
       handleAddPlaceButtonClicked: handleAddPlaceButtonClicked,
