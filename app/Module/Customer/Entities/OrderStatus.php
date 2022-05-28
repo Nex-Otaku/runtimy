@@ -203,6 +203,11 @@ class OrderStatus
 
     private function getComingTime(OrderStatusPlace $orderStatusPlace): string
     {
+        if (($orderStatusPlace->will_come_from === null)
+            || ($orderStatusPlace->will_come_to === null)) {
+            return '';
+        }
+
         return 'с '
             . $this->toLocalDayTime($orderStatusPlace->will_come_from)
             . ' до '

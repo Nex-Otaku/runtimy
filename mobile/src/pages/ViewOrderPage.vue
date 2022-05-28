@@ -75,6 +75,7 @@
             </div>
 
             <div
+              v-if="orderViewStore.orderInfo.next_place_coming_time"
               class="q-mt-sm q-mb-xs text-grey-7"
               style="font-size: 15px;"
             >
@@ -82,6 +83,7 @@
             </div>
 
             <div
+              v-if="orderViewStore.orderInfo.next_place_coming_time"
               style="font-size: 15px;"
             >
               {{ orderViewStore.orderInfo.next_place_coming_time }}
