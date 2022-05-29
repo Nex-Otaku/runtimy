@@ -277,4 +277,20 @@ class OrderStatus
 
         return $currentIndex + 1;
     }
+
+    public function canBeCanceled(): bool
+    {
+        return !in_array(
+            $this->orderStatus->phase,
+            [self::PHASE_CANCELED, self::PHASE_COMPLETED]
+        );
+    }
+
+    public function canBeEdited(): bool
+    {
+        return !in_array(
+            $this->orderStatus->phase,
+            [self::PHASE_CANCELED, self::PHASE_COMPLETED]
+        );
+    }
 }

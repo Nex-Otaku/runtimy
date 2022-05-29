@@ -175,6 +175,8 @@ class Order
             'order_status_label' => $orderStatus->getStatusLabel(),
             'order_price' => self::STUB_PRICE,
             'is_coming_next_place' => $orderStatus->isComing(),
+            'can_be_canceled' => $orderStatus->canBeCanceled(),
+            'can_be_edited' => $orderStatus->canBeEdited(),
             'order_next_place_address' => $orderStatus->getNextPlaceStreetAddress(),
             'next_place_coming_time' => $orderStatus->getNextPlaceComingTime(),
             'is_assigned_courier' => $isAssignedCourier,

@@ -91,6 +91,7 @@
           </div>
 
           <div
+            v-if="orderViewStore.orderInfo.can_be_edited"
             style="border-top: solid 1px rgba(0, 0, 0, 0.22);"
           >
             <q-btn
@@ -107,6 +108,7 @@
           </div>
 
           <div
+            v-if="orderViewStore.orderInfo.can_be_canceled"
             style="border-top: solid 1px rgba(0, 0, 0, 0.22);"
           >
             <q-btn
