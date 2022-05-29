@@ -118,7 +118,7 @@
               style="font-size: 18px;"
               @click="clickCancelOrder"
             >
-              Отменить доставку
+              Отменить заказ
             </q-btn>
           </div>
 
@@ -368,6 +368,32 @@
           </q-expansion-item>
         </q-list>
       </div>
+
+      <q-dialog v-model="confirmCancelOrder" persistent>
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-avatar icon="question_mark" color="primary" text-color="white" />
+            <span class="q-ml-sm">Отменить заказ?</span>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn
+              v-close-popup
+              flat
+              icon="delete"
+              label="Отменить заказ"
+              color="primary"
+              @click="cancelOrderConfirmed"
+            />
+            <q-btn
+              v-close-popup
+              flat
+              label="Не отменять"
+              color="primary"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page>
 
   </q-page-container>
@@ -375,7 +401,7 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import {defineComponent, ref} from 'vue'
 import {useOrderView} from 'src/stores/order-view'
 import {useRoute} from 'vue-router'
 import {api} from "boot/axios";
@@ -391,14 +417,22 @@ export default defineComponent({
     const orderId = route.params.id;
     orderViewStore.fetch(orderId);
 
+    const confirmCancelOrder = ref(false);
+
     const clickCancelOrder = () => {
+      confirmCancelOrder.value = true;
+    }
+
+    const cancelOrderConfirmed = () => {
+      confirmCancelOrder.value = false;
+
       api.post('/api/cancel-order/' + orderId)
         .then(() => {
           orderViewStore.fetch(orderId);
 
           $q.notify({
             message: 'Заказ отменен!',
-            icon: 'check',
+            icon: 'delete',
             color: 'positive'
           })
         })
@@ -417,6 +451,8 @@ export default defineComponent({
       clickCancelOrder: clickCancelOrder,
       clickEditOrder: clickEditOrder,
       clickCallCourier: clickCallCourier,
+      confirmCancelOrder: confirmCancelOrder,
+      cancelOrderConfirmed: cancelOrderConfirmed,
     }
   },
 })
