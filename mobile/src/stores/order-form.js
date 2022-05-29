@@ -1,7 +1,8 @@
 import {defineStore} from 'pinia'
 import {api} from 'src/boot/axios'
+import clonedeep from 'clone-deep';
 
-const transport_options = [
+const transport_options_list = [
   {
     label: 'Пешком',
     value: 'feet'
@@ -16,7 +17,7 @@ const transport_options = [
   },
 ];
 
-const size_options = [
+const size_options_list = [
   {
     label: 'Мелкий',
     value: 'small'
@@ -35,7 +36,7 @@ const size_options = [
   },
 ];
 
-const weight_options = [
+const weight_options_list = [
   {
     label: 'До 1 кг',
     value: '1kg'
@@ -53,7 +54,7 @@ const weight_options = [
 const getOptionByCode = (options, code) => {
   for (const option of options) {
     if (option.value === code) {
-      return option;
+      return clonedeep(option);
     }
   }
 
@@ -61,15 +62,15 @@ const getOptionByCode = (options, code) => {
 }
 
 const getTransportTypeOption = (transportType) => {
-  return getOptionByCode(transport_options, transportType);
+  return getOptionByCode(transport_options_list, transportType);
 }
 
 const getSizeTypeOption = (sizeType) => {
-  return getOptionByCode(size_options, sizeType);
+  return getOptionByCode(size_options_list, sizeType);
 }
 
 const getWeightTypeOption = (weightType) => {
-  return getOptionByCode(weight_options, weightType);
+  return getOptionByCode(weight_options_list, weightType);
 }
 
 const getPlaceTitle = (sortIndex) => {
@@ -115,13 +116,13 @@ export const useOrderForm = defineStore(
 
     getters: {
       transport_options: () => {
-        return transport_options;
+        return clonedeep(transport_options_list);
       },
       size_options: () => {
-        return size_options;
+        return clonedeep(size_options_list);
       },
       weight_options: () => {
-        return weight_options;
+        return clonedeep(weight_options_list);
       },
       form: (state) => {
         const resultPlaces = [];
