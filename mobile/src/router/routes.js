@@ -4,6 +4,7 @@ const routes = [
     component: () => import('layouts/GuestLayout.vue'),
     children: [
       {
+        name: 'login',
         path: '', component: () => import('pages/FastLoginPage.vue')
       },
     ]
