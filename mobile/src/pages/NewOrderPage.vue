@@ -37,26 +37,7 @@
 
           <!-- Конец блока адресов -->
 
-
-          <div class="text-h6 text-left q-mt-md">
-            Содержимое заказа
-          </div>
-
-          <q-input
-            v-model="orderFormStore.description"
-            label="Что везём?"
-          >
-          </q-input>
-
-          <q-input
-            v-model="orderFormStore.price_of_package"
-            label="Ценность (Сумма)"
-            bottom-slots
-          >
-            <template #hint>
-              Если груз потеряется или будет повреждён, вернём до 50000₽ в течение трёх рабочих дней.
-            </template>
-          </q-input>
+          <OrderFormPackageOptions/>
 
           <!-- TODO Блок оплаты -->
           <div
@@ -101,10 +82,11 @@ import {useRouter} from 'vue-router'
 import OrderFormHeader from "components/order-form/OrderFormHeader";
 import OrderFormPlacesList from "components/order-form/OrderFormPlacesList";
 import OrderFormDeliveryOptions from "components/order-form/OrderFormDeliveryOptions";
+import OrderFormPackageOptions from "components/order-form/OrderFormPackageOptions";
 
 export default defineComponent({
   name: 'NewOrderPage',
-  components: {OrderFormDeliveryOptions, OrderFormPlacesList, OrderFormHeader},
+  components: {OrderFormPackageOptions, OrderFormDeliveryOptions, OrderFormPlacesList, OrderFormHeader},
   setup() {
     const $q = useQuasar();
     const orderFormStore = useOrderForm();
