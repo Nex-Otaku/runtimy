@@ -15,28 +15,7 @@
 
         <q-form ref="newOrderForm" class="column">
 
-          <q-select
-            v-model="orderFormStore.transport_type"
-            :options="orderFormStore.transport_options"
-            label="Транспорт"
-            class="q-ma-sm"
-            outlined
-          />
-          <q-select
-            v-model="orderFormStore.size_type"
-            :options="orderFormStore.size_options"
-            label="Габариты"
-            class="q-ma-sm"
-            outlined
-          />
-          <q-select
-            v-model="orderFormStore.weight_type"
-            :options="orderFormStore.weight_options"
-            label="Вес"
-            class="q-ma-sm"
-            outlined
-          />
-
+          <OrderFormDeliveryOptions/>
 
           <!-- Начало блока адресов -->
 
@@ -121,10 +100,11 @@ import {nextTick} from 'vue'
 import {useRouter} from 'vue-router'
 import OrderFormHeader from "components/order-form/OrderFormHeader";
 import OrderFormPlacesList from "components/order-form/OrderFormPlacesList";
+import OrderFormDeliveryOptions from "components/order-form/OrderFormDeliveryOptions";
 
 export default defineComponent({
   name: 'NewOrderPage',
-  components: {OrderFormPlacesList, OrderFormHeader},
+  components: {OrderFormDeliveryOptions, OrderFormPlacesList, OrderFormHeader},
   setup() {
     const $q = useQuasar();
     const orderFormStore = useOrderForm();
