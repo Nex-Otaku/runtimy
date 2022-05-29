@@ -101,6 +101,10 @@ export default defineComponent({
       })
     }
 
+    nextTick(function () {
+      resetForm();
+    })
+
     const handleResetButtonClicked = () => {
       resetForm();
     }
