@@ -405,7 +405,7 @@
 <script>
 import {defineComponent, ref} from 'vue'
 import {useOrderView} from 'src/stores/order-view'
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import {api} from "boot/axios";
 import {useQuasar} from "quasar";
 import {openURL} from 'quasar'
@@ -415,6 +415,7 @@ export default defineComponent({
   setup() {
     const $q = useQuasar();
     const route = useRoute();
+    const router = useRouter();
     const orderViewStore = useOrderView();
     const orderId = route.params.id;
     orderViewStore.fetch(orderId);
