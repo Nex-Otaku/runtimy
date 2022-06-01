@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Customer\Entities;
+namespace App\Module\MobileAuth\Entities;
 
 use App\Models\MobileAccount as MobileAccountModel;
 use App\Models\User;
