@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
                 UsersTableSeeder::class,
                 CouriersTableSeeder::class,
                 OrdersTableSeeder::class,
+                MobileAccountsTableSeeder::class,
             ]
         );
     }

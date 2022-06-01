@@ -33,4 +33,9 @@ class MobileAccount
 
         return new self($mobileAccount);
     }
+
+    public static function createDemo(): self
+    {
+        return self::register('+71112223344');
+    }
 }
