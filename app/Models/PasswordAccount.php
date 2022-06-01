@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
@@ -15,9 +17,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string $remember_token
  */
-class PasswordAccount extends Model
+class PasswordAccount extends Model implements AuthenticatableContract
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, Authenticatable;
 
     /**
      * The attributes that are mass assignable.
