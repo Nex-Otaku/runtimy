@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PasswordAccount;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -11,17 +12,22 @@ class UsersTableSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Throwable
      */
     public function run()
     {
-        User::firstOrCreate(
+        $user = new User();
+        $user->saveOrFail();
+
+        $passwordAccount = new PasswordAccount(
             [
-                'email' => 'demo@mail.com'
-            ],
-            [
+                'user_id' => $user->id,
+                'email' => 'demo@mail.com',
                 'name' => 'Demo User',
                 'password' => bcrypt('secret'),
             ]
         );
+
+        $passwordAccount->saveOrFail();
     }
 }

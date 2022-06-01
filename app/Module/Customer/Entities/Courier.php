@@ -3,6 +3,7 @@
 namespace App\Module\Customer\Entities;
 
 use App\Models\Courier as CourierModel;
+use App\Models\PasswordAccount;
 use App\Models\User;
 use Faker\Factory;
 
@@ -21,21 +22,24 @@ class Courier
     {
         $faker = Factory::create();
 
-        /** @var User $user */
-        $user = User::firstOrCreate(
+        $user = new User();
+        $user->saveOrFail();
+
+        $passwordAccount = new PasswordAccount(
             [
+                'user_id' => $user->id,
                 'email' => $faker->email,
-            ],
-            [
                 'name' => $faker->name,
                 'password' => bcrypt('secret'),
             ]
         );
 
+        $passwordAccount->saveOrFail();
+
         $courier = new CourierModel(
             [
                 'user_id' => $user->id,
-                'name' => $user->name,
+                'name' => $passwordAccount->name,
                 'avatar_url' => $faker->imageUrl,
                 'phone_number' => $faker->phoneNumber,
             ]
