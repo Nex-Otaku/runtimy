@@ -48,11 +48,11 @@ class SpaLoginPincodeController extends Controller
         $phoneNumber = $credentials['phone'];
         $pincode = $credentials['pincode'];
 
-        $mobileAccount = MobileAccount::getExistingByPhone($phoneNumber);
-
-        if ($mobileAccount === null) {
+        if (!MobileAccount::existsByPhone($phoneNumber)) {
             return $this->failLoginPincode();
         }
+
+        $mobileAccount = MobileAccount::getExistingByPhone($phoneNumber);
 
         if (!$mobileAccount->isValidPincode($pincode)) {
             return $this->failLoginPincode();

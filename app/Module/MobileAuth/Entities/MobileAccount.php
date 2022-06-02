@@ -49,7 +49,7 @@ class MobileAccount
         // TODO
     }
 
-    public static function getExistingByPhone(string $phoneNumber): ?self
+    public static function getExistingByPhone(string $phoneNumber): self
     {
         // TODO
     }
