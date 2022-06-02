@@ -4,6 +4,7 @@ namespace App\Module\MobileAuth\Entities;
 
 use App\Models\MobileAccount as MobileAccountModel;
 use App\Models\User;
+use App\Module\MobileAuth\PincodeSender;
 
 class MobileAccount
 {
@@ -39,24 +40,28 @@ class MobileAccount
         return self::register('+71112223344');
     }
 
-    public static function existsByPhone(mixed $phoneNumber): bool
+    public static function existsByPhone(string $phoneNumber): bool
     {
-        // TODO
+        return MobileAccountModel::where(['phone_number' => $phoneNumber])->exists();
     }
 
-    public static function sendPincode(mixed $phoneNumber): void
+    public function sendPincode(): void
     {
-        // TODO
+        $pincode = (new PincodeSender())->sendPincode($this->mobileAccount->phone_number);
+        $this->mobileAccount->pincode = $pincode;
+        $this->mobileAccount->saveOrFail();
     }
 
     public static function getExistingByPhone(string $phoneNumber): self
     {
-        // TODO
+        $mobileAccount = MobileAccountModel::where(['phone_number' => $phoneNumber])->firstOrFail();
+
+        return new self($mobileAccount);
     }
 
     public function isValidPincode(string $pincode): bool
     {
-        // TODO
+        return $this->mobileAccount->pincode === $pincode;
     }
 
     public function getUserModelId(): int

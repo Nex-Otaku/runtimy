@@ -27,7 +27,7 @@ class SpaLoginPincodeController extends Controller
             MobileAccount::register($phoneNumber);
         }
 
-        MobileAccount::sendPincode($phoneNumber);
+        MobileAccount::getExistingByPhone($phoneNumber)->sendPincode();
 
         return $this->success();
     }
