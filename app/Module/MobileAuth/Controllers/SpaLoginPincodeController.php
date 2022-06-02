@@ -3,6 +3,8 @@
 namespace App\Module\MobileAuth\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Module\MobileAuth\Entities\MobileAccount;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,33 +16,68 @@ class SpaLoginPincodeController extends Controller
      * Handle an authentication attempt.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function authenticate(Request $request)
+    public function loginPhone(Request $request)
     {
-        $credentials = $request->validate([
-                                              'email' => ['required', 'email'],
-                                              'password' => ['required'],
-                                          ]);
+        $credentials = $request->validate(['phone' => ['required']]);
+        $phoneNumber = $credentials['phone'];
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return response('success', 200);
+        if (!MobileAccount::existsByPhone($phoneNumber)) {
+            MobileAccount::register($phoneNumber);
         }
 
-        return [
+        MobileAccount::sendPincode($phoneNumber);
+
+        return $this->success();
+    }
+
+    /**
+     * Handle an authentication attempt.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loginPincode(Request $request)
+    {
+        $credentials = $request->validate([
+                                              'phone' => ['required'],
+                                              'pincode' => ['required'],
+                                          ]);
+
+        $phoneNumber = $credentials['phone'];
+        $pincode = $credentials['pincode'];
+
+        $mobileAccount = MobileAccount::getExistingByPhone($phoneNumber);
+
+        if ($mobileAccount === null) {
+            return $this->failLoginPincode();
+        }
+
+        if (!$mobileAccount->isValidPincode($pincode)) {
+            return $this->failLoginPincode();
+        }
+
+        Auth::loginUsingId($mobileAccount->getUserModelId());
+        $request->session()->regenerate();
+
+        return $this->success();
+    }
+
+    private function failLoginPincode(): JsonResponse
+    {
+        return response()->json([
             'errors' => [
-                'email' => 'The provided credentials do not match our records.',
+                'auth' => 'Неверный номер или пинкод',
             ],
-        ];
+        ], 400);
     }
 
     /**
      * Log the user out of the application.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function logout(Request $request)
     {
@@ -50,6 +87,13 @@ class SpaLoginPincodeController extends Controller
 
         $request->session()->regenerateToken();
 
-        return response('success', 200);
+        return $this->success();
+    }
+
+    private function success(): JsonResponse
+    {
+        return response()->json([
+                                    'success',
+                                ]);
     }
 }

@@ -38,4 +38,29 @@ class MobileAccount
     {
         return self::register('+71112223344');
     }
+
+    public static function existsByPhone(mixed $phoneNumber): bool
+    {
+        // TODO
+    }
+
+    public static function sendPincode(mixed $phoneNumber): void
+    {
+        // TODO
+    }
+
+    public static function getExistingByPhone(string $phoneNumber): ?self
+    {
+        // TODO
+    }
+
+    public function isValidPincode(string $pincode): bool
+    {
+        // TODO
+    }
+
+    public function getUserModelId(): int
+    {
+        return $this->mobileAccount->user_id;
+    }
 }
