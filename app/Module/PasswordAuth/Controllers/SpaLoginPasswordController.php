@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Module\PasswordAuth\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SpaLoginController extends Controller
+use function response;
+
+class SpaLoginPasswordController extends Controller
 {
     /**
      * Handle an authentication attempt.

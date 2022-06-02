@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\SpaLoginController;
 use App\Module\Customer\Controllers\OrderController;
+use App\Module\MobileAuth\Controllers\SpaLoginPincodeController;
+use App\Module\PasswordAuth\Controllers\SpaLoginPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,8 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', [SpaLoginController::class, 'authenticate']);
-Route::post('/logout', [SpaLoginController::class, 'logout']);
+Route::post('/password-login', [SpaLoginPasswordController::class, 'authenticate']);
+Route::post('/password-logout', [SpaLoginPasswordController::class, 'logout']);
+
+Route::post('/login-phone', [SpaLoginPincodeController::class, 'loginPhone']);
+Route::post('/login-pincode', [SpaLoginPincodeController::class, 'loginPincode']);
+Route::post('/logout', [SpaLoginPincodeController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
