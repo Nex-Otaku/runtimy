@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import {api} from "boot/axios";
 
 export const useAuth = defineStore(
   'auth',
@@ -6,6 +7,8 @@ export const useAuth = defineStore(
     state: () => ({
       isLoggedIn: false,
       role: 'guest',
+      phoneNumber: '',
+      pincode: '',
     }),
 
     getters: {
@@ -25,8 +28,37 @@ export const useAuth = defineStore(
         })
       },
 
-      async fetch() {
-        // TODO
+      loginToRole(role) {
+        this.$patch({
+          isLoggedIn: true,
+          role: role,
+        })
+      },
+
+      async loginPhone(phoneNumber) {
+        this.$patch({
+          phoneNumber: phoneNumber,
+        })
+
+        return api.get('/sanctum/csrf-cookie')
+          .then(() => {
+            api.post('/api/login-phone', {
+              phone: this.phoneNumber
+            })
+          })
+      },
+
+      async loginPincode(pincode) {
+        this.$patch({
+          pincode: pincode,
+        })
+
+        await api.post('/api/login-pincode', {
+          phone: this.phoneNumber,
+          pincode: this.pincode
+        });
+
+        this.loginToRole('customer');
       },
     }
   },

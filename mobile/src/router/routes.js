@@ -4,8 +4,28 @@ const routes = [
     component: () => import('layouts/GuestLayout.vue'),
     children: [
       {
-        name: 'login',
-        path: '', component: () => import('pages/FastLoginPage.vue')
+        name: 'login-phone',
+        path: '',
+        component: () => import('pages/LoginPhonePage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
+      },
+      {
+        name: 'login-pincode',
+        path: 'pincode',
+        component: () => import('pages/LoginPincodePage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
+      },
+      {
+        name: 'fast-login',
+        path: 'fast-login',
+        component: () => import('pages/FastLoginPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
     ]
   },
@@ -14,10 +34,18 @@ const routes = [
     component: () => import('layouts/GuestLayout.vue'),
     children: [
       {
-        path: '', component: () => import('pages/IndexPage.vue')
+        path: '',
+        component: () => import('pages/IndexPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
       {
-        path: 'login', component: () => import('pages/LoginPage.vue')
+        path: 'login',
+        component: () => import('pages/LoginPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       }
     ]
   },
@@ -26,17 +54,27 @@ const routes = [
     component: () => import('layouts/DialogPageLayout.vue'),
     children: [
       {
-        path: 'new-order', component: () => import('pages/NewOrderPage.vue')
+        path: 'new-order',
+        component: () => import('pages/NewOrderPage.vue'),
+        meta: {
+          roles: ['customer'],
+        }
       },
       {
         name: 'view-order',
         path: 'view-order/:id',
-        component: () => import('pages/ViewOrderPage.vue')
+        component: () => import('pages/ViewOrderPage.vue'),
+        meta: {
+          roles: ['customer'],
+        }
       },
       {
         name: 'edit-order',
         path: 'edit-order/:id',
-        component: () => import('pages/EditOrderPage.vue')
+        component: () => import('pages/EditOrderPage.vue'),
+        meta: {
+          roles: ['customer'],
+        }
       },
     ]
   },
@@ -47,14 +85,20 @@ const routes = [
       {
         name: 'orders',
         path: 'orders',
-        meta: {title: 'Заказы'},
         component: () => import('pages/OrdersListPage.vue'),
+        meta: {
+          roles: ['customer'],
+          title: 'Заказы',
+        }
       },
       {
         name: 'chat',
         path: 'chat',
-        meta: {title: 'Чат'},
         component: () => import('pages/ChatPage.vue'),
+        meta: {
+          roles: ['customer'],
+          title: 'Чат',
+        }
       },
     ]
   },
@@ -66,6 +110,9 @@ const routes = [
         name: 'profile',
         path: '',
         component: () => import('pages/ProfilePage.vue'),
+        meta: {
+          roles: ['customer', 'courier'],
+        }
       },
     ]
   },
@@ -74,24 +121,48 @@ const routes = [
     component: () => import('layouts/GuestLayout.vue'),
     children: [
       {
-        path: 'blank', component: () => import('pages/BlankPage.vue')
+        path: 'blank',
+        component: () => import('pages/BlankPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
       {
-        path: 'pinia', component: () => import('pages/PiniaPage.vue')
+        path: 'pinia',
+        component: () => import('pages/PiniaPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
       {
-        path: 'loop', component: () => import('pages/LoopPage.vue')
+        path: 'loop',
+        component: () => import('pages/LoopPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
       {
-        path: 'router', component: () => import('pages/RouterPage.vue')
+        path: 'router',
+        component: () => import('pages/RouterPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
       {
         name: 'counter1',
-        path: 'counter1', component: () => import('pages/CounterFirstPage.vue')
+        path: 'counter1',
+        component: () => import('pages/CounterFirstPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
       {
         name: 'counter2',
-        path: 'counter2', component: () => import('pages/CounterSecondPage.vue')
+        path: 'counter2',
+        component: () => import('pages/CounterSecondPage.vue'),
+        meta: {
+          roles: ['guest'],
+        }
       },
     ]
   },

@@ -1,6 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
+import {useAuth} from "stores/auth";
 
 /*
  * If not building with SSR mode, you can
@@ -24,6 +25,31 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
+  })
+
+  Router.beforeEach((to, from, next) => {
+    const authStore = useAuth();
+    const allowedRoles = to.meta.roles;
+
+    if (typeof allowedRoles === 'undefined') {
+      console.error('Не указаны роли для ' + to.fullPath);
+
+      return;
+    }
+
+    if (!allowedRoles.includes(authStore.role)) {
+      if (!authStore.isLoggedIn) {
+        next({ name: 'login-phone' })
+
+        return;
+      }
+
+      console.error('Не разрешён доступ к ' + to.fullPath + ' для ' + authStore.role);
+
+      return;
+    }
+
+    next()
   })
 
   return Router
