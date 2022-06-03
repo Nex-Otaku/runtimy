@@ -9,9 +9,9 @@
           />
           <div class="row justify-center q-mt-md">
             <q-btn
+              color="primary"
               label="Отправить пинкод"
               @click="pincodeSubmitClicked"
-              color="primary"
             />
           </div>
         </q-form>
