@@ -64,8 +64,8 @@ class MobileAccount
         return $this->mobileAccount->pincode === $pincode;
     }
 
-    public function getUserModelId(): int
+    public function getModelId(): int
     {
-        return $this->mobileAccount->user_id;
+        return $this->mobileAccount->id;
     }
 }

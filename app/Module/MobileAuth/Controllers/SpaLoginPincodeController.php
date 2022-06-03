@@ -58,10 +58,10 @@ class SpaLoginPincodeController extends Controller
             return $this->failLoginPincode();
         }
 
-        $result = Auth::loginUsingId($mobileAccount->getUserModelId());
+        $result = Auth::guard('mobile')->loginUsingId($mobileAccount->getModelId());
 
         if ($result === false) {
-            throw new \LogicException('Не удалось выполнить вход для пользователя с ID ' . $mobileAccount->getUserModelId());
+            throw new \LogicException('Не удалось выполнить вход для пользователя с ID ' . $mobileAccount->getModelId());
         }
 
         $request->session()->regenerate();
@@ -86,7 +86,7 @@ class SpaLoginPincodeController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('mobile')->logout();
 
         $request->session()->invalidate();
 

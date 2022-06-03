@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'mobile' => [
+            'driver' => 'session',
+            'provider' => 'mobile_users',
+        ],
     ],
 
     /*
@@ -63,6 +67,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\PasswordAccount::class,
+        ],
+
+        'mobile_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\MobileAccount::class,
         ],
 
         // 'users' => [
