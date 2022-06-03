@@ -58,7 +58,12 @@ class SpaLoginPincodeController extends Controller
             return $this->failLoginPincode();
         }
 
-        Auth::loginUsingId($mobileAccount->getUserModelId());
+        $result = Auth::loginUsingId($mobileAccount->getUserModelId());
+
+        if ($result === false) {
+            throw new \LogicException('Не удалось выполнить вход для пользователя с ID ' . $mobileAccount->getUserModelId());
+        }
+
         $request->session()->regenerate();
 
         return $this->success();
