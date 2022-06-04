@@ -11,8 +11,14 @@
   </q-header>
 
   <q-page-container>
-    <q-page padding>
-      <!-- content -->
+    <q-page padding class="row">
+      <div class="full-width column justify-center content-center items-center">
+        <q-btn
+          color="primary"
+          label="Выйти"
+          @click="logoutClicked"
+        />
+      </div>
     </q-page>
   </q-page-container>
 </template>
@@ -20,16 +26,28 @@
 <script>
 import {defineComponent} from 'vue'
 import {useProfile} from "stores/profile";
+import {useAuth} from "stores/auth";
+import {useRouter} from "vue-router";
 
 export default defineComponent({
   name: 'ProfilePage',
   setup() {
+    const authStore = useAuth();
+    const router = useRouter();
 
     const profileStore = useProfile();
     profileStore.fetch();
 
+    const logoutClicked = () => {
+      authStore.logout()
+        .then(() => {
+          router.push({name: 'login-phone'});
+        })
+    }
+
     return {
-      profileStore: profileStore,
+      profileStore,
+      logoutClicked
     }
   },
 })

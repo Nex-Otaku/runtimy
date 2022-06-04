@@ -28,6 +28,13 @@ export const useAuth = defineStore(
         })
       },
 
+      async logout() {
+        return api.post('/api/logout')
+          .then(async () => {
+            await this.clearLoginState();
+          });
+      },
+
       loginToRole(role) {
         this.$patch({
           isLoggedIn: true,
