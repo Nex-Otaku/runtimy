@@ -6,6 +6,10 @@
           <q-input
             v-model="authFormStore.phoneNumber"
             label="Телефон"
+            type="tel"
+            mask="+7 (###) ### - ####"
+            fill-mask
+            unmasked-value
           />
           <div class="row justify-center q-mt-md">
             <q-btn

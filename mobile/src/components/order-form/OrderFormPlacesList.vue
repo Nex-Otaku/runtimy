@@ -27,6 +27,10 @@
         <q-input
           v-model="place.phone_number"
           label="Телефон"
+          type="tel"
+          mask="+7 (###) ### - ####"
+          fill-mask
+          unmasked-value
         >
           <template #append>
             <q-icon name="phone"/>
