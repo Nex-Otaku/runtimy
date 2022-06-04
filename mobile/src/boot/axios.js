@@ -36,8 +36,8 @@ api.interceptors.response.use(function (response) {
       const router = routerWrapper.router;
       const currentRouteName = router.currentRoute.value.name;
 
-      if (currentRouteName !== 'login') {
-        router.push({name: 'login'});
+      if (currentRouteName !== 'login-phone') {
+        router.push({name: 'login-phone'});
       }
 
       return Promise.reject(error);
