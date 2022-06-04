@@ -6,6 +6,9 @@
           <q-input
             v-model="authFormStore.pincode"
             label="Пинкод"
+            :error-message="getPincodeInputError()"
+            :error="hasErrorForPincodeInput()"
+            reactive-rules
           />
           <div class="row justify-center q-mt-md">
             <q-btn
@@ -34,6 +37,10 @@ export default defineComponent({
     const pincodeLoginForm = ref(null);
     const router = useRouter();
 
+    if (authStore.phoneNumber === '') {
+      router.push({name: 'login-phone'});
+    }
+
     const resetForm = () => {
       nextTick(function () {
         pincodeLoginForm.value.resetValidation();
@@ -44,11 +51,37 @@ export default defineComponent({
       resetForm();
     })
 
+    let pincodeInputError = null;
+
+    const getPincodeInputError = () => {
+      if (pincodeInputError === null) {
+        return '';
+      }
+
+      return pincodeInputError;
+    }
+
+    const hasErrorForPincodeInput = () => {
+      return pincodeInputError !== null;
+    }
+
     const submitValidForm = () => {
       authStore.loginPincode(authFormStore.pincode)
         .then(() => {
           resetForm();
           router.push({name: 'orders'});
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 400) {
+            if (error.response.data && error.response.data.errors && error.response.data.errors.auth) {
+              pincodeInputError = error.response.data.errors.auth;
+
+              // Меняем значение поля на пустую строку и обратно, чтобы заново запустить функции валидации.
+              const backup = authFormStore.pincode;
+              authFormStore.pincode = '';
+              authFormStore.pincode = backup;
+            }
+          }
         });
     }
 
@@ -66,6 +99,9 @@ export default defineComponent({
       authFormStore,
       pincodeLoginForm,
       pincodeSubmitClicked,
+      authStore,
+      getPincodeInputError,
+      hasErrorForPincodeInput,
     }
   }
 })
