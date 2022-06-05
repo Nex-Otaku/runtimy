@@ -1,5 +1,6 @@
 import {boot} from 'quasar/wrappers'
 import axios from 'axios'
+import {useAuth} from "stores/auth";
 
 axios.defaults.withCredentials = true
 
@@ -37,6 +38,8 @@ api.interceptors.response.use(function (response) {
       const currentRouteName = router.currentRoute.value.name;
 
       if (currentRouteName !== 'login-phone') {
+        const authStore = useAuth();
+        authStore.localLogout();
         router.push({name: 'login-phone'});
       }
 
