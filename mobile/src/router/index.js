@@ -46,6 +46,12 @@ export default route(function (/* { store, ssrContext } */) {
 
       console.error('Не разрешён доступ к ' + to.fullPath + ' для ' + authStore.role);
 
+      if (authStore.role === 'customer') {
+        next({ name: 'orders' })
+
+        return;
+      }
+
       return;
     }
 
