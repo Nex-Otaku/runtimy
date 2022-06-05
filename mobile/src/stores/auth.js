@@ -79,6 +79,10 @@ export const useAuth = defineStore(
           });
       },
 
+      localLogout() {
+        this._clearLoginState();
+      },
+
       async loginPhone(phoneNumber) {
         this.$patch({
           phoneNumber: phoneNumber,
@@ -86,7 +90,7 @@ export const useAuth = defineStore(
 
         return api.get('/sanctum/csrf-cookie')
           .then(() => {
-            api.post('/api/login-phone', {
+            return api.post('/api/login-phone', {
               phone: this.phoneNumber
             })
           })
