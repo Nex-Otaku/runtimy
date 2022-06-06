@@ -3,6 +3,7 @@
 namespace App\Module\MobileAuth\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Module\Common\PhoneNumber;
 use App\Module\MobileAuth\Entities\MobileAccount;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class SpaLoginPincodeController extends Controller
     public function loginPhone(Request $request)
     {
         $credentials = $request->validate(['phone' => ['required']]);
-        $phoneNumber = $credentials['phone'];
+        $phoneNumber = PhoneNumber::fromInputString($credentials['phone']);
 
         if (!MobileAccount::existsByPhone($phoneNumber)) {
             MobileAccount::register($phoneNumber);
@@ -45,7 +46,7 @@ class SpaLoginPincodeController extends Controller
                                               'pincode' => ['required'],
                                           ]);
 
-        $phoneNumber = $credentials['phone'];
+        $phoneNumber = PhoneNumber::fromInputString($credentials['phone']);
         $pincode = $credentials['pincode'];
 
         if (!MobileAccount::existsByPhone($phoneNumber)) {

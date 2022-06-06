@@ -3,6 +3,7 @@
 namespace App\Module\Customer\Entities;
 
 use App\Models\OrderPlace as OrderPlaceModel;
+use App\Module\Common\PhoneNumber;
 
 class OrderPlace
 {
@@ -25,7 +26,7 @@ class OrderPlace
                     'order_id' => $order->getModelId(),
                     'sort_index' => $sortIndex,
                     'street_address' => $placeParams['street_address'] ?? '',
-                    'phone_number' => $placeParams['phone_number'] ?? '',
+                    'phone_number' => PhoneNumber::fromInputString($placeParams['phone_number'] ?? '')->asDbValue(),
                     'courier_comment' => $placeParams['courier_comment'] ?? '',
                 ]
             );
@@ -80,9 +81,9 @@ class OrderPlace
         return $this->orderPlace->street_address;
     }
 
-    public function getPhoneNumber(): string
+    public function getPhoneNumber(): PhoneNumber
     {
-        return $this->orderPlace->phone_number;
+        return PhoneNumber::fromDb($this->orderPlace->phone_number);
     }
 
     public function getCourierComment(): string
@@ -98,7 +99,11 @@ class OrderPlace
     public function updateFields(array $fields): void
     {
         $this->orderPlace->street_address = $fields['street_address'] ?? $this->orderPlace->street_address;
-        $this->orderPlace->phone_number = $fields['phone_number'] ?? $this->orderPlace->phone_number;
+
+        if (array_key_exists('phone_number', $fields)) {
+            $this->orderPlace->phone_number = PhoneNumber::fromInputString($fields['phone_number'])->asDbValue();
+        }
+
         $this->orderPlace->courier_comment = $fields['courier_comment'] ?? $this->orderPlace->courier_comment;
         $this->orderPlace->saveOrFail();
     }

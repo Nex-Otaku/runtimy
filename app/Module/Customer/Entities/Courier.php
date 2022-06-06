@@ -5,6 +5,7 @@ namespace App\Module\Customer\Entities;
 use App\Models\Courier as CourierModel;
 use App\Models\PasswordAccount;
 use App\Models\User;
+use App\Module\Common\PhoneNumber;
 use Faker\Factory;
 
 class Courier
@@ -41,7 +42,7 @@ class Courier
                 'user_id' => $user->id,
                 'name' => $passwordAccount->name,
                 'avatar_url' => $faker->imageUrl,
-                'phone_number' => $faker->phoneNumber,
+                'phone_number' => PhoneNumber::fromFakerString($faker->phoneNumber)->asDbValue(),
             ]
         );
 
@@ -78,18 +79,13 @@ class Courier
         return $this->courier->avatar_url;
     }
 
-    public function getPhoneNumber(): string
+    public function getPhoneNumber(): PhoneNumber
     {
-        return $this->courier->phone_number;
+        return PhoneNumber::fromDb($this->courier->phone_number);
     }
 
     public function getModelId(): int
     {
         return $this->courier->id;
-    }
-
-    public function getPhoneNumberUri(): string
-    {
-        return preg_replace('/[^0-9+]/', '', $this->getPhoneNumber());
     }
 }

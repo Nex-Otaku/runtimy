@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\OrderPlace;
+use App\Module\Common\PhoneNumber;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +23,7 @@ class OrderPlaceFactory extends Factory
         return [
             'sort_index' => 0,
             'street_address' => $this->faker->streetAddress,
-            'phone_number' => $this->faker->phoneNumber,
+            'phone_number' => PhoneNumber::fromFakerString($this->faker->phoneNumber)->asDbValue(),
             'courier_comment' => $this->faker->text(),
         ];
     }

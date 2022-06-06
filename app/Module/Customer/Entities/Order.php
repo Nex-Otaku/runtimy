@@ -182,8 +182,8 @@ class Order
             'is_assigned_courier' => $isAssignedCourier,
             'courier_name' => $isAssignedCourier ? $courier->getName() : '',
             'courier_avatar' => $isAssignedCourier ? $courier->getAvatarUrl() : '',
-            'courier_phone_number' => $isAssignedCourier ? $courier->getPhoneNumber() : '',
-            'courier_phone_number_uri' => $isAssignedCourier ? $courier->getPhoneNumberUri() : '',
+            'courier_phone_number' => $isAssignedCourier ? $courier->getPhoneNumber()->asApiFormat() : '',
+            'courier_phone_number_uri' => $isAssignedCourier ? $courier->getPhoneNumber()->asUri() : '',
             'order_created_at' => $this->order->created_at->format('d.m.Y H:i'),
             'transport_type_and_weight_type' =>
                 $this->getTransportTypeLabel()
@@ -217,7 +217,7 @@ class Order
             $places[] = [
                 'sort_index' => $sortIndex,
                 'street_address' => $place->getStreetAddress(),
-                'phone_number' => $place->getPhoneNumber(),
+                'phone_number' => $place->getPhoneNumber()->asDbValue(),
                 'courier_comment' => $place->getCourierComment(),
             ];
 
