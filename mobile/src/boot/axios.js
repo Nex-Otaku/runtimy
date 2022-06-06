@@ -33,7 +33,11 @@ api.interceptors.response.use(function (response) {
     // console.log(error.response.status);
     // console.log(error.response.headers);
 
-    if (error.response.status === 401) {
+    const statusCode = error.response.status;
+    const isUnauthorized = statusCode === 401;
+    const isExpiredCsrf = statusCode === 419;
+
+    if (isUnauthorized || isExpiredCsrf) {
       const router = routerWrapper.router;
       const currentRouteName = router.currentRoute.value.name;
 
