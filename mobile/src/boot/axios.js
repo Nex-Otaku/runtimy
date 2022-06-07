@@ -36,6 +36,17 @@ api.interceptors.response.use(function (response) {
     const statusCode = error.response.status;
     const isUnauthorized = statusCode === 401;
     const isExpiredCsrf = statusCode === 419;
+    const isServerError = statusCode === 500;
+
+    if (isServerError) {
+      if (error.response.data && error.response.data.message) {
+        console.error(error.response.data.message);
+      } else {
+        console.log('Unknown Server Error', error.response);
+      }
+
+      return Promise.reject(error);
+    }
 
     if (isUnauthorized || isExpiredCsrf) {
       const router = routerWrapper.router;
