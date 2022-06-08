@@ -4,6 +4,7 @@ namespace App\Module\Sms;
 
 use App\Module\Common\Json;
 use App\Module\Common\PhoneNumber;
+use App\Module\Sms\Entities\SmspilotResponse;
 use App\Module\Sms\Entities\SmsRequest;
 use GuzzleHttp\Client;
 
@@ -17,8 +18,7 @@ class SmsPilot implements SmsSender
 
     private function __construct(
         string $apiKey
-    )
-    {
+    ) {
         if (strlen($apiKey) === 0) {
             throw new \InvalidArgumentException('Не указан ключ для API smspilot.ru');
         }
@@ -44,9 +44,7 @@ class SmsPilot implements SmsSender
         $smsRequest = SmsRequest::create($phoneNumber, $message);
 
         try {
-            //send=test&to=79102851138&format=json&apikey=2QVQ3724H38H2P48234CLM15A6213R80M99EOC3PDW052Z45H8UW202O4ZDKNEZ7
-            // {"send":[{"server_id":"189940538","phone":"79525422512","price":"3.38","status":"0"}],"balance":"7.00","cost":"3.38", "server_packet_id": "189940538"}
-            $request = $this->client->post(self::API_URL, [
+            $response = $this->client->post(self::API_URL, [
                 'form_params' => [
                     'apikey' => $this->apiKey,
                     'to' => $phoneNumber->asSmsPilotFormat(),
@@ -55,12 +53,26 @@ class SmsPilot implements SmsSender
                 ],
             ]);
 
-            $json = Json::decode($request->getBody()->getContents());
+            $statusCode = $response->getStatusCode();
 
-            var_dump($json);
+            if (($statusCode < 200) || ($statusCode >= 300)) {
+                $smsRequest->markAsFailed('Ошибка HTTP ' . $statusCode);
 
+                return;
+            }
+
+            $contents = $response->getBody()->getContents();
+            $json = Json::decode($contents);
+
+            if ($json === null) {
+                $smsRequest->markAsFailed('Некорректный ответ JSON от smspilot: ' . $contents);
+
+                return;
+            }
+
+            SmspilotResponse::create($smsRequest->getModelId(), $json);
         } catch (\Throwable $throwable) {
-            $smsRequest->markAsFailed((string) $throwable);
+            $smsRequest->markAsFailed((string)$throwable);
 
             return;
         }

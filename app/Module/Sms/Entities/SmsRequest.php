@@ -51,4 +51,9 @@ class SmsRequest
         $this->smsRequest->status = $status;
         $this->smsRequest->saveOrFail();
     }
+
+    public function getModelId(): int
+    {
+        return $this->smsRequest->id;
+    }
 }
