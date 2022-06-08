@@ -4,6 +4,7 @@ namespace App\Module\Sms;
 
 use App\Module\Common\Json;
 use App\Module\Common\PhoneNumber;
+use App\Module\Sms\Entities\SmsRequest;
 use GuzzleHttp\Client;
 
 class SmsPilot implements SmsSender
@@ -40,26 +41,31 @@ class SmsPilot implements SmsSender
 
     public function sendSms(PhoneNumber $phoneNumber, string $message): void
     {
-        $number = $phoneNumber->asSmsPilotFormat();
+        $smsRequest = SmsRequest::create($phoneNumber, $message);
 
-        //send=test&to=79102851138&format=json&apikey=2QVQ3724H38H2P48234CLM15A6213R80M99EOC3PDW052Z45H8UW202O4ZDKNEZ7
-        // {"send":[{"server_id":"189940538","phone":"79525422512","price":"3.38","status":"0"}],"balance":"7.00","cost":"3.38", "server_packet_id": "189940538"}
-        $request = $this->client->post(self::API_URL, [
-            'form_params' => [
-                'apikey' => $this->apiKey,
-                'to' => $number,
-                'send' => $message,
-                'format' => 'json',
-            ],
-        ]);
+        try {
+            //send=test&to=79102851138&format=json&apikey=2QVQ3724H38H2P48234CLM15A6213R80M99EOC3PDW052Z45H8UW202O4ZDKNEZ7
+            // {"send":[{"server_id":"189940538","phone":"79525422512","price":"3.38","status":"0"}],"balance":"7.00","cost":"3.38", "server_packet_id": "189940538"}
+            $request = $this->client->post(self::API_URL, [
+                'form_params' => [
+                    'apikey' => $this->apiKey,
+                    'to' => $phoneNumber->asSmsPilotFormat(),
+                    'send' => $message,
+                    'format' => 'json',
+                ],
+            ]);
 
-        $json = Json::decode($request->getBody()->getContents());
+            $json = Json::decode($request->getBody()->getContents());
 
-        var_dump($json);
+            var_dump($json);
 
-//
-//        $body1 = json_decode($request->getBody()->getContents());
-//        $body2 = json_decode($request->getBody()->getContents(), true);
+        } catch (\Throwable $throwable) {
+            $smsRequest->markAsFailed((string) $throwable);
+
+            return;
+        }
+
+        $smsRequest->markAsSent();
     }
 
     public function sendCode(PhoneNumber $phoneNumber): void
