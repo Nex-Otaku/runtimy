@@ -74,4 +74,10 @@ class MobileAccount
     {
         return PhoneNumber::fromDb($this->mobileAccount->phone_number);
     }
+
+    public function clearPincode(): void
+    {
+        $this->mobileAccount->pincode = null;
+        $this->mobileAccount->saveOrFail();
+    }
 }

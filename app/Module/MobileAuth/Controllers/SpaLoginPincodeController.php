@@ -65,6 +65,7 @@ class SpaLoginPincodeController extends Controller
             throw new \LogicException('Не удалось выполнить вход для пользователя с ID ' . $mobileAccount->getModelId());
         }
 
+        $mobileAccount->clearPincode();
         $request->session()->regenerate();
 
         return $this->success();
