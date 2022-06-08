@@ -69,6 +69,7 @@ export default defineComponent({
       authStore.loginPincode(authFormStore.pincode)
         .then(() => {
           resetForm();
+          authFormStore.pincode = '';
           router.push({name: 'orders'});
         })
         .catch(error => {
