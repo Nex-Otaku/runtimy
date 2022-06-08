@@ -44,6 +44,16 @@ class PhoneNumber
         return '+' . $this->value;
     }
 
+    public function asSmsRuFormat(): string
+    {
+        return $this->value;
+    }
+
+    public function asSmsPilotFormat(): string
+    {
+        return $this->value;
+    }
+
     public function asApiFormat(): string
     {
         return $this->value;
