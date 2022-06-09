@@ -2,6 +2,7 @@
 
 namespace App\Module\Customer\Entities;
 
+use App\Module\MobileAuth\Entities\MobileAccount;
 use Illuminate\Support\Facades\Auth;
 
 class Customer
@@ -20,7 +21,9 @@ class Customer
             throw new \LogicException('Пользователь не авторизован. Проверьте откуда вызывается метод');
         }
 
-        return new self(Auth::guard('mobile')->id());
+        $mobileAccount = MobileAccount::getExistingById(Auth::guard('mobile')->id());
+
+        return new self($mobileAccount->getModelUserId());
     }
 
     public function getSpaUserId(): int

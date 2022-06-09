@@ -46,6 +46,13 @@ class MobileAccount
         return MobileAccountModel::where(['phone_number' => $phoneNumber->asDbValue()])->exists();
     }
 
+    public static function getExistingById(int $id): self
+    {
+        $mobileAccount = MobileAccountModel::where(['id' => $id])->firstOrFail();
+
+        return new self($mobileAccount);
+    }
+
     public function sendPincode(): void
     {
         $pincode = (new PincodeSender())->sendPincode($this->getPhoneNumber());
@@ -68,6 +75,11 @@ class MobileAccount
     public function getModelId(): int
     {
         return $this->mobileAccount->id;
+    }
+
+    public function getModelUserId(): int
+    {
+        return $this->mobileAccount->user_id;
     }
 
     private function getPhoneNumber(): PhoneNumber
