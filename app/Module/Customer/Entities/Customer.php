@@ -2,6 +2,8 @@
 
 namespace App\Module\Customer\Entities;
 
+use Illuminate\Support\Facades\Auth;
+
 class Customer
 {
     private int $spaUserId;
@@ -14,7 +16,11 @@ class Customer
 
     public static function takeLogined(): self
     {
-        return new self(1);
+        if (!Auth::guard('mobile')->check()) {
+            throw new \LogicException('Пользователь не авторизован. Проверьте откуда вызывается метод');
+        }
+
+        return new self(Auth::guard('mobile')->id());
     }
 
     public function getSpaUserId(): int
