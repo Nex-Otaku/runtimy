@@ -198,6 +198,8 @@ return [
         // Sms
         App\Module\Sms\SmsServiceProvider::class,
 
+        // Payment
+        App\Module\Payment\PaymentServiceProvider::class,
     ],
 
     /*

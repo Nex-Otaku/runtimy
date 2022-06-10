@@ -3,8 +3,9 @@
 namespace App\Module\Customer\Entities;
 
 use App\Models\Order as OrderModel;
+use App\Module\Payment\Contracts\PaymentOrder;
 
-class Order
+class Order implements PaymentOrder
 {
     private const TRANSPORT_TYPE_FEET      = 'feet';
     private const TRANSPORT_TYPE_PASSENGER = 'passenger';
