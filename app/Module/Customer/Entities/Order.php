@@ -3,6 +3,7 @@
 namespace App\Module\Customer\Entities;
 
 use App\Models\Order as OrderModel;
+use App\Module\Common\Money;
 use App\Module\Payment\Contracts\PaymentOrder;
 
 class Order implements PaymentOrder
@@ -279,5 +280,15 @@ class Order implements PaymentOrder
     private function getOrderPlaceByIndex(int $sortIndex): OrderPlace
     {
         return OrderPlace::forOrderWithIndex($this, $sortIndex);
+    }
+
+    public function getCustomerId(): int
+    {
+        return $this->order->customer_id;
+    }
+
+    public function getAmount(): Money
+    {
+        return Money::createFromString($this->order->price);
     }
 }
