@@ -40,6 +40,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql \
     exif \
     pcntl \
+    bcmath \
     intl
 # -- Copy from PHP Dockerfile --
 
