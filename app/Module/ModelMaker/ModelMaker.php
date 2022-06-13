@@ -2,6 +2,8 @@
 
 namespace App\Module\ModelMaker;
 
+use Illuminate\Support\Str;
+
 class ModelMaker
 {
     private string $modelNameCamelCased = '';
@@ -56,12 +58,6 @@ class ModelMaker
             . strtolower(substr($value, 1));
     }
 
-    private function lowercase(string $value): string
-    {
-        return strtoupper(substr($value, 0, 1))
-            . strtolower(substr($value, 1));
-    }
-
     private function echoPrint(array $lines): void
     {
         foreach ($lines as $line) {
@@ -75,21 +71,6 @@ class ModelMaker
             return '';
         }
 
-        $lastLetter = substr($value, -1, 1);
-
-        if ($this->isConsonant($lastLetter)) {
-            return $value . 'es';
-        }
-
-        return $value . 's';
-    }
-
-    private function isConsonant(string $letter): bool
-    {
-        if ($letter === '') {
-            return false;
-        }
-
-        return str_contains('bcdfghjklmnpqrstvwxz', $letter);
+        return Str::plural($value);
     }
 }
