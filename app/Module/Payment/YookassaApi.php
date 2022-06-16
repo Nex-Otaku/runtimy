@@ -6,16 +6,64 @@ use App\Module\Common\Money;
 use App\Module\Payment\Contracts\PaymentOrder;
 use App\Module\Payment\Entities\FakeOrder;
 use App\Module\Payment\Entities\Payment;
+use App\Module\Payment\Entities\YookassaPayment;
 use YooKassa\Client;
+use YooKassa\Request\Payments\CreatePaymentResponse;
 
 class YookassaApi
 {
-    public function createPayment(PaymentOrder $paymentOrder, Money $amount): Payment
+    public function createPayment(PaymentOrder $paymentOrder): Payment
+    {
+        return $this->createCardPayment($paymentOrder);
+    }
+
+    public function createCardPayment(PaymentOrder $paymentOrder): Payment
     {
         $payment = Payment::create($paymentOrder);
 
         $client = new Client();
         $client->setAuth($this->getShopId(), $this->getSecretKey());
+
+        // https://yookassa.ru/developers/payment-acceptance/integration-scenarios/manual-integration/other/sbp#create-payment-qr
+        // 1. Создаём платёж
+        // 2. Обновляем статус платежа по уведомлению
+        // 3. При успешном платеже завершаем оплату
+
+        /** @var CreatePaymentResponse $paymentResponse */
+        $paymentResponse = $client->createPayment(
+            [
+                'amount' => [
+                    'value' => 100.0,
+                    'currency' => 'RUB',
+                ],
+                'confirmation' => [
+                    'type' => 'redirect',
+                    'return_url' => 'https://www.merchant-website.com/return_url',
+                ],
+                'capture' => true,
+                'description' => 'Заказ №1',
+            ],
+            uniqid('', true)
+        );
+
+        var_dump($paymentResponse);
+
+        $yookassaPayment = YookassaPayment::create(
+            (int) $this->getShopId(),
+            $payment->getModelId(),
+            $paymentResponse
+        );
+
+        return $payment;
+    }
+
+    public function createSbpPayment(PaymentOrder $paymentOrder, Money $amount): Payment
+    {
+        $payment = Payment::create($paymentOrder);
+
+        $client = new Client();
+        $client->setAuth($this->getShopId(), $this->getSecretKey());
+
 
         // https://yookassa.ru/developers/payment-acceptance/integration-scenarios/manual-integration/other/sbp#create-payment-qr
         // 1. Создаём платёж
@@ -62,7 +110,7 @@ class YookassaApi
 
     public function createTestPayment(): void
     {
-        $this->createPayment(new FakeOrder(), Money::createFromString('50000'));
+        $this->createPayment(new FakeOrder());
     }
 
     private function getShopId(): string

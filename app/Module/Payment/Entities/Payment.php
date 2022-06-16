@@ -2,6 +2,7 @@
 
 namespace App\Module\Payment\Entities;
 
+use App\Module\Common\Money;
 use App\Module\Payment\Contracts\PaymentOrder;
 use App\Module\Payment\Models\Payment as PaymentModel;
 
@@ -33,5 +34,15 @@ class Payment
         $payment->saveOrFail();
 
         return new self($payment);
+    }
+
+    public function getAmount(): Money
+    {
+        return Money::createFromString($this->payment->amount);
+    }
+
+    public function getModelId(): int
+    {
+        return $this->payment->id;
     }
 }
