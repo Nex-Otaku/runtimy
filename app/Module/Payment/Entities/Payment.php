@@ -26,7 +26,7 @@ class Payment
         $payment = new PaymentModel([
                                         'order_id' => $paymentOrder->getModelId(),
                                         'user_id' => $paymentOrder->getCustomerId(),
-                                        'amount' => $paymentOrder->getAmount(),
+                                        'amount' => $paymentOrder->getAmount()->toString(),
                                         'status' => self::STATUS_DRAFT,
                                         'error' => '',
                                     ]);
@@ -44,5 +44,17 @@ class Payment
     public function getModelId(): int
     {
         return $this->payment->id;
+    }
+
+    public function fail(string $error): void
+    {
+        $this->payment->error = $error;
+        $this->payment->status = self::STATUS_FAILED;
+        $this->payment->saveOrFail();
+    }
+
+    public function getDescription(): string
+    {
+        return "Заказ №{$this->payment->order_id}";
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->decimal('amount');
             $table->string('status');
-            $table->string('error');
+            $table->text('error');
             $table->timestamps();
         });
     }

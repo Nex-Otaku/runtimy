@@ -12,6 +12,16 @@ use YooKassa\Request\Payments\CreatePaymentResponse;
 
 class YookassaApi
 {
+    public const DEFAULT_CURRENCY = 'RUB';
+
+    private $returnUrl;
+
+    public function __construct(
+        string $returnUrl
+    ) {
+        $this->returnUrl = $returnUrl;
+    }
+
     public function createPayment(PaymentOrder $paymentOrder): Payment
     {
         return $this->createCardPayment($paymentOrder);
@@ -29,26 +39,33 @@ class YookassaApi
         // 2. Обновляем статус платежа по уведомлению
         // 3. При успешном платеже завершаем оплату
 
-        /** @var CreatePaymentResponse $paymentResponse */
-        $paymentResponse = $client->createPayment(
-            [
-                'amount' => [
-                    'value' => 100.0,
-                    'currency' => 'RUB',
+        try {
+            /** @var CreatePaymentResponse $paymentResponse */
+            $paymentResponse = $client->createPayment(
+                [
+                    'amount' => [
+                        'value' => $payment->getAmount()->toString(),
+                        'currency' => self::DEFAULT_CURRENCY,
+                    ],
+                    'confirmation' => [
+                        'type' => 'redirect',
+                        'return_url' => $this->returnUrl,
+                    ],
+                    'capture' => true,
+                    'description' => $payment->getDescription(),
+                    'metadata' => [
+                        'runtimy_payment_id' => $payment->getModelId(),
+                    ],
                 ],
-                'confirmation' => [
-                    'type' => 'redirect',
-                    'return_url' => 'https://www.merchant-website.com/return_url',
-                ],
-                'capture' => true,
-                'description' => 'Заказ №1',
-            ],
-            uniqid('', true)
-        );
+                uniqid('', true)
+            );
+        } catch (\Throwable $throwable) {
+            $payment->fail((string) $throwable);
 
-        var_dump($paymentResponse);
+            throw $throwable;
+        }
 
-        $yookassaPayment = YookassaPayment::create(
+        YookassaPayment::create(
             (int) $this->getShopId(),
             $payment->getModelId(),
             $paymentResponse

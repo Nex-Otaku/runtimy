@@ -11,32 +11,34 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $shop_id
  * @property string $recipient_account_id
  * @property string $recipient_gateway_id
- * @property string $payment_method_type
- * @property string $payment_method_title
+ * @property string|null $payment_method_type
+ * @property string|null $payment_method_title
  * @property string $amount
  * @property string $currency
- * @property string $income_amount
- * @property string $income_currency
+ * @property string|null $income_amount
+ * @property string|null $income_currency
  * @property string $confirmation_type
  * @property string $description
  * @property string $external_id
  * @property string $status
  * @property int $paid
  * @property int $refundable
- * @property string $refunded_amount
- * @property string $refunded_currency
+ * @property string|null $refunded_amount
+ * @property string|null $refunded_currency
  * @property int $test
  * @property \DateTimeInterface|null $captured_at
  * @property \DateTimeInterface|null $created_at
  * @property \DateTimeInterface|null $expires_at
- * @property string $receipt_registration
- * @property string $metadata
- * @property string $cancellation_party
- * @property string $cancellation_reason
+ * @property string|null $receipt_registration
+ * @property string|null $metadata
+ * @property string|null $cancellation_party
+ * @property string|null $cancellation_reason
  * @property string $error
  */
 class YookassaPayment extends Model
 {
+    public $timestamps = false;
+
     use HasFactory;
 
     protected $fillable = [
