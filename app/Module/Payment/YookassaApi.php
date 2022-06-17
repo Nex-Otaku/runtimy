@@ -8,31 +8,36 @@ use App\Module\Payment\Entities\FakeOrder;
 use App\Module\Payment\Entities\Payment;
 use App\Module\Payment\Entities\YookassaPayment;
 use YooKassa\Client;
+use YooKassa\Model\PaymentStatus;
 use YooKassa\Request\Payments\CreatePaymentResponse;
 
 class YookassaApi
 {
-    public const DEFAULT_CURRENCY = 'RUB';
+    private const DEFAULT_CURRENCY = 'RUB';
 
-    private $returnUrl;
+    /** @var Client */
+    private $client;
 
-    public function __construct(
-        string $returnUrl
-    ) {
-        $this->returnUrl = $returnUrl;
-    }
-
-    public function createPayment(PaymentOrder $paymentOrder): Payment
+    private function __construct()
     {
-        return $this->createCardPayment($paymentOrder);
+        // Обращаемся только через ::instance()
+        $this->client = new Client();
+        $this->client->setAuth($this->getShopId(), $this->getSecretKey());
     }
 
-    public function createCardPayment(PaymentOrder $paymentOrder): Payment
+    public static function instance(): self
+    {
+        return new self();
+    }
+
+    public function createPayment(PaymentOrder $paymentOrder, string $returnUrl): Payment
+    {
+        return $this->createCardPayment($paymentOrder, $returnUrl);
+    }
+
+    public function createCardPayment(PaymentOrder $paymentOrder, string $returnUrl): Payment
     {
         $payment = Payment::create($paymentOrder);
-
-        $client = new Client();
-        $client->setAuth($this->getShopId(), $this->getSecretKey());
 
         // https://yookassa.ru/developers/payment-acceptance/integration-scenarios/manual-integration/other/sbp#create-payment-qr
         // 1. Создаём платёж
@@ -41,7 +46,7 @@ class YookassaApi
 
         try {
             /** @var CreatePaymentResponse $paymentResponse */
-            $paymentResponse = $client->createPayment(
+            $paymentResponse = $this->client->createPayment(
                 [
                     'amount' => [
                         'value' => $payment->getAmount()->toString(),
@@ -49,7 +54,7 @@ class YookassaApi
                     ],
                     'confirmation' => [
                         'type' => 'redirect',
-                        'return_url' => $this->returnUrl,
+                        'return_url' => $returnUrl,
                     ],
                     'capture' => true,
                     'description' => $payment->getDescription(),
@@ -74,36 +79,36 @@ class YookassaApi
         return $payment;
     }
 
-    public function createSbpPayment(PaymentOrder $paymentOrder, Money $amount): Payment
+    public function createSbpPayment(PaymentOrder $paymentOrder): Payment
     {
-        $payment = Payment::create($paymentOrder);
-
-        $client = new Client();
-        $client->setAuth($this->getShopId(), $this->getSecretKey());
-
-
-        // https://yookassa.ru/developers/payment-acceptance/integration-scenarios/manual-integration/other/sbp#create-payment-qr
-        // 1. Создаём платёж
-        // 2. Обновляем статус платежа по уведомлению
-        // 3. При успешном платеже завершаем оплату
-        $paymentResponse = $client->createPayment(
-            [
-                'amount' => [
-                    'value' => $amount->toString(),
-                    'currency' => 'RUB',
-                ],
-                'payment_method_data' => [
-                    'type' => 'sbp',
-                ],
-                'confirmation' => [
-                    'type' => 'qr',
-                ],
-                'description' => 'Оплата доставки по заказу №' . $paymentOrder->getModelId(),
-            ],
-            uniqid('', true)
-        );
-
-        var_dump($paymentResponse);
+//        $payment = Payment::create($paymentOrder);
+//
+//        $client = new Client();
+//        $client->setAuth($this->getShopId(), $this->getSecretKey());
+//
+//
+//        // https://yookassa.ru/developers/payment-acceptance/integration-scenarios/manual-integration/other/sbp#create-payment-qr
+//        // 1. Создаём платёж
+//        // 2. Обновляем статус платежа по уведомлению
+//        // 3. При успешном платеже завершаем оплату
+//        $paymentResponse = $client->createPayment(
+//            [
+//                'amount' => [
+//                    'value' => $amount->toString(),
+//                    'currency' => 'RUB',
+//                ],
+//                'payment_method_data' => [
+//                    'type' => 'sbp',
+//                ],
+//                'confirmation' => [
+//                    'type' => 'qr',
+//                ],
+//                'description' => 'Оплата доставки по заказу №' . $paymentOrder->getModelId(),
+//            ],
+//            uniqid('', true)
+//        );
+//
+//        var_dump($paymentResponse);
 
 //        $payment = $client->createPayment(
 //            array(
@@ -122,12 +127,13 @@ class YookassaApi
 //        );
 
         // TODO
-        return new Payment();
+//        return new Payment();
+        return Payment::create($paymentOrder);
     }
 
     public function createTestPayment(): void
     {
-        $this->createPayment(new FakeOrder());
+        $this->createPayment(new FakeOrder(), 'https://www.merchant-website.com/return_url');
     }
 
     private function getShopId(): string
@@ -150,5 +156,35 @@ class YookassaApi
         }
 
         return $secretKey;
+    }
+
+    public function isPaid(string $paymentId): bool
+    {
+        $payment = $this->client->getPaymentInfo($paymentId);
+
+        return $payment->getPaid();
+    }
+
+    public function confirmPayment(string $paymentId, Money $amount): void
+    {
+        if (!$this->isPaid($paymentId)) {
+            throw new \Exception("Попытка подтверждения неоплаченного заказа, ID: {$paymentId}");
+        }
+
+        $data = [
+            'amount' => [
+                'value' => $amount->toString(),
+                'currency' => self::DEFAULT_CURRENCY,
+            ],
+        ];
+
+        $this->client->capturePayment($data, $paymentId);
+    }
+
+    public function isCanceled(string $paymentId): bool
+    {
+        $payment = $this->client->getPaymentInfo($paymentId);
+
+        return $payment->status === PaymentStatus::CANCELED;
     }
 }

@@ -3,11 +3,19 @@
 namespace App\Module\Payment\Entities;
 
 use App\Module\Common\Json;
+use App\Module\Common\Money;
 use App\Module\Payment\Models\YookassaPayment as YookassaPaymentModel;
+use YooKassa\Model\PaymentInterface;
+use YooKassa\Model\RefundInterface;
 use YooKassa\Request\Payments\CreatePaymentResponse;
 
 class YookassaPayment
 {
+    private const STATUS_PENDING = 'pending';
+    private const STATUS_WAITING_FOR_CAPTURE = 'waiting_for_capture';
+    private const STATUS_SUCCEEDED = 'succeeded';
+    private const STATUS_CANCELED = 'canceled';
+
     private YookassaPaymentModel $yookassaPayment;
 
     private function __construct(
@@ -19,8 +27,8 @@ class YookassaPayment
     public static function create(int $shopId, int $paymentId, CreatePaymentResponse $paymentResponse): self
     {
         $metadata = $paymentResponse->metadata !== null
-                ? Json::encode($paymentResponse->metadata->toArray())
-                : null;
+            ? Json::encode($paymentResponse->metadata->toArray())
+            : null;
 
         $yookassaPayment = new YookassaPaymentModel([
                                                         'payment_id' => $paymentId,
@@ -55,5 +63,91 @@ class YookassaPayment
         $yookassaPayment->saveOrFail();
 
         return new self($yookassaPayment);
+    }
+
+    public static function getById(int $id): self
+    {
+        $model = YookassaPaymentModel::where(
+            [
+                'id' => $id,
+            ]
+        )->firstOrFail();
+
+        return new self($model);
+    }
+
+    public function getModelId(): int
+    {
+        return $this->yookassaPayment->id;
+    }
+
+    public function canSucceed(): bool
+    {
+        return in_array(
+                $this->yookassaPayment->status,
+                [
+                    self::STATUS_PENDING,
+                    self::STATUS_WAITING_FOR_CAPTURE,
+                ]
+        );
+    }
+
+    public function getMainPayment(): Payment
+    {
+        return Payment::getById($this->yookassaPayment->payment_id);
+    }
+
+    public function complete(): void
+    {
+        $this->yookassaPayment->status = self::STATUS_SUCCEEDED;
+        $this->yookassaPayment->saveOrFail();
+    }
+
+    public function canConfirm(): bool
+    {
+        return $this->yookassaPayment->status === self::STATUS_PENDING;
+    }
+
+    public function getAmount(): Money
+    {
+        return Money::createFromString($this->yookassaPayment->amount);
+    }
+
+    public function canCancel(): bool
+    {
+        return in_array(
+            $this->yookassaPayment->status,
+            [
+                self::STATUS_PENDING,
+                self::STATUS_WAITING_FOR_CAPTURE,
+            ]
+        );
+    }
+
+    public function cancel(PaymentInterface $paymentInfo): void
+    {
+        $this->yookassaPayment->cancellation_party = $paymentInfo->cancellationDetails?->party;
+        $this->yookassaPayment->cancellation_reason = $paymentInfo->cancellationDetails?->reason;
+        $this->yookassaPayment->status = self::STATUS_CANCELED;
+        $this->yookassaPayment->saveOrFail();
+    }
+
+    public function canRefund(): bool
+    {
+        return
+            $this->yookassaPayment->status === self::STATUS_SUCCEEDED
+            && $this->yookassaPayment->refundable === 1
+            && $this->yookassaPayment->paid === 1
+            && (
+                ($this->yookassaPayment->refunded_amount === null)
+                || (Money::createFromString($this->yookassaPayment->refunded_amount)->isZero())
+            );
+    }
+
+    public function refund(RefundInterface $refundInfo): void
+    {
+        $this->yookassaPayment->refunded_amount = $refundInfo->amount?->value;
+        $this->yookassaPayment->refunded_currency = $refundInfo->amount?->currency;
+        $this->yookassaPayment->saveOrFail();
     }
 }

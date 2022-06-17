@@ -8,10 +8,11 @@ use App\Module\Payment\Models\Payment as PaymentModel;
 
 class Payment
 {
-    private const STATUS_DRAFT     = 'draft';
-    private const STATUS_COMPLETED = 'completed';
-    private const STATUS_CANCELED  = 'canceled';
+    private const STATUS_DRAFT    = 'draft';
+    private const STATUS_PAID     = 'paid';
+    private const STATUS_CANCELED = 'canceled';
     private const STATUS_FAILED    = 'failed';
+    private const STATUS_REFUND    = 'refund';
 
     private PaymentModel $payment;
 
@@ -56,5 +57,34 @@ class Payment
     public function getDescription(): string
     {
         return "Заказ №{$this->payment->order_id}";
+    }
+
+    public function getById(int $id): self
+    {
+        $model = PaymentModel::where(
+            [
+                'id' => $id,
+            ]
+        )->firstOrFail();
+
+        return new self($model);
+    }
+
+    public function complete(): void
+    {
+        $this->payment->status = self::STATUS_PAID;
+        $this->payment->saveOrFail();
+    }
+
+    public function cancel(): void
+    {
+        $this->payment->status = self::STATUS_CANCELED;
+        $this->payment->saveOrFail();
+    }
+
+    public function refund(): void
+    {
+        $this->payment->status = self::STATUS_REFUND;
+        $this->payment->saveOrFail();
     }
 }
