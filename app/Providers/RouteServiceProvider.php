@@ -33,6 +33,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
+            Route::middleware('yookassa')
+                ->prefix('yookassa')
+                ->group(base_path('app/Module/Payment/Routes/yookassa.php'));
+
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
