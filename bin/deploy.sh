@@ -40,10 +40,12 @@ ${ARTISAN} cache:clear
 ${ARTISAN} optimize:clear
 
 # Install node modules
-npm ci
+# TODO Временно отключено из-за ошибки на деплое, разобраться и включить
+#npm ci
 
 # Build assets using Laravel Mix
-npm run production
+# TODO Временно отключено из-за ошибки на деплое, разобраться и включить
+#npm run production
 
 # Turn off maintenance mode
 ${ARTISAN} up
