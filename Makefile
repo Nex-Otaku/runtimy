@@ -79,7 +79,7 @@ install-demo:
 
 # Тянем изменения из Git
 pull-demo:
-	$(RUN_SSH_DEMO) 'cd ${PROJECT_DIR} && git pull'
+	$(RUN_SSH_DEMO) 'cd ${PROJECT_DIR} && git pull && chmod +x ./bin/*.sh'
 
 
 # Выкатываем обновление на прод
@@ -105,6 +105,6 @@ install-prod:
 
 # Тянем изменения из Git
 pull-prod:
-	$(RUN_SSH_PROD) 'cd ${PROJECT_DIR} && git pull'
+	$(RUN_SSH_PROD) 'cd ${PROJECT_DIR} && git pull && chmod +x ./bin/*.sh'
 
 
