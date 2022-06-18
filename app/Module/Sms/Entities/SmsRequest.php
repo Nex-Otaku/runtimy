@@ -9,7 +9,6 @@ class SmsRequest
 {
     private const STATUS_DRAFT     = 'draft';
     private const STATUS_SENT      = 'sent';
-    private const STATUS_DELIVERED = 'delivered';
     private const STATUS_FAILED    = 'failed';
 
     private $smsRequest;
