@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\OrderPlace;
 use App\Module\Common\PhoneNumber;
+use App\Module\Customer\Models\OrderPlace;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderPlace>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Module\Customer\Models\OrderPlace>
  */
 class OrderPlaceFactory extends Factory
 {

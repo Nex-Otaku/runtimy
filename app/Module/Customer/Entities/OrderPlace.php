@@ -2,8 +2,8 @@
 
 namespace App\Module\Customer\Entities;
 
-use App\Models\OrderPlace as OrderPlaceModel;
 use App\Module\Common\PhoneNumber;
+use App\Module\Customer\Models\OrderPlace as OrderPlaceModel;
 
 class OrderPlace
 {

@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Order;
-use App\Models\OrderPlace;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Module\Customer\Entities\Order as OrderEntity;
+use App\Module\Customer\Models\Order;
+use App\Module\Customer\Models\OrderPlace;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Module\Customer\Models\Order>
  */
 class OrderFactory extends Factory
 {

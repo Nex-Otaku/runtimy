@@ -2,8 +2,8 @@
 
 namespace App\Module\Customer\Entities;
 
-use App\Models\OrderStatus as OrderStatusModel;
-use App\Models\OrderStatusPlace;
+use App\Module\Customer\Models\OrderStatus as OrderStatusModel;
+use App\Module\Customer\Models\OrderStatusPlace;
 
 class OrderStatus
 {

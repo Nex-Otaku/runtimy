@@ -2,8 +2,8 @@
 
 namespace App\Module\Customer\Entities;
 
-use App\Models\Order as OrderModel;
 use App\Module\Common\Money;
+use App\Module\Customer\Models\Order as OrderModel;
 use App\Module\Payment\Contracts\PaymentOrder;
 
 class Order implements PaymentOrder
