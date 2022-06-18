@@ -7,9 +7,9 @@ use App\Module\Sms\Models\SmsRequest as SmsRequestModel;
 
 class SmsRequest
 {
-    private const STATUS_DRAFT     = 'draft';
-    private const STATUS_SENT      = 'sent';
-    private const STATUS_FAILED    = 'failed';
+    private const STATUS_DRAFT = 'draft';
+    private const STATUS_SENT = 'sent';
+    private const STATUS_FAILED = 'failed';
 
     private $smsRequest;
 
@@ -21,12 +21,14 @@ class SmsRequest
 
     public static function create(PhoneNumber $phoneNumber, string $message): self
     {
-        $smsRequest = new SmsRequestModel([
-                                              'message' => $message,
-                                              'phone_number' => $phoneNumber->asDbValue(),
-                                              'status' => self::STATUS_DRAFT,
-                                              'error' => '',
-                                          ]);
+        $smsRequest = new SmsRequestModel(
+            [
+                'message' => $message,
+                'phone_number' => $phoneNumber->asDbValue(),
+                'status' => self::STATUS_DRAFT,
+                'error' => '',
+            ]
+        );
 
         $smsRequest->saveOrFail();
 
