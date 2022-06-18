@@ -2,7 +2,7 @@
 
 namespace App\Module\Sms\Entities;
 
-use App\Models\SmspilotResponse as SmspilotResponseModel;
+use App\Module\Sms\Models\SmspilotResponse as SmspilotResponseModel;
 
 class SmspilotResponse
 {

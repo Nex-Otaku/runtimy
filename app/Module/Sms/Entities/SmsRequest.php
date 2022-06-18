@@ -2,8 +2,8 @@
 
 namespace App\Module\Sms\Entities;
 
-use App\Models\SmsRequest as SmsRequestModel;
 use App\Module\Common\PhoneNumber;
+use App\Module\Sms\Models\SmsRequest as SmsRequestModel;
 
 class SmsRequest
 {
