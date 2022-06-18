@@ -2,9 +2,9 @@
 
 namespace App\Module\MobileAuth\Entities;
 
-use App\Models\MobileAccount as MobileAccountModel;
 use App\Models\User;
 use App\Module\Common\PhoneNumber;
+use App\Module\MobileAuth\Models\MobileAccount as MobileAccountModel;
 use App\Module\MobileAuth\PincodeSender;
 
 class MobileAccount

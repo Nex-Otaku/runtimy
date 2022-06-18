@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Module\MobileAuth\Models;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

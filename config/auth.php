@@ -71,7 +71,7 @@ return [
 
         'mobile_users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\MobileAccount::class,
+            'model' => \App\Module\MobileAuth\Models\MobileAccount::class,
         ],
 
         // 'users' => [
