@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Module\PasswordAuth\Models\PasswordAccount;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;

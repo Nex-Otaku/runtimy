@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\PasswordAccount;
 use App\Models\User;
+use App\Module\PasswordAuth\Models\PasswordAccount;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder

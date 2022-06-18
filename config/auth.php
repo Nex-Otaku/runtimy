@@ -66,7 +66,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\PasswordAccount::class,
+            'model' => \App\Module\PasswordAuth\Models\PasswordAccount::class,
         ],
 
         'mobile_users' => [

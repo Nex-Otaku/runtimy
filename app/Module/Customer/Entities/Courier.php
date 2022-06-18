@@ -2,10 +2,10 @@
 
 namespace App\Module\Customer\Entities;
 
-use App\Models\PasswordAccount;
 use App\Models\User;
 use App\Module\Common\PhoneNumber;
 use App\Module\Customer\Models\Courier as CourierModel;
+use App\Module\PasswordAuth\Models\PasswordAccount;
 use Faker\Factory;
 
 class Courier
