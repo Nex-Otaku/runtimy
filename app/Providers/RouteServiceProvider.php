@@ -52,5 +52,9 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(6000)->by($request->user()?->id ?: $request->ip());
         });
+
+        RateLimiter::for('yookassa', function (Request $request) {
+            return Limit::perMinute(6000)->by($request->ip());
+        });
     }
 }
