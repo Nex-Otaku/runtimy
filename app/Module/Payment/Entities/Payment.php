@@ -87,4 +87,16 @@ class Payment
         $this->payment->status = self::STATUS_REFUND;
         $this->payment->saveOrFail();
     }
+
+    private function findYookassaPayment(): ?YookassaPayment
+    {
+        return YookassaPayment::findByMainPaymentId($this->payment->id);
+    }
+
+    public function getConfirmationUrl(): ?string
+    {
+        $yookassaPayment = $this->findYookassaPayment();
+
+        return $yookassaPayment?->getConfirmationUrl();
+    }
 }

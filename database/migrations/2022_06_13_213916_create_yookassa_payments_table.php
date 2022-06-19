@@ -26,6 +26,8 @@ return new class extends Migration
             $table->decimal('income_amount')->nullable();
             $table->string('income_currency')->nullable();
             $table->string('confirmation_type');
+            $table->string('return_url')->nullable();
+            $table->string('confirmation_url')->nullable();
             $table->string('description');
             $table->string('external_id');
             $table->string('status');

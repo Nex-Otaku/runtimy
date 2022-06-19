@@ -73,7 +73,8 @@ class YookassaApi
         YookassaPayment::create(
             (int) $this->getShopId(),
             $payment->getModelId(),
-            $paymentResponse
+            $paymentResponse,
+            $returnUrl
         );
 
         return $payment;
@@ -131,9 +132,9 @@ class YookassaApi
         return Payment::create($paymentOrder);
     }
 
-    public function createTestPayment(): void
+    public function createTestPayment(): Payment
     {
-        $this->createPayment(new FakeOrder(), 'https://www.merchant-website.com/return_url');
+        return $this->createPayment(new FakeOrder(), 'https://www.merchant-website.com/return_url');
     }
 
     private function getShopId(): string

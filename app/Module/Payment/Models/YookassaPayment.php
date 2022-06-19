@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $income_amount
  * @property string|null $income_currency
  * @property string $confirmation_type
+ * @property string|null $return_url
+ * @property string|null $confirmation_url
  * @property string $description
  * @property string $external_id
  * @property string $status
@@ -53,6 +55,8 @@ class YookassaPayment extends Model
         'income_amount',
         'income_currency',
         'confirmation_type',
+        'return_url',
+        'confirmation_url',
         'description',
         'external_id',
         'status',

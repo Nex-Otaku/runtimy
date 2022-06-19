@@ -24,7 +24,12 @@ class YookassaPayment
         $this->yookassaPayment = $yookassaPayment;
     }
 
-    public static function create(int $shopId, int $paymentId, CreatePaymentResponse $paymentResponse): self
+    public static function create(
+        int $shopId,
+        int $paymentId,
+        CreatePaymentResponse $paymentResponse,
+        string $returnUrl
+    ): self
     {
         $metadata = $paymentResponse->metadata !== null
             ? Json::encode($paymentResponse->metadata->toArray())
@@ -42,6 +47,8 @@ class YookassaPayment
                                                         'income_amount' => $paymentResponse->incomeAmount?->value,
                                                         'income_currency' => $paymentResponse->incomeAmount?->currency,
                                                         'confirmation_type' => $paymentResponse->confirmation->type,
+                                                        'return_url' => $returnUrl,
+                                                        'confirmation_url' => $paymentResponse->confirmation->getConfirmationUrl(),
                                                         'description' => $paymentResponse->description,
                                                         'external_id' => $paymentResponse->id,
                                                         'status' => $paymentResponse->status,
@@ -72,6 +79,21 @@ class YookassaPayment
                 'id' => $id,
             ]
         )->firstOrFail();
+
+        return new self($model);
+    }
+
+    public static function findByMainPaymentId(int $mainPaymentId): ?self
+    {
+        $model = YookassaPaymentModel::where(
+            [
+                'payment_id' => $mainPaymentId,
+            ]
+        )->first();
+
+        if ($model === null) {
+            return null;
+        }
 
         return new self($model);
     }
@@ -149,5 +171,10 @@ class YookassaPayment
         $this->yookassaPayment->refunded_amount = $refundInfo->amount?->value;
         $this->yookassaPayment->refunded_currency = $refundInfo->amount?->currency;
         $this->yookassaPayment->saveOrFail();
+    }
+
+    public function getConfirmationUrl(): ?string
+    {
+        return $this->yookassaPayment->confirmation_url;
     }
 }
