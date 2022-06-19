@@ -103,7 +103,7 @@ class YookassaWebhook
             throw new \Exception("Заказ не оплачен в Yookassa. YK ID: {$responseObject->id}");
         }
 
-        $yookassaPayment->complete();
+        $yookassaPayment->complete($responseObject);
 
         $mainPayment = $yookassaPayment->getMainPayment();
         $mainPayment->complete();
@@ -123,7 +123,7 @@ class YookassaWebhook
 
         YookassaApi::instance()->confirmPayment($responseObject->id, $yookassaPayment->getAmount());
 
-        $yookassaPayment->complete();
+        $yookassaPayment->complete($responseObject);
 
         $mainPayment = $yookassaPayment->getMainPayment();
         $mainPayment->complete();
