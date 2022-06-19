@@ -119,9 +119,18 @@ class YookassaPayment
         return Payment::getById($this->yookassaPayment->payment_id);
     }
 
-    public function complete(): void
+    public function complete(PaymentInterface $paymentInfo): void
     {
         $this->yookassaPayment->status = self::STATUS_SUCCEEDED;
+        $this->yookassaPayment->income_amount = $paymentInfo->incomeAmount?->value;
+        $this->yookassaPayment->income_currency = $paymentInfo->incomeAmount?->currency;
+        $this->yookassaPayment->payment_method_type = $paymentInfo->paymentMethod?->getType();
+        $this->yookassaPayment->payment_method_title = $paymentInfo->paymentMethod?->title;
+        $this->yookassaPayment->paid = $paymentInfo->paid ? 1 : 0;
+        $this->yookassaPayment->refundable = $paymentInfo->refundable ? 1 : 0;
+        $this->yookassaPayment->captured_at = $paymentInfo->capturedAt;
+        $this->yookassaPayment->expires_at = $paymentInfo->expiresAt;
+        $this->yookassaPayment->receipt_registration = $paymentInfo->receiptRegistration;
         $this->yookassaPayment->saveOrFail();
     }
 
