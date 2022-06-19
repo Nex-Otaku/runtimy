@@ -93,7 +93,7 @@ class YookassaWebhook
 
     private function successPayment(PaymentInterface $responseObject): void
     {
-        $yookassaPayment = YookassaPayment::getById((int) $responseObject->id);
+        $yookassaPayment = YookassaPayment::getByExternalId($responseObject->id);
 
         if (!$yookassaPayment->canSucceed()) {
             throw new \Exception("Заказ уже был подтверждён или отклонён. YP ID: {$yookassaPayment->getModelId()}");
@@ -111,7 +111,7 @@ class YookassaWebhook
 
     private function confirmPayment(PaymentInterface $responseObject): void
     {
-        $yookassaPayment = YookassaPayment::getById((int) $responseObject->id);
+        $yookassaPayment = YookassaPayment::getByExternalId($responseObject->id);
 
         if (!$yookassaPayment->canConfirm()) {
             throw new \Exception("Заказ уже был подтверждён или отклонён. YP ID: {$yookassaPayment->getModelId()}");
@@ -131,7 +131,7 @@ class YookassaWebhook
 
     private function cancelPayment(PaymentInterface $responseObject): void
     {
-        $yookassaPayment = YookassaPayment::getById((int) $responseObject->id);
+        $yookassaPayment = YookassaPayment::getByExternalId($responseObject->id);
 
         if (!$yookassaPayment->canCancel()) {
             throw new \Exception("Заказ уже был подтверждён или отклонён. YP ID: {$yookassaPayment->getModelId()}");
@@ -149,7 +149,7 @@ class YookassaWebhook
 
     private function doRefund(RefundInterface $responseObject): void
     {
-        $yookassaPayment = YookassaPayment::getById((int) $responseObject->id);
+        $yookassaPayment = YookassaPayment::getByExternalId($responseObject->paymentId);
 
         if (!$yookassaPayment->canRefund()) {
             throw new \Exception("Средства не могут быть возвращены. YP ID: {$yookassaPayment->getModelId()}");

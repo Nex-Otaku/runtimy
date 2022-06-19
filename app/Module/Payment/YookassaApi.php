@@ -159,17 +159,17 @@ class YookassaApi
         return $secretKey;
     }
 
-    public function isPaid(string $paymentId): bool
+    public function isPaid(string $externalId): bool
     {
-        $payment = $this->client->getPaymentInfo($paymentId);
+        $payment = $this->client->getPaymentInfo($externalId);
 
         return $payment->getPaid();
     }
 
-    public function confirmPayment(string $paymentId, Money $amount): void
+    public function confirmPayment(string $externalId, Money $amount): void
     {
-        if (!$this->isPaid($paymentId)) {
-            throw new \Exception("Попытка подтверждения неоплаченного заказа, ID: {$paymentId}");
+        if (!$this->isPaid($externalId)) {
+            throw new \Exception("Попытка подтверждения неоплаченного заказа, ID: {$externalId}");
         }
 
         $data = [
@@ -179,12 +179,12 @@ class YookassaApi
             ],
         ];
 
-        $this->client->capturePayment($data, $paymentId);
+        $this->client->capturePayment($data, $externalId);
     }
 
-    public function isCanceled(string $paymentId): bool
+    public function isCanceled(string $externalId): bool
     {
-        $payment = $this->client->getPaymentInfo($paymentId);
+        $payment = $this->client->getPaymentInfo($externalId);
 
         return $payment->status === PaymentStatus::CANCELED;
     }

@@ -72,11 +72,11 @@ class YookassaPayment
         return new self($yookassaPayment);
     }
 
-    public static function getById(int $id): self
+    public static function getByExternalId(string $externalId): self
     {
         $model = YookassaPaymentModel::where(
             [
-                'id' => $id,
+                'external_id' => $externalId,
             ]
         )->firstOrFail();
 
