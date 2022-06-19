@@ -48,7 +48,8 @@ class YookassaPayment
                 'income_currency' => $paymentResponse->incomeAmount?->currency,
                 'confirmation_type' => $paymentResponse->confirmation->type,
                 'return_url' => $returnUrl,
-                'confirmation_url' => $paymentResponse->confirmation->getConfirmationUrl(),
+                'confirmation_url' => $paymentResponse->confirmation->getConfirmationUrl()
+                    ?? $paymentResponse->confirmation->getConfirmationData(),
                 'description' => $paymentResponse->description,
                 'external_id' => $paymentResponse->id,
                 'status' => $paymentResponse->status,
