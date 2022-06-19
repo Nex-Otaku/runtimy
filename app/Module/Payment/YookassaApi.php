@@ -30,19 +30,9 @@ class YookassaApi
         return new self();
     }
 
-    public function createPayment(PaymentOrder $paymentOrder, string $returnUrl): Payment
-    {
-        return $this->createCardPayment($paymentOrder, $returnUrl);
-    }
-
     public function createCardPayment(PaymentOrder $paymentOrder, string $returnUrl): Payment
     {
         $payment = Payment::create($paymentOrder);
-
-        // https://yookassa.ru/developers/payment-acceptance/integration-scenarios/manual-integration/other/sbp#create-payment-qr
-        // 1. Создаём платёж
-        // 2. Обновляем статус платежа по уведомлению
-        // 3. При успешном платеже завершаем оплату
 
         try {
             /** @var CreatePaymentResponse $paymentResponse */
@@ -65,13 +55,13 @@ class YookassaApi
                 uniqid('', true)
             );
         } catch (\Throwable $throwable) {
-            $payment->fail((string) $throwable);
+            $payment->fail((string)$throwable);
 
             throw $throwable;
         }
 
         YookassaPayment::create(
-            (int) $this->getShopId(),
+            (int)$this->getShopId(),
             $payment->getModelId(),
             $paymentResponse,
             $returnUrl
@@ -82,59 +72,49 @@ class YookassaApi
 
     public function createSbpPayment(PaymentOrder $paymentOrder): Payment
     {
-//        $payment = Payment::create($paymentOrder);
-//
-//        $client = new Client();
-//        $client->setAuth($this->getShopId(), $this->getSecretKey());
-//
-//
-//        // https://yookassa.ru/developers/payment-acceptance/integration-scenarios/manual-integration/other/sbp#create-payment-qr
-//        // 1. Создаём платёж
-//        // 2. Обновляем статус платежа по уведомлению
-//        // 3. При успешном платеже завершаем оплату
-//        $paymentResponse = $client->createPayment(
-//            [
-//                'amount' => [
-//                    'value' => $amount->toString(),
-//                    'currency' => 'RUB',
-//                ],
-//                'payment_method_data' => [
-//                    'type' => 'sbp',
-//                ],
-//                'confirmation' => [
-//                    'type' => 'qr',
-//                ],
-//                'description' => 'Оплата доставки по заказу №' . $paymentOrder->getModelId(),
-//            ],
-//            uniqid('', true)
-//        );
-//
-//        var_dump($paymentResponse);
+        $payment = Payment::create($paymentOrder);
 
-//        $payment = $client->createPayment(
-//            array(
-//                'amount' => array(
-//                    'value' => 100.0,
-//                    'currency' => 'RUB',
-//                ),
-//                'confirmation' => array(
-//                    'type' => 'redirect',
-//                    'return_url' => 'https://www.merchant-website.com/return_url',
-//                ),
-//                'capture' => true,
-//                'description' => 'Заказ №1',
-//            ),
-//            uniqid('', true)
-//        );
+        try {
+            /** @var CreatePaymentResponse $paymentResponse */
+            $paymentResponse = $this->client->createPayment(
+                [
+                    'amount' => [
+                        'value' => $payment->getAmount()->toString(),
+                        'currency' => self::DEFAULT_CURRENCY,
+                    ],
+                    'payment_method_data' => [
+                        'type' => 'sbp',
+                    ],
+                    'confirmation' => [
+                        'type' => 'qr',
+                    ],
+                    'capture' => true,
+                    'description' => $payment->getDescription(),
+                    'metadata' => [
+                        'runtimy_payment_id' => $payment->getModelId(),
+                    ],
+                ],
+                uniqid('', true)
+            );
+        } catch (\Throwable $throwable) {
+            $payment->fail((string)$throwable);
 
-        // TODO
-//        return new Payment();
-        return Payment::create($paymentOrder);
+            throw $throwable;
+        }
+
+        YookassaPayment::create(
+            (int)$this->getShopId(),
+            $payment->getModelId(),
+            $paymentResponse,
+            '',
+        );
+
+        return $payment;
     }
 
     public function createTestPayment(): Payment
     {
-        return $this->createPayment(new FakeOrder(), 'https://www.merchant-website.com/return_url');
+        return $this->createCardPayment(new FakeOrder(), 'https://www.merchant-website.com/return_url');
     }
 
     private function getShopId(): string
