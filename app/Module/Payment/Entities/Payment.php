@@ -59,7 +59,7 @@ class Payment
         return "Заказ №{$this->payment->order_id}";
     }
 
-    public function getById(int $id): self
+    public static function getById(int $id): self
     {
         $model = PaymentModel::where(
             [
