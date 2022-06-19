@@ -2,6 +2,7 @@
 
 namespace App\Module\Payment\Entities;
 
+use App\Module\Common\Environment;
 use App\Module\Payment\Models\YookassaWebhook as YookassaWebhookModel;
 use App\Module\Payment\YookassaApi;
 use Illuminate\Support\Str;
@@ -57,7 +58,7 @@ class YookassaWebhook
     {
         $client = new \YooKassa\Client();
 
-        if (!$client->isNotificationIPTrusted($ip)) {
+        if (Environment::get()->isProduction() && !$client->isNotificationIPTrusted($ip)) {
             throw new \Exception('Некорректный IP');
         }
 
