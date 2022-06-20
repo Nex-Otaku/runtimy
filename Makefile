@@ -74,7 +74,7 @@ show-ssh-key-demo:
 
 # Устанавливаем проект на демо
 install-demo:
-	$(RUN_SSH_DEMO) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_NAMESPACE}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
+	$(RUN_SSH_DEMO) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone git@github.com:${GITHUB_USER}/${GITHUB_REPO}.git ${PROJECT_DIR}'
 	$(RUN_SSH_DEMO) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
 
 # Тянем изменения из Git
@@ -103,7 +103,7 @@ show-ssh-key-prod:
 
 # Устанавливаем проект на прод
 install-prod:
-	$(RUN_SSH_PROD) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_NAMESPACE}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
+	$(RUN_SSH_PROD) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone git@github.com:${GITHUB_USER}/${GITHUB_REPO}.git ${PROJECT_DIR}'
 	$(RUN_SSH_PROD) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
 	$(RUN_SSH_PROD) '[ -d "./${PROJECT_MOBILE_DIR}" ] && echo "Mobile directory exists, skipping creating" || mkdir -p ${PROJECT_MOBILE_DIR}'
 
