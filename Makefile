@@ -61,8 +61,8 @@ seed-demo:
 fast-deploy-demo:
 	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/fast-deploy.sh'
 	cd mobile && quasar build
-	$(RUN_SSH_DEMO) 'rm -rf /home/nex/runtimy-spa/*'
-	scp -r /home/nex/projects/runtimy/mobile/dist/spa/* ${DEMO_SSH_USER}@${DEMO_SSH_HOST}:/home/nex/runtimy-spa
+	$(RUN_SSH_DEMO) 'rm -rf /home/${DEMO_SSH_USER}/${PROJECT_MOBILE_DIR}/*'
+	scp -r ${LOCAL_MOBILE_DIR}/dist/spa/* ${DEMO_SSH_USER}@${DEMO_SSH_HOST}:/home/${DEMO_SSH_USER}/${PROJECT_MOBILE_DIR}
 
 # Обновляем контейнеры в демо:
 rebuild-docker-on-demo:
@@ -89,6 +89,9 @@ deploy-prod:
 # Выкатываем быстрое обновление на прод
 fast-deploy-prod:
 	$(RUN_SSH_PROD) './${PROJECT_DIR}/bin/fast-deploy.sh'
+	cd mobile && quasar build
+	$(RUN_SSH_PROD) 'rm -rf /home/${PROD_SSH_USER}/${PROJECT_MOBILE_DIR}/*'
+	scp -r ${LOCAL_MOBILE_DIR}/dist/spa/* ${PROD_SSH_USER}@${PROD_SSH_HOST}:/home/${PROD_SSH_USER}/${PROJECT_MOBILE_DIR}
 
 # Обновляем контейнеры в проде:
 rebuild-docker-on-prod:
@@ -102,6 +105,7 @@ show-ssh-key-prod:
 install-prod:
 	$(RUN_SSH_PROD) '[ -d "./${PROJECT_DIR}" ] && echo "Repository exists, skipping cloning" || git clone ${BITBUCKET_USER}@bitbucket.org:${BITBUCKET_NAMESPACE}/${BITBUCKET_REPO}.git ${PROJECT_DIR}'
 	$(RUN_SSH_PROD) 'chmod +x ./${PROJECT_DIR}/bin/install.sh && ./${PROJECT_DIR}/bin/install.sh'
+	$(RUN_SSH_PROD) '[ -d "./${PROJECT_MOBILE_DIR}" ] && echo "Mobile directory exists, skipping creating" || mkdir -p ${PROJECT_MOBILE_DIR}'
 
 # Тянем изменения из Git
 pull-prod:
