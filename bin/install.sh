@@ -19,6 +19,7 @@ git config core.fileMode false
 # Load .env variables
 source .env
 
+docker-compose build
 docker-compose up -d
 
 # Выполняем команды в docker-контейнере PHP.
