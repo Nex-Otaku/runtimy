@@ -21,6 +21,7 @@ class PasswordAccount extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
         'name',
         'email',
         'password',
