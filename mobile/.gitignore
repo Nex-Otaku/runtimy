@@ -34,4 +34,5 @@ yarn-error.log*
 
 .development.env
 .production.env
-.demo.env
+.demo.mode.env
+.prod.mode.env
