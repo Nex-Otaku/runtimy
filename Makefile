@@ -60,7 +60,7 @@ seed-demo:
 # Выкатываем быстрое обновление на демо
 fast-deploy-demo:
 	$(RUN_SSH_DEMO) './${PROJECT_DIR}/bin/fast-deploy.sh'
-	cd mobile && quasar build
+	cd mobile && rm .production.env && cp .demo.mode.env .production.env && quasar build
 	$(RUN_SSH_DEMO) 'rm -rf /home/${DEMO_SSH_USER}/${PROJECT_MOBILE_DIR}/*'
 	scp -r ${LOCAL_MOBILE_DIR}/dist/spa/* ${DEMO_SSH_USER}@${DEMO_SSH_HOST}:/home/${DEMO_SSH_USER}/${PROJECT_MOBILE_DIR}
 
@@ -89,7 +89,7 @@ deploy-prod:
 # Выкатываем быстрое обновление на прод
 fast-deploy-prod:
 	$(RUN_SSH_PROD) './${PROJECT_DIR}/bin/fast-deploy.sh'
-	cd mobile && quasar build
+	cd mobile && rm .production.env && cp .prod.mode.env .production.env && quasar build
 	$(RUN_SSH_PROD) 'rm -rf /home/${PROD_SSH_USER}/${PROJECT_MOBILE_DIR}/*'
 	scp -r ${LOCAL_MOBILE_DIR}/dist/spa/* ${PROD_SSH_USER}@${PROD_SSH_HOST}:/home/${PROD_SSH_USER}/${PROJECT_MOBILE_DIR}
 
