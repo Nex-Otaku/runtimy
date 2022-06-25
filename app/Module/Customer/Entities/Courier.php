@@ -29,8 +29,8 @@ class Courier
         $passwordAccount = new PasswordAccount(
             [
                 'user_id' => $user->id,
-                'email' => $faker->email,
-                'name' => $faker->name,
+                'email' => $faker->email(),
+                'name' => $faker->name(),
                 'password' => bcrypt('secret'),
             ]
         );
@@ -41,8 +41,8 @@ class Courier
             [
                 'user_id' => $user->id,
                 'name' => $passwordAccount->name,
-                'avatar_url' => $faker->imageUrl,
-                'phone_number' => PhoneNumber::fromFakerString($faker->phoneNumber)->asDbValue(),
+                'avatar_url' => $faker->imageUrl(),
+                'phone_number' => PhoneNumber::fromFakerString($faker->phoneNumber())->asDbValue(),
             ]
         );
 
