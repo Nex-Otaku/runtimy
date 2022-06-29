@@ -54,6 +54,7 @@ const routes = [
     component: () => import('layouts/DialogPageLayout.vue'),
     children: [
       {
+        name: 'new-order',
         path: 'new-order',
         component: () => import('pages/NewOrderPage.vue'),
         meta: {

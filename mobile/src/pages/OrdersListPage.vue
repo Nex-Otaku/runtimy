@@ -1,6 +1,23 @@
 <template>
-  <q-page>
+  <q-page
+    v-if="orderStatusStore.hasNoOrders"
+    padding
+    class="row"
+  >
+    <div class="full-width column justify-center content-center items-center">
+      <p>Чтобы заказать доставку, нажмите кнопку:</p>
+      <q-btn
+        icon="add"
+        color="primary"
+        label="Новый заказ"
+        @click="clickNewOrder"
+      />
+    </div>
+  </q-page>
 
+  <q-page
+    v-else
+  >
     <q-list>
       <q-item
         v-for="orderStatus in orderStatusStore.orderStatuses" :key="orderStatus.sort_index"
@@ -108,9 +125,14 @@ export default defineComponent({
       router.push({name: 'view-order', params: {id: orderId}});
     }
 
+    const clickNewOrder = () => {
+      router.push({name: 'new-order'});
+    }
+
     return {
       orderStatusStore: orderStatusStore,
-      clickOrderItem: clickOrderItem
+      clickOrderItem: clickOrderItem,
+      clickNewOrder: clickNewOrder
     }
   },
 })

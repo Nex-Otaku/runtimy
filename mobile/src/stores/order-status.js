@@ -9,6 +9,9 @@ export const useOrderStatus = defineStore(
     }),
 
     getters: {
+      hasNoOrders: (state) => {
+        return state.orderStatuses.length === 0;
+      },
     },
 
     actions: {
