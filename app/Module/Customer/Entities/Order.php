@@ -59,6 +59,7 @@ class Order implements PaymentOrder
                 'weight_type' => $params['weight_type'] ?? self::WEIGHT_TYPE_UNDER_1_KG,
                 'description' => $params['description'] ?? '',
                 'price_of_package' => $params['price_of_package'] ?? null,
+                'delivery_price' => null,
             ]
         );
 
@@ -175,7 +176,8 @@ class Order implements PaymentOrder
         return [
             'order_number' => $this->getModelId(),
             'order_status_label' => $orderStatus->getStatusLabel(),
-            'order_price' => self::STUB_PRICE,
+            'order_price' => $this->order->delivery_price,
+            'is_set_price' => $this->order->delivery_price !== null,
             'is_coming_next_place' => $orderStatus->isComing(),
             'can_be_canceled' => $orderStatus->canBeCanceled(),
             'can_be_edited' => $orderStatus->canBeEdited(),

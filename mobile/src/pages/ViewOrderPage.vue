@@ -50,11 +50,22 @@
         <div
           class="q-pl-lg"
         >
+          <!-- Есть цена -->
           <div
+            v-if="orderViewStore.orderInfo.is_set_price"
             class="q-mt-sm"
             style="font-size: 20px;"
           >
             {{ orderViewStore.orderInfo.order_price }}₽
+          </div>
+
+          <!-- Нет цены -->
+          <div
+            v-else
+            class="q-mt-sm"
+            style="font-size: 20px;"
+          >
+            -
           </div>
 
           <div

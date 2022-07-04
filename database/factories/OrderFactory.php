@@ -50,6 +50,7 @@ class OrderFactory extends Factory
             'weight_type' => $this->faker->randomElement(OrderEntity::getWeightTypes()),
             'description' => $this->faker->text(),
             'price_of_package' => null,
+            'delivery_price' => null,
         ];
     }
 }

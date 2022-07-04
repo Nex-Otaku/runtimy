@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property int|null $price_of_package
  * @property \DateTimeInterface $created_at
+ * @property string|null $delivery_price
  */
 class Order extends Model
 {
@@ -28,5 +29,6 @@ class Order extends Model
         'weight_type',
         'description',
         'price_of_package',
+        'delivery_price',
     ];
 }
