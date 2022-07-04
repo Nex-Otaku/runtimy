@@ -3,6 +3,7 @@
 namespace App\Module\MobileAuth\Entities;
 
 use App\Models\User;
+use App\Module\Common\Environment;
 use App\Module\Common\PhoneNumber;
 use App\Module\MobileAuth\Models\MobileAccount as MobileAccountModel;
 use App\Module\MobileAuth\PincodeSender;
@@ -55,7 +56,12 @@ class MobileAccount
 
     public function sendPincode(): void
     {
-        $pincode = (new PincodeSender())->sendPincode($this->getPhoneNumber());
+        if (Environment::get()->isLocal()) {
+            $pincode = 1111;
+        } else {
+            $pincode = (new PincodeSender())->sendPincode($this->getPhoneNumber());
+        }
+
         $this->mobileAccount->pincode = $pincode;
         $this->mobileAccount->saveOrFail();
     }
