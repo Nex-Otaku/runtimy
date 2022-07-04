@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $order_id
  * @property int|null $next_place_id
  * @property string $phase
+ * @property int $is_active
  */
 class OrderStatus extends Model
 {
@@ -19,6 +20,7 @@ class OrderStatus extends Model
         'order_id',
         'next_place_id',
         'phase',
+        'is_active',
     ];
 
     public function order()

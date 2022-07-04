@@ -39,6 +39,7 @@ class OrderStatus
                 'order_id' => $order->getModelId(),
                 'next_place_id' => null,
                 'phase' => self::PHASE_WAITING_FOR_PRICE,
+                'is_active' => true,
             ]
         );
 
@@ -77,7 +78,7 @@ class OrderStatus
 
         foreach ($orders as $order) {
             $record = OrderStatusModel::where(['order_id' => $order->getModelId()])
-                                      ->where('phase', '<>', self::PHASE_WAITING_FOR_PAYMENT)
+                                      ->where('is_active', '<>', 0)
                                       ->first();
 
             if ($record === null) {
@@ -219,12 +220,14 @@ class OrderStatus
     public function setCanceled(): void
     {
         $this->orderStatus->phase = self::PHASE_CANCELED;
+        $this->orderStatus->is_active = false;
         $this->orderStatus->saveOrFail();
     }
 
     public function setIsComing(): void
     {
         $this->orderStatus->phase = self::PHASE_COMING;
+        $this->orderStatus->is_active = true;
         $this->orderStatus->saveOrFail();
     }
 
