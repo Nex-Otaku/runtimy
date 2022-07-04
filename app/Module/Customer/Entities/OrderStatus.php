@@ -157,6 +157,17 @@ class OrderStatus
         return '{' . var_export($time, true) . '}';
     }
 
+    public function markPriceWasAssigned(): void
+    {
+        if ($this->orderStatus->phase !== self::PHASE_WAITING_FOR_PRICE) {
+            return;
+        }
+
+        $this->orderStatus->phase = self::PHASE_WAITING_FOR_PAYMENT;
+        $this->orderStatus->is_active = true;
+        $this->orderStatus->saveOrFail();
+    }
+
     public function confirmPayment(): void
     {
         if ($this->orderStatus->phase === self::PHASE_WAITING_FOR_COURIER) {
@@ -168,6 +179,7 @@ class OrderStatus
         }
 
         $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER;
+        $this->orderStatus->is_active = true;
         $this->orderStatus->saveOrFail();
     }
 

@@ -159,6 +159,13 @@ class Order implements PaymentOrder
         return $items;
     }
 
+    public function setDeliveryPrice(Money $price): void
+    {
+        $this->order->delivery_price = $price->toString();
+        $this->order->saveOrFail();
+        OrderStatus::get($this)->markPriceWasAssigned();
+    }
+
     public function confirmPayment(): void
     {
         OrderStatus::get($this)->confirmPayment();

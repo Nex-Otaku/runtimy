@@ -3,6 +3,7 @@
 namespace App\Module\Customer\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Module\Common\Money;
 use App\Module\Customer\Entities\Customer;
 use App\Module\Customer\Entities\Order;
 use App\Module\Customer\Entities\OrderStatus;
@@ -15,6 +16,7 @@ class OrderController extends Controller
     {
         try {
             $order = Order::create(Customer::takeLogined(), $request->post());
+            $order->setDeliveryPrice(Money::createFromString('100'));
             $order->confirmPayment();
             $order->assignCourier();
         } catch (\Throwable $throwable) {
