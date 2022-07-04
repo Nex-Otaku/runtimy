@@ -7,6 +7,7 @@ use App\Module\Customer\Models\OrderStatusPlace;
 
 class OrderStatus
 {
+    private const PHASE_WAITING_FOR_PRICE = 'waiting-for-price';
     private const PHASE_WAITING_FOR_PAYMENT = 'waiting-for-payment';
     private const PHASE_WAITING_FOR_COURIER = 'waiting-for-courier';
     private const PHASE_COMING              = 'coming';
@@ -14,6 +15,7 @@ class OrderStatus
     private const PHASE_COMPLETED           = 'completed';
 
     private const PHASE_LABELS = [
+        self::PHASE_WAITING_FOR_PRICE => 'Ждём подтверждения оператором',
         self::PHASE_WAITING_FOR_PAYMENT => 'Ждём оплату',
         self::PHASE_WAITING_FOR_COURIER => 'Ищем курьера',
         self::PHASE_COMING => 'Курьер в пути',
@@ -36,7 +38,7 @@ class OrderStatus
             [
                 'order_id' => $order->getModelId(),
                 'next_place_id' => null,
-                'phase' => self::PHASE_WAITING_FOR_PAYMENT,
+                'phase' => self::PHASE_WAITING_FOR_PRICE,
             ]
         );
 
