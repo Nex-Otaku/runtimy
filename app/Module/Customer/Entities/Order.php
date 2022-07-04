@@ -33,9 +33,6 @@ class Order implements PaymentOrder
         self::WEIGHT_TYPE_UNDER_10_KG => 'До 10 кг',
     ];
 
-    // TODO Сделать поле цены заказа
-    private const STUB_PRICE = 500;
-
     // TODO Сделать тип оплаты заказа
     private const PAYMENT_TYPE = 'Картой онлайн';
 
