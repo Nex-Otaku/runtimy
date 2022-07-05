@@ -28,9 +28,20 @@
         <div class="column col-12">
 
           <div class="row justify-between q-mb-xs">
-            <div style="font-size: 20px">
+            <div
+              v-if="orderStatus.isSetDeliveryPrice"
+              style="font-size: 20px"
+            >
               {{ orderStatus.deliveryPrice }}₽
             </div>
+
+            <div
+              v-else
+              style="font-size: 20px"
+            >
+              -
+            </div>
+
             <div
               class="text-grey-7"
               style="font-size: 15px"

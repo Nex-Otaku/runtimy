@@ -102,6 +102,7 @@ class OrderStatus
     {
         return [
             'order_number' => $this->orderStatus->order_id,
+            'isSetDeliveryPrice' => !$this->getOrder()->getAmount()->isZero(),
             'deliveryPrice' => $this->getOrder()->getAmount()->toFrontAsString(),
             'isComing' => $this->isComing(),
             'isCanceled' => $this->isCanceled(),
