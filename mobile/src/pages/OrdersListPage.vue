@@ -29,7 +29,7 @@
 
           <div class="row justify-between q-mb-xs">
             <div style="font-size: 20px">
-              500₽
+              {{ orderStatus.deliveryPrice }}₽
             </div>
             <div
               class="text-grey-7"

@@ -63,4 +63,9 @@ class Money
     {
         return bccomp($this->value, $money->value, self::DECIMAL_SCALE) === 0;
     }
+
+    public function toFrontAsString(): string
+    {
+        return bcadd('0', $this->value, 0);
+    }
 }

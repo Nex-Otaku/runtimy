@@ -102,6 +102,7 @@ class OrderStatus
     {
         return [
             'order_number' => $this->orderStatus->order_id,
+            'deliveryPrice' => $this->getOrder()->getAmount()->toFrontAsString(),
             'isComing' => $this->isComing(),
             'isCanceled' => $this->isCanceled(),
             'label' => $this->getStatusLabel(),
@@ -126,8 +127,7 @@ class OrderStatus
 
     private function getStatusPlaces(): array
     {
-        $order = Order::get($this->orderStatus->order_id);
-        $places = $order->getPlaces();
+        $places = $this->getOrder()->getPlaces();
         $result = [];
 
         foreach ($places as $place) {
@@ -309,5 +309,10 @@ class OrderStatus
             $this->orderStatus->phase,
             [self::PHASE_CANCELED, self::PHASE_COMPLETED]
         );
+    }
+
+    private function getOrder(): Order
+    {
+        return Order::get($this->orderStatus->order_id);
     }
 }
