@@ -48,7 +48,10 @@
 
           <div class="row items-center">
             <div class="col-sm">
+              <!--
+              TODO: Сделать определение стоимости по адресам
               от 500₽
+              -->
             </div>
             <q-space></q-space>
             <div class="col-8">
