@@ -10,8 +10,9 @@ use App\Module\Customer\Contracts\CourierAccountRegistry;
 use App\Module\MobileAuth\Contracts\MobileAccountRegistry;
 use App\Module\MobileAuth\Contracts\UserId;
 use App\Module\PasswordAuth\Models\PasswordAccount;
+use App\Nova\Contracts\NovaUserRegistry;
 
-class LkAccountRegistry implements CourierAccountRegistry, MobileAccountRegistry
+class LkAccountRegistry implements CourierAccountRegistry, MobileAccountRegistry, NovaUserRegistry
 {
     private function __construct()
     {
@@ -62,5 +63,16 @@ class LkAccountRegistry implements CourierAccountRegistry, MobileAccountRegistry
     public function registerCustomerMobileAccount(): UserId
     {
         return $this->registerMobileAccount(Role::customer());
+    }
+
+    public function isAllowedNovaUser(int $userId): bool
+    {
+        $lkAccount = LkAccount::find($userId);
+
+        if ($lkAccount === null) {
+            return false;
+        }
+
+        return $lkAccount->isAllowedLkRole();
     }
 }

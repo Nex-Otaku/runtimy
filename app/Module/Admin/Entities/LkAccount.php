@@ -31,8 +31,33 @@ class LkAccount implements CourierAccount, UserId
         return new self($lkAccount);
     }
 
+    public static function find(int $userId): ?self
+    {
+        $lkAccount = LkAccountModel::where(
+           [
+               'user_id' => $userId,
+           ]
+        )->first();
+
+        if ($lkAccount === null) {
+            return null;
+        }
+
+        return new self($lkAccount);
+    }
+
     public function getUserId(): int
     {
         return $this->lkAccount->user_id;
+    }
+
+    public function isAllowedLkRole(): bool
+    {
+        return $this->role()->isAllowedLk();
+    }
+
+    private function role(): Role
+    {
+        return Role::fromString($this->lkAccount->role);
     }
 }

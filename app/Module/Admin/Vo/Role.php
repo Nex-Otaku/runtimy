@@ -61,4 +61,9 @@ class Role
     {
         return $this->role;
     }
+
+    public function isAllowedLk(): bool
+    {
+        return in_array($this->role, self::LK_ROLES);
+    }
 }

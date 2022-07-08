@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Module\Common\ModuleSystem;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
@@ -41,12 +42,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewNova', function ($user) {
-            // Любой пользователь сайта может зайти в личный кабинет.
-            return true;
-
-//            return in_array($user->email, [
-//                //
-//            ]);
+            return ModuleSystem::instance()
+                               ->getNovaUserRegistry()
+                               ->isAllowedNovaUser($user->id);
         });
     }
 
