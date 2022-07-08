@@ -32,7 +32,7 @@ class RegisterAccount extends Command
         $email = $this->argument('email');
         $name = $this->ask('Имя');
         $password = $this->ask('Пароль');
-        $roleCode = $this->choice('Роль', Role::getChoices());
+        $roleCode = $this->choice('Роль', Role::getLkChoices());
         $role = Role::fromString($roleCode);
 
         LkAccountRegistry::instance()->registerLkAccount($name, $email, $password, $role);

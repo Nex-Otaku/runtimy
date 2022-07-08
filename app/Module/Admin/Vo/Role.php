@@ -16,6 +16,11 @@ class Role
         self::ROLE_DEMO,
     ];
 
+    private const LK_ROLES = [
+        self::ROLE_OPERATOR,
+        self::ROLE_DEMO,
+    ];
+
     private string $role;
 
     private function __construct(string $role)
@@ -27,9 +32,9 @@ class Role
         $this->role = $role;
     }
 
-    public static function getChoices(): array
+    public static function getLkChoices(): array
     {
-        return self::ROLES;
+        return self::LK_ROLES;
     }
 
     public static function fromString(string $role): self
