@@ -2,10 +2,9 @@
 
 namespace App\Module\Customer\Entities;
 
-use App\Models\User;
 use App\Module\Common\PhoneNumber;
+use App\Module\Customer\Contracts\CourierAccountRegistry;
 use App\Module\Customer\Models\Courier as CourierModel;
-use App\Module\PasswordAuth\Models\PasswordAccount;
 use Faker\Factory;
 
 class Courier
@@ -19,28 +18,15 @@ class Courier
         $this->courier = $Courier;
     }
 
-    public static function createRandom(): self
+    public static function createRandom(CourierAccountRegistry $courierAccountRegistry): self
     {
         $faker = Factory::create();
-
-        $user = new User();
-        $user->saveOrFail();
-
-        $passwordAccount = new PasswordAccount(
-            [
-                'user_id' => $user->id,
-                'email' => $faker->email(),
-                'name' => $faker->name(),
-                'password' => bcrypt('secret'),
-            ]
-        );
-
-        $passwordAccount->saveOrFail();
+        $courierAccount = $courierAccountRegistry->registerCourier();
 
         $courier = new CourierModel(
             [
-                'user_id' => $user->id,
-                'name' => $passwordAccount->name,
+                'user_id' => $courierAccount->getUserId(),
+                'name' => $faker->name(),
                 'avatar_url' => $faker->imageUrl(),
                 'phone_number' => PhoneNumber::fromFakerString($faker->phoneNumber())->asDbValue(),
             ]

@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Module\PasswordAuth\Models\PasswordAccount;
+use App\Module\Admin\LkAccountRegistry;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -16,18 +15,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = new User();
-        $user->saveOrFail();
-
-        $passwordAccount = new PasswordAccount(
-            [
-                'user_id' => $user->id,
-                'email' => 'demo@mail.com',
-                'name' => 'Demo User',
-                'password' => bcrypt('secret'),
-            ]
-        );
-
-        $passwordAccount->saveOrFail();
+        LkAccountRegistry::instance()->registerDemo();
     }
 }

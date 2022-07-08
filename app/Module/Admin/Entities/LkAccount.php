@@ -3,11 +3,12 @@
 namespace App\Module\Admin\Entities;
 
 use App\Module\Admin\Models\LkAccount as LkAccountModel;
+use App\Module\Admin\Vo\Role;
+use App\Module\Customer\Contracts\CourierAccount;
+use App\Module\MobileAuth\Contracts\UserId;
 
-class LkAccount
+class LkAccount implements CourierAccount, UserId
 {
-    private const ROLE_OPERATOR = 'operator';
-
     private LkAccountModel $lkAccount;
 
     private function __construct(
@@ -16,17 +17,22 @@ class LkAccount
         $this->lkAccount = $lkAccount;
     }
 
-    public static function createOperator(int $userId): self
+    public static function create(int $userId, Role $role): self
     {
         $lkAccount = new LkAccountModel(
             [
                 'user_id' => $userId,
-                'role' => self::ROLE_OPERATOR,
+                'role' => $role->toString(),
             ]
         );
 
         $lkAccount->saveOrFail();
 
         return new self($lkAccount);
+    }
+
+    public function getUserId(): int
+    {
+        return $this->lkAccount->user_id;
     }
 }

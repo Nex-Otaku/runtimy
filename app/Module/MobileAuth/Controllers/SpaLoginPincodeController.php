@@ -3,6 +3,7 @@
 namespace App\Module\MobileAuth\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Module\Common\ModuleSystem;
 use App\Module\Common\PhoneNumber;
 use App\Module\MobileAuth\Entities\MobileAccount;
 use Illuminate\Http\JsonResponse;
@@ -25,7 +26,7 @@ class SpaLoginPincodeController extends Controller
         $phoneNumber = PhoneNumber::fromInputString($credentials['phone']);
 
         if (!MobileAccount::existsByPhone($phoneNumber)) {
-            MobileAccount::register($phoneNumber);
+            MobileAccount::registerCustomer($phoneNumber, ModuleSystem::instance()->getMobileAccountRegistry());
         }
 
         MobileAccount::getExistingByPhone($phoneNumber)->sendPincode();

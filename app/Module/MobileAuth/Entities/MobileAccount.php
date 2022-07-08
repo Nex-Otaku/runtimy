@@ -2,9 +2,9 @@
 
 namespace App\Module\MobileAuth\Entities;
 
-use App\Models\User;
 use App\Module\Common\Environment;
 use App\Module\Common\PhoneNumber;
+use App\Module\MobileAuth\Contracts\MobileAccountRegistry;
 use App\Module\MobileAuth\Models\MobileAccount as MobileAccountModel;
 use App\Module\MobileAuth\PincodeSender;
 
@@ -19,14 +19,13 @@ class MobileAccount
         $this->mobileAccount = $MobileAccount;
     }
 
-    public static function register(PhoneNumber $phoneNumber): self
+    public static function registerCustomer(PhoneNumber $phoneNumber, MobileAccountRegistry $mobileAccountRegistry): self
     {
-        $user = new User();
-        $user->saveOrFail();
+        $userIdentity = $mobileAccountRegistry->registerCustomerMobileAccount();
 
         $mobileAccount = new MobileAccountModel(
             [
-                'user_id' => $user->id,
+                'user_id' => $userIdentity->getUserId(),
                 'pincode' => null,
                 'phone_number' => $phoneNumber->asDbValue(),
             ]
@@ -37,9 +36,9 @@ class MobileAccount
         return new self($mobileAccount);
     }
 
-    public static function createDemo(): self
+    public static function createDemo(MobileAccountRegistry $mobileAccountRegistry): self
     {
-        return self::register(PhoneNumber::fromInputString('+71112223344'));
+        return self::registerCustomer(PhoneNumber::fromInputString('+71112223344'), $mobileAccountRegistry);
     }
 
     public static function existsByPhone(PhoneNumber $phoneNumber): bool
