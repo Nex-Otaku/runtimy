@@ -5,8 +5,10 @@ namespace App\Module\Admin;
 use App\Models\User;
 use App\Module\Admin\Entities\LkAccount;
 use App\Module\Admin\Vo\Role;
+use App\Module\Common\PhoneNumber;
 use App\Module\Customer\Contracts\CourierAccount;
 use App\Module\Customer\Contracts\CourierAccountRegistry;
+use App\Module\Customer\Models\Customer;
 use App\Module\MobileAuth\Contracts\MobileAccountRegistry;
 use App\Module\MobileAuth\Contracts\UserId;
 use App\Module\PasswordAuth\Models\PasswordAccount;
@@ -60,9 +62,20 @@ class LkAccountRegistry implements CourierAccountRegistry, MobileAccountRegistry
         return $this->registerLkAccount('Demo User', 'demo@mail.com', 'demo', Role::demo());
     }
 
-    public function registerCustomerMobileAccount(): UserId
+    public function registerCustomerMobileAccount(PhoneNumber $phoneNumber): UserId
     {
-        return $this->registerMobileAccount(Role::customer());
+        $lkAccount = $this->registerMobileAccount(Role::customer());
+
+        $customer = new Customer(
+            [
+                'user_id' => $lkAccount->getUserId(),
+                'phone_number' => $phoneNumber->asDbValue(),
+            ]
+        );
+
+        $customer->saveOrFail();
+
+        return $lkAccount;
     }
 
     public function isAllowedNovaUser(int $userId): bool

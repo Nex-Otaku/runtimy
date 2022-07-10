@@ -21,7 +21,7 @@ class MobileAccount
 
     public static function registerCustomer(PhoneNumber $phoneNumber, MobileAccountRegistry $mobileAccountRegistry): self
     {
-        $userIdentity = $mobileAccountRegistry->registerCustomerMobileAccount();
+        $userIdentity = $mobileAccountRegistry->registerCustomerMobileAccount($phoneNumber);
 
         $mobileAccount = new MobileAccountModel(
             [
