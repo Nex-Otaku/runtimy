@@ -97,4 +97,9 @@ class MobileAccount
         $this->mobileAccount->pincode = null;
         $this->mobileAccount->saveOrFail();
     }
+
+    public function remove(): void
+    {
+        $this->mobileAccount->delete();
+    }
 }

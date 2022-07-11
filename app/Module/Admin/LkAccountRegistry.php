@@ -44,7 +44,7 @@ class LkAccountRegistry implements CourierAccountRegistry, MobileAccountRegistry
         return LkAccount::create($user->id, $role);
     }
 
-    public function registerMobileAccount(Role $role): LkAccount
+    private function registerMobileAccount(Role $role): LkAccount
     {
         $user = new User();
         $user->saveOrFail();
@@ -87,5 +87,28 @@ class LkAccountRegistry implements CourierAccountRegistry, MobileAccountRegistry
         }
 
         return $lkAccount->isAllowedLkRole();
+    }
+
+    public function removeCourier(CourierAccount $courierAccount): void
+    {
+        $userId = $courierAccount->getUserId();
+        $this->removeUser($userId);
+        $this->removeMobileAccount($userId);
+    }
+
+    private function removeUser(int $userId): void
+    {
+        User::destroy([$userId]);
+    }
+
+    private function removeMobileAccount(int $userId): void
+    {
+        $lkAccount = LkAccount::find($userId);
+
+        if ($lkAccount === null) {
+            return;
+        }
+
+        $lkAccount->remove();
     }
 }

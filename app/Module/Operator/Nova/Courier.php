@@ -3,6 +3,7 @@
 namespace App\Module\Operator\Nova;
 
 use App\Module\Owner\Actions\AddCourierAction;
+use App\Module\Owner\Actions\RemoveCourierAction;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -150,6 +151,7 @@ class Courier extends Resource
     {
         return [
             AddCourierAction::make()->standalone(),
+            RemoveCourierAction::make(),
         ];
     }
 }

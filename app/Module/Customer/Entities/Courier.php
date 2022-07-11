@@ -3,11 +3,12 @@
 namespace App\Module\Customer\Entities;
 
 use App\Module\Common\PhoneNumber;
+use App\Module\Customer\Contracts\CourierAccount;
 use App\Module\Customer\Contracts\CourierAccountRegistry;
 use App\Module\Customer\Models\Courier as CourierModel;
 use Faker\Factory;
 
-class Courier
+class Courier implements CourierAccount
 {
     /** @var CourierModel */
     private $courier;
@@ -103,5 +104,16 @@ class Courier
     public function getModelId(): int
     {
         return $this->courier->id;
+    }
+
+    public function remove(CourierAccountRegistry $courierAccountRegistry): void
+    {
+        $courierAccountRegistry->removeCourier($this);
+        $this->courier->delete();
+    }
+
+    public function getUserId(): int
+    {
+        return $this->courier->user_id;
     }
 }

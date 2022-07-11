@@ -75,4 +75,9 @@ class LkAccount implements CourierAccount, UserId
     {
         return Role::fromString($this->lkAccount->role);
     }
+
+    public function remove(): void
+    {
+        $this->lkAccount->delete();
+    }
 }
