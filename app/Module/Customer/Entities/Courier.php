@@ -21,14 +21,44 @@ class Courier
     public static function createRandom(CourierAccountRegistry $courierAccountRegistry): self
     {
         $faker = Factory::create();
+
+        return self::create(
+            $courierAccountRegistry,
+            $faker->name(),
+            $faker->imageUrl(),
+            PhoneNumber::fromFakerString($faker->phoneNumber())
+        );
+    }
+
+    public static function createFromLk(
+        CourierAccountRegistry $courierAccountRegistry,
+        string $name,
+        PhoneNumber $phoneNumber
+    ): self
+    {
+        return self::create(
+            $courierAccountRegistry,
+            $name,
+            null,
+            $phoneNumber
+        );
+    }
+
+    private static function create(
+        CourierAccountRegistry $courierAccountRegistry,
+        string $name,
+        ?string $url,
+        PhoneNumber $phoneNumber
+    ): self
+    {
         $courierAccount = $courierAccountRegistry->registerCourier();
 
         $courier = new CourierModel(
             [
                 'user_id' => $courierAccount->getUserId(),
-                'name' => $faker->name(),
-                'avatar_url' => $faker->imageUrl(),
-                'phone_number' => PhoneNumber::fromFakerString($faker->phoneNumber())->asDbValue(),
+                'name' => $name,
+                'avatar_url' => $url,
+                'phone_number' => $phoneNumber->asDbValue(),
             ]
         );
 
