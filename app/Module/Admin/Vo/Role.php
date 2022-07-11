@@ -8,17 +8,23 @@ class Role
     private const ROLE_COURIER = 'courier';
     private const ROLE_OPERATOR = 'operator';
     private const ROLE_DEMO = 'demo';
+    private const ROLE_OWNER = 'owner';
+    private const ROLE_DEVELOPER = 'developer';
 
     private const ROLES = [
         self::ROLE_CUSTOMER,
         self::ROLE_COURIER,
         self::ROLE_OPERATOR,
         self::ROLE_DEMO,
+        self::ROLE_OWNER,
+        self::ROLE_DEVELOPER,
     ];
 
     private const LK_ROLES = [
         self::ROLE_OPERATOR,
         self::ROLE_DEMO,
+        self::ROLE_OWNER,
+        self::ROLE_DEVELOPER,
     ];
 
     private string $role;
@@ -65,5 +71,20 @@ class Role
     public function isAllowedLk(): bool
     {
         return in_array($this->role, self::LK_ROLES);
+    }
+
+    public function isOperator(): bool
+    {
+        return $this->role === self::ROLE_OPERATOR;
+    }
+
+    public function isDeveloper(): bool
+    {
+        return $this->role === self::ROLE_DEVELOPER;
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->role === self::ROLE_OWNER;
     }
 }
