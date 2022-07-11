@@ -2,6 +2,7 @@
 
 namespace App\Module\Operator\Nova;
 
+use App\Module\Owner\Actions\AddCourierAction;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -98,7 +99,7 @@ class Courier extends Resource
                 ->rules('required', 'max:255'),
 
             Url::make('Аватар', 'avatar_url')
-                ->rules('required', 'max:255'),
+                ->rules('max:255'),
 
             Text::make('Телефон', 'phone_number')
                 ->sortable()
@@ -147,6 +148,8 @@ class Courier extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            AddCourierAction::make()->standalone(),
+        ];
     }
 }
