@@ -75,4 +75,20 @@ class LkAccess
     {
         return false;
     }
+
+    // Orders
+
+    public function canViewOrders(): bool
+    {
+        return $this->lkAccount->isOperator()
+            || $this->lkAccount->isOwner()
+            || $this->lkAccount->isDeveloper();
+    }
+
+    public function canEditOrders(): bool
+    {
+        return $this->lkAccount->isOperator()
+            || $this->lkAccount->isOwner()
+            || $this->lkAccount->isDeveloper();
+    }
 }
