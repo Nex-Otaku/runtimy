@@ -112,3 +112,4 @@ pull-prod:
 	$(RUN_SSH_PROD) 'cd ${PROJECT_DIR} && git pull && chmod +x ./bin/*.sh'
 
 
+fast-deploy: fast-deploy-demo fast-deploy-prod
