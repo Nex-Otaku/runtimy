@@ -23,7 +23,7 @@ class CourierPolicy
 
     public function create(PasswordAccount $passwordAccount)
     {
-        return LkAccess::of($passwordAccount->user_id)->canAddCouriers();
+        return false;
     }
 
     public function update(PasswordAccount $passwordAccount, Courier $courier)
@@ -33,7 +33,7 @@ class CourierPolicy
 
     public function delete(PasswordAccount $passwordAccount, Courier $courier)
     {
-        return LkAccess::of($passwordAccount->user_id)->canRemoveCouriers();
+        return false;
     }
 
     public function restore(PasswordAccount $passwordAccount, Courier $courier)

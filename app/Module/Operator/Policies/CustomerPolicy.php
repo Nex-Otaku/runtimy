@@ -23,7 +23,7 @@ class CustomerPolicy
 
     public function create(PasswordAccount $passwordAccount)
     {
-        return LkAccess::of($passwordAccount->user_id)->canAddCustomers();
+        return false;
     }
 
     public function update(PasswordAccount $passwordAccount, Customer $customer)
@@ -33,7 +33,7 @@ class CustomerPolicy
 
     public function delete(PasswordAccount $passwordAccount, Customer $customer)
     {
-        return LkAccess::of($passwordAccount->user_id)->canRemoveCustomers();
+        return false;
     }
 
     public function restore(PasswordAccount $passwordAccount, Customer $customer)
