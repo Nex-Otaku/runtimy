@@ -56,6 +56,21 @@ class LkAccount implements CourierAccount, UserId
         return $this->role()->isAllowedLk();
     }
 
+    public function isOperator(): bool
+    {
+        return $this->role()->isOperator();
+    }
+
+    public function isDeveloper(): bool
+    {
+        return $this->role()->isDeveloper();
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->role()->isOwner();
+    }
+
     private function role(): Role
     {
         return Role::fromString($this->lkAccount->role);

@@ -2,6 +2,7 @@
 
 namespace App\Module\Operator\Policies;
 
+use App\Module\Admin\Access\LkAccess;
 use App\Module\Customer\Models\Courier;
 use App\Module\PasswordAuth\Models\PasswordAccount;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -18,7 +19,7 @@ class CourierPolicy
      */
     public function viewAny(PasswordAccount $passwordAccount)
     {
-        return true;
+        return LkAccess::of($passwordAccount->user_id)->canViewCouriers();
     }
 
     /**
@@ -30,7 +31,7 @@ class CourierPolicy
      */
     public function view(PasswordAccount $passwordAccount, Courier $courier)
     {
-        return true;
+        return LkAccess::of($passwordAccount->user_id)->canViewCouriers();
     }
 
     /**
@@ -41,7 +42,7 @@ class CourierPolicy
      */
     public function create(PasswordAccount $passwordAccount)
     {
-        return false;
+        return LkAccess::of($passwordAccount->user_id)->canAddCouriers();
     }
 
     /**
@@ -53,7 +54,7 @@ class CourierPolicy
      */
     public function update(PasswordAccount $passwordAccount, Courier $courier)
     {
-        return true;
+        return LkAccess::of($passwordAccount->user_id)->canEditCouriers();
     }
 
     /**
@@ -65,7 +66,7 @@ class CourierPolicy
      */
     public function delete(PasswordAccount $passwordAccount, Courier $courier)
     {
-        return false;
+        return LkAccess::of($passwordAccount->user_id)->canRemoveCouriers();
     }
 
     /**
