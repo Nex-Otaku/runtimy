@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     locales \
+    libzip-dev \
     zip \
     jpegoptim optipng pngquant gifsicle \
     vim \
@@ -26,6 +27,7 @@ RUN docker-php-ext-install pdo_mysql \
     exif \
     pcntl \
     bcmath \
+    zip \
     intl
 
 # Install composer
