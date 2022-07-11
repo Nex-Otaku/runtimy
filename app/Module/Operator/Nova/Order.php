@@ -94,7 +94,9 @@ class Order extends Resource
             ID::make(__('Customer ID'), 'customer_id')->sortable(),
 
             // Courier
-            ID::make(__('Courier ID'), 'assigned_courier_id')->sortable(),
+            ID::make(__('Courier ID'), 'assigned_courier_id')
+                ->nullable()
+                ->sortable(),
 
             Text::make('Транспорт', 'transport_type')
                 ->sortable()
@@ -113,10 +115,12 @@ class Order extends Resource
                 ->rules('required', 'max:255'),
 
             Text::make('Объявленная ценность', 'price_of_package')
+                ->nullable()
                 ->sortable()
                 ->rules('required', 'max:255'),
 
             Text::make('Стоимость доставки', 'delivery_price')
+                ->nullable()
                 ->sortable()
                 ->rules('required', 'max:255'),
         ];
