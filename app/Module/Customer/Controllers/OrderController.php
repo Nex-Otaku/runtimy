@@ -16,9 +16,9 @@ class OrderController extends Controller
     {
         try {
             $order = Order::create(Customer::takeLogined(), $request->post());
-            $order->setDeliveryPrice(Money::createFromString('100'));
-            $order->confirmPayment();
-            $order->assignCourier();
+//            $order->setDeliveryPrice(Money::createFromString('100'));
+//            $order->confirmPayment();
+//            $order->assignCourier();
         } catch (\Throwable $throwable) {
             return $this->failResponse($throwable->getMessage());
         }
