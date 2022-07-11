@@ -57,9 +57,6 @@
     },
     "config": {
         "optimize-autoloader": true,
-        "platform": {
-            "ext-zip": "1.0"
-        },
         "preferred-install": "dist",
         "sort-packages": true
     },
