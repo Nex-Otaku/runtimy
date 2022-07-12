@@ -2,9 +2,11 @@
 
 namespace App\Module\Operator\Nova;
 
+use App\Module\Admin\Access\LkAccess;
 use App\Module\Owner\Actions\AddCourierAction;
 use App\Module\Owner\Actions\RemoveCourierAction;
 use App\Nova\Resource;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\URL;
@@ -151,8 +153,16 @@ class Courier extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            AddCourierAction::make()->standalone(),
-            RemoveCourierAction::make(),
+            AddCourierAction::make()
+                ->standalone()
+                ->canSee(function (Request $request) {
+                    return LkAccess::of($request->user()->user_id)->canAddCouriers();
+                }),
+
+            RemoveCourierAction::make()
+                ->canSee(function ($request) {
+                    return LkAccess::of($request->user()->user_id)->canRemoveCouriers();
+                }),
         ];
     }
 }

@@ -42,13 +42,15 @@ class LkAccess
 
     public function canAddCouriers(): bool
     {
-        return $this->lkAccount->isOwner()
+        return $this->lkAccount->isOperator()
+            || $this->lkAccount->isOwner()
             || $this->lkAccount->isDeveloper();
     }
 
     public function canRemoveCouriers(): bool
     {
-        return $this->lkAccount->isOwner()
+        return $this->lkAccount->isOperator()
+            || $this->lkAccount->isOwner()
             || $this->lkAccount->isDeveloper();
     }
 
