@@ -173,7 +173,7 @@ class Order implements PaymentOrder
 
     public function serializeInfo(): array
     {
-        $orderStatus = $this->getOrderStatus();
+        $orderStatus = $this->getStatus();
         $isAssignedCourier = $this->isAssignedCourier();
         $courier = $this->getAssignedCourier();
 
@@ -234,9 +234,14 @@ class Order implements PaymentOrder
         return $places;
     }
 
-    private function getOrderStatus(): OrderStatus
+    private function getStatus(): OrderStatus
     {
         return OrderStatus::get($this);
+    }
+
+    public function getStatusLabel(): string
+    {
+        return $this->getStatus()->getStatusLabel();
     }
 
     private function getTransportTypeLabel(): string
@@ -265,7 +270,7 @@ class Order implements PaymentOrder
 
     public function cancel(): void
     {
-        $this->getOrderStatus()->setCanceled();
+        $this->getStatus()->setCanceled();
     }
 
     public function assignCourier(): void
@@ -279,8 +284,8 @@ class Order implements PaymentOrder
         $this->order->assigned_courier_id = $courier->getModelId();
         $this->order->saveOrFail();
 
-        $this->getOrderStatus()->setIsComing();
-        $this->getOrderStatus()->setNextPlace();
+        $this->getStatus()->setIsComing();
+        $this->getStatus()->setNextPlace();
     }
 
     private function getOrderPlaceByIndex(int $sortIndex): OrderPlace
