@@ -5,8 +5,10 @@ namespace App\Module\Operator\Nova;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Module\Customer\Entities\Order as OrderEntity;
 
 class Order extends Resource
 {
@@ -92,14 +94,17 @@ class Order extends Resource
             ID::make(__('ID'), 'id')->sortable(),
 
             // Статус
-            // TODO
+            Text::make('Статус', function () {
+                $order = OrderEntity::get($this->id);
+
+                return $order->getStatusLabel();
+            }),
 
             // Маршрут (Список мест через тире)
             // TODO
 
             // Стоимость (Нет "прочерк", Сумма)
-            // TODO
-            Text::make('Стоимость доставки', 'delivery_price')
+            Number::make('Стоимость доставки', 'delivery_price')
                 ->nullable()
                 ->sortable()
                 ->rules('required', 'max:255'),
