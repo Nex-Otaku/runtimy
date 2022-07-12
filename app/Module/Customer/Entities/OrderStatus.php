@@ -164,7 +164,12 @@ class OrderStatus
             return;
         }
 
-        $this->orderStatus->phase = self::PHASE_WAITING_FOR_PAYMENT;
+        if ($this->getOrder()->isPostPayment()) {
+            $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER;
+        } else {
+            $this->orderStatus->phase = self::PHASE_WAITING_FOR_PAYMENT;
+        }
+
         $this->orderStatus->is_active = true;
         $this->orderStatus->saveOrFail();
     }

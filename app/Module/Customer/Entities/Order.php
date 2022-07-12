@@ -307,4 +307,13 @@ class Order implements PaymentOrder
     {
         return $this->getStatus()->getRouteLabel();
     }
+
+    public function isPostPayment(): bool
+    {
+        // Временно мы затачиваемся на юриков, поэтому все заказы у нас идут по постоплате.
+        // Когда будут физики то сделаем различие по профилю клиента.
+        // Тип "постоплата" или "предоплата" должны быть записаны в заказ.
+
+        return true;
+    }
 }
