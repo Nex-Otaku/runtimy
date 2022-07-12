@@ -101,7 +101,11 @@ class Order extends Resource
             }),
 
             // Маршрут (Список мест через тире)
-            // TODO
+            Text::make('Маршрут', function () {
+                $order = OrderEntity::get($this->id);
+
+                return $order->getRouteLabel();
+            }),
 
             // Стоимость (Нет "прочерк", Сумма)
             Number::make('Стоимость доставки', 'delivery_price')
@@ -113,15 +117,9 @@ class Order extends Resource
             // TODO
 
             // Курьер (Не назначен "прочерк", Назначен "имя")
-            // TODO
-//            ID::make(__('Courier ID'), 'assigned_courier_id')
-//                ->nullable()
-//                ->sortable(),
             BelongsTo::make('Курьер', 'assignedCourier', Courier::class),
 
             // Покупатель (Телефон - первые и последние цифры +79..45, активная ссылка для звонка)
-            // TODO
-//            ID::make(__('Customer ID'), 'customer_id')->sortable(),
             BelongsTo::make('Клиент', 'customer', Customer::class),
 
 

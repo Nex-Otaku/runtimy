@@ -316,4 +316,24 @@ class OrderStatus
     {
         return Order::get($this->orderStatus->order_id);
     }
+
+    public function getRouteLabel(): string
+    {
+        $places = $this->getOrder()->getPlaces();
+        $result = [];
+
+        foreach ($places as $place) {
+            /** @var OrderStatusPlace $orderStatusPlace */
+            $orderStatusPlace = OrderStatusPlace::where(
+                [
+                    'order_status_id' => $this->orderStatus->id,
+                    'order_place_id' => $place->getModelId(),
+                ],
+            )->firstOrFail();
+
+            $result[$orderStatusPlace->sort_index] = $place->getStreetAddress();
+        }
+
+        return implode(' — ', $result);
+    }
 }
