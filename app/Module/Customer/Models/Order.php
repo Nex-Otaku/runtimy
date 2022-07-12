@@ -21,6 +21,16 @@ class Order extends Model
 {
     use HasFactory;
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function assignedCourier()
+    {
+        return $this->belongsTo(Courier::class, 'assigned_courier_id');
+    }
+
     protected $fillable = [
         'customer_id',
         'assigned_courier_id',

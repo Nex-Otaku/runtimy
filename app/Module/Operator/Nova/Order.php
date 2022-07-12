@@ -3,6 +3,7 @@
 namespace App\Module\Operator\Nova;
 
 use App\Nova\Resource;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -90,39 +91,61 @@ class Order extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            // Customer
-            ID::make(__('Customer ID'), 'customer_id')->sortable(),
+            // Статус
+            // TODO
 
-            // Courier
-            ID::make(__('Courier ID'), 'assigned_courier_id')
-                ->nullable()
-                ->sortable(),
+            // Маршрут (Список мест через тире)
+            // TODO
 
-            Text::make('Транспорт', 'transport_type')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Габариты', 'size_type')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Вес', 'weight_type')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Что везём', 'description')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Объявленная ценность', 'price_of_package')
-                ->nullable()
-                ->sortable()
-                ->rules('required', 'max:255'),
-
+            // Стоимость (Нет "прочерк", Сумма)
+            // TODO
             Text::make('Стоимость доставки', 'delivery_price')
                 ->nullable()
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            // Оплачено (Нет "прочерк", Ожидаем "часы", Оплачено "галочка")
+            // TODO
+
+            // Курьер (Не назначен "прочерк", Назначен "имя")
+            // TODO
+//            ID::make(__('Courier ID'), 'assigned_courier_id')
+//                ->nullable()
+//                ->sortable(),
+            BelongsTo::make('Курьер', 'assignedCourier', Courier::class),
+
+            // Покупатель (Телефон - первые и последние цифры +79..45, активная ссылка для звонка)
+            // TODO
+//            ID::make(__('Customer ID'), 'customer_id')->sortable(),
+            BelongsTo::make('Клиент', 'customer', Customer::class),
+
+
+//            Text::make('Транспорт', 'transport_type')
+//                ->sortable()
+//                ->rules('required', 'max:255')
+//                ->hideFromIndex(),
+//
+//            Text::make('Габариты', 'size_type')
+//                ->sortable()
+//                ->rules('required', 'max:255')
+//                ->hideFromIndex(),
+//
+//            Text::make('Вес', 'weight_type')
+//                ->sortable()
+//                ->rules('required', 'max:255')
+//                ->hideFromIndex(),
+//
+//            Text::make('Что везём', 'description')
+//                ->sortable()
+//                ->rules('required', 'max:255')
+//                ->hideFromIndex(),
+//
+//            Text::make('Объявленная ценность', 'price_of_package')
+//                ->nullable()
+//                ->sortable()
+//                ->rules('required', 'max:255')
+//                ->hideFromIndex(),
+
         ];
     }
 
@@ -167,6 +190,15 @@ class Order extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            // 1. Указать стоимость доставки
+            // TODO
+
+            // 2. Подтвердить платёж
+            // TODO
+
+            // 3. Назначить курьера
+            // TODO
+        ];
     }
 }
