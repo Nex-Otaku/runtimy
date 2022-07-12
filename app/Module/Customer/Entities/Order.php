@@ -49,7 +49,7 @@ class Order implements PaymentOrder
     {
         $order = new OrderModel(
             [
-                'customer_id' => $customer->getSpaUserId(),
+                'customer_id' => $customer->getCustomerModelId(),
                 'assigned_courier_id' => null,
                 'transport_type' => $params['transport_type'] ?? self::TRANSPORT_TYPE_FEET,
                 'size_type' => $params['size_type'] ?? self::SIZE_TYPE_SMALL,
@@ -117,7 +117,7 @@ class Order implements PaymentOrder
     {
         $model = OrderModel::where([
                                        'id' => $orderModelId,
-                                       'customer_id' => $customer->getSpaUserId(),
+                                       'customer_id' => $customer->getCustomerModelId(),
                                    ])->firstOrFail();
 
         return new self($model);
@@ -150,7 +150,7 @@ class Order implements PaymentOrder
     public static function findForCustomer(Customer $customer): array
     {
         $items = [];
-        $records = OrderModel::where(['customer_id' => $customer->getSpaUserId()])->get();
+        $records = OrderModel::where(['customer_id' => $customer->getCustomerModelId()])->get();
 
         foreach ($records as $record) {
             $items[] = new self($record);
@@ -301,5 +301,10 @@ class Order implements PaymentOrder
     public function getAmount(): Money
     {
         return Money::createFromString($this->order->delivery_price ?? '0');
+    }
+
+    public function getRouteLabel(): string
+    {
+        return $this->getStatus()->getRouteLabel();
     }
 }

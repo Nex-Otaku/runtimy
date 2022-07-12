@@ -4,6 +4,7 @@ namespace App\Module\Customer\Entities;
 
 use App\Module\MobileAuth\Entities\MobileAccount;
 use Illuminate\Support\Facades\Auth;
+use App\Module\Customer\Models\Customer as CustomerModel;
 
 class Customer
 {
@@ -26,8 +27,14 @@ class Customer
         return new self($mobileAccount->getModelUserId());
     }
 
-    public function getSpaUserId(): int
+    public function getCustomerModelId(): int
     {
-        return $this->spaUserId;
+        $customer = CustomerModel::where(
+            [
+                'user_id' => $this->spaUserId,
+            ]
+        )->firstOrFail();
+
+        return $customer->id;
     }
 }
