@@ -76,7 +76,7 @@ class Customer extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'phone_number',
     ];
 
     /**
