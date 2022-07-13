@@ -83,6 +83,15 @@ class Courier implements CourierAccount
         return new self($model);
     }
 
+    public static function listCourierOptions(): array
+    {
+        return CourierModel::query()
+            ->select('id', 'name')
+            ->get()
+            ->pluck('name', 'id')
+            ->all();
+    }
+
     public function getName(): string
     {
         return $this->courier->name;

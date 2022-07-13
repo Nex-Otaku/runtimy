@@ -100,4 +100,11 @@ class LkAccess
             || $this->lkAccount->isOwner()
             || $this->lkAccount->isDeveloper();
     }
+
+    public function canAssignCourier(): bool
+    {
+        return $this->lkAccount->isOperator()
+            || $this->lkAccount->isOwner()
+            || $this->lkAccount->isDeveloper();
+    }
 }

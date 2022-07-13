@@ -8,16 +8,16 @@ use App\Module\Customer\Models\OrderStatusPlace;
 class OrderStatus
 {
     private const PHASE_WAITING_FOR_PRICE = 'waiting-for-price';
-    private const PHASE_WAITING_FOR_PAYMENT = 'waiting-for-payment';
-    private const PHASE_WAITING_FOR_COURIER = 'waiting-for-courier';
-    private const PHASE_COMING              = 'coming';
+    private const PHASE_WAITING_FOR_PAYMENT        = 'waiting-for-payment';
+    private const PHASE_WAITING_FOR_COURIER_ASSIGN = 'waiting-for-courier-assign';
+    private const PHASE_COMING                     = 'coming';
     private const PHASE_CANCELED            = 'canceled';
     private const PHASE_COMPLETED           = 'completed';
 
     private const PHASE_LABELS = [
         self::PHASE_WAITING_FOR_PRICE => 'Ждём подтверждения оператором',
         self::PHASE_WAITING_FOR_PAYMENT => 'Ждём оплату',
-        self::PHASE_WAITING_FOR_COURIER => 'Ищем курьера',
+        self::PHASE_WAITING_FOR_COURIER_ASSIGN => 'Ищем курьера',
         self::PHASE_COMING => 'Курьер в пути',
         self::PHASE_CANCELED => 'Отменён',
         self::PHASE_COMPLETED => 'Завершён',
@@ -165,7 +165,7 @@ class OrderStatus
         }
 
         if ($this->getOrder()->isPostPayment()) {
-            $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER;
+            $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER_ASSIGN;
         } else {
             $this->orderStatus->phase = self::PHASE_WAITING_FOR_PAYMENT;
         }
@@ -176,7 +176,7 @@ class OrderStatus
 
     public function confirmPayment(): void
     {
-        if ($this->orderStatus->phase === self::PHASE_WAITING_FOR_COURIER) {
+        if ($this->orderStatus->phase === self::PHASE_WAITING_FOR_COURIER_ASSIGN) {
             return;
         }
 
@@ -184,7 +184,7 @@ class OrderStatus
             throw new \LogicException('Нельзя оплатить заказ, который не ожидает оплаты');
         }
 
-        $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER;
+        $this->orderStatus->phase = self::PHASE_WAITING_FOR_COURIER_ASSIGN;
         $this->orderStatus->is_active = true;
         $this->orderStatus->saveOrFail();
     }
@@ -345,5 +345,10 @@ class OrderStatus
     public function isWaitingForDeliveryPrice(): bool
     {
         return $this->orderStatus->phase === self::PHASE_WAITING_FOR_PRICE;
+    }
+
+    public function isWaitingForCourierAssign(): bool
+    {
+        return $this->orderStatus->phase === self::PHASE_WAITING_FOR_COURIER_ASSIGN;
     }
 }

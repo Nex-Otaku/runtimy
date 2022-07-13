@@ -278,14 +278,8 @@ class Order implements PaymentOrder
         $this->getStatus()->setCanceled();
     }
 
-    public function assignCourier(): void
+    public function assignCourier(Courier $courier): void
     {
-        $courier = Courier::findFirstAvailableCourier();
-
-        if ($courier === null) {
-            return;
-        }
-
         $this->order->assigned_courier_id = $courier->getModelId();
         $this->order->saveOrFail();
 
@@ -320,5 +314,10 @@ class Order implements PaymentOrder
         // Тип "постоплата" или "предоплата" должны быть записаны в заказ.
 
         return true;
+    }
+
+    public function isWaitingForCourierAssign(): bool
+    {
+        return OrderStatus::get($this)->isWaitingForCourierAssign();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Module\Operator\Nova;
 
 use App\Module\Admin\Access\LkAccess;
+use App\Module\Operator\Actions\AssignOrderCourierAction;
 use App\Module\Operator\Actions\SetOrderPriceAction;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
@@ -219,7 +220,20 @@ class Order extends Resource
             // TODO только для физиков, выставить флаг is_paid
 
             // 3. Назначить курьера
-            // TODO
+            AssignOrderCourierAction::make()
+                ->showInline()
+                ->canSee(function ($request) {
+                    $isAuthorized = LkAccess::of($request->user()->user_id)->canAssignCourier();
+
+                    if ($request instanceof ActionRequest) {
+                        return $isAuthorized;
+                    }
+
+                    return $isAuthorized
+                        && $this->resource instanceof OrderModel
+                        && $this->resource->exists
+                        && $this->getEntity($this->resource)->isWaitingForCourierAssign();
+                }),
         ];
     }
 
