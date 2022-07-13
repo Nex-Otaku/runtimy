@@ -21,7 +21,7 @@ class Environment
         $mode = env('APP_ENVIRONMENT_MODE', self::MODE_LOCAL);
 
         if ($mode === self::MODE_PRODUCTION) {
-            return new self(self::MODE_LOCAL);
+            return new self(self::MODE_PRODUCTION);
         }
 
         if ($mode === self::MODE_LOCAL) {
