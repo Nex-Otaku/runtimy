@@ -2,7 +2,6 @@
 
 namespace App\Module\Admin\Commands;
 
-use App\Module\Admin\LkAccountRegistry;
 use App\Module\Admin\Vo\Role;
 use App\Module\Common\ModuleSystem;
 use Illuminate\Console\Command;

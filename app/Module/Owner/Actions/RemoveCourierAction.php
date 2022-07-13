@@ -2,7 +2,6 @@
 
 namespace App\Module\Owner\Actions;
 
-use App\Module\Admin\LkAccountRegistry;
 use App\Module\Customer\Entities\Courier;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
