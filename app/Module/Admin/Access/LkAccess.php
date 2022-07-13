@@ -93,4 +93,11 @@ class LkAccess
             || $this->lkAccount->isOwner()
             || $this->lkAccount->isDeveloper();
     }
+
+    public function canSetOrderPrice(): bool
+    {
+        return $this->lkAccount->isOperator()
+            || $this->lkAccount->isOwner()
+            || $this->lkAccount->isDeveloper();
+    }
 }

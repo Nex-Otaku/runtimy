@@ -2,13 +2,17 @@
 
 namespace App\Module\Operator\Nova;
 
+use App\Module\Admin\Access\LkAccess;
+use App\Module\Operator\Actions\SetOrderPriceAction;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\ActionRequest;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Module\Customer\Entities\Order as OrderEntity;
+use App\Module\Customer\Models\Order as OrderModel;
 
 class Order extends Resource
 {
@@ -114,7 +118,8 @@ class Order extends Resource
                 ->rules('required', 'max:255'),
 
             // Оплачено (Нет "прочерк", Ожидаем "часы", Оплачено "галочка")
-            // TODO
+            // TODO флаг is_paid
+            // TODO поле payment_status none|waiting|post-payment|paid
 
             // Курьер (Не назначен "прочерк", Назначен "имя")
             BelongsTo::make('Курьер', 'assignedCourier', Courier::class),
@@ -195,13 +200,31 @@ class Order extends Resource
     {
         return [
             // 1. Указать стоимость доставки
-            // TODO
+            SetOrderPriceAction::make()
+                ->showInline()
+                ->canSee(function ($request) {
+                    $isAuthorized = LkAccess::of($request->user()->user_id)->canSetOrderPrice();
+
+                    if ($request instanceof ActionRequest) {
+                        return $isAuthorized;
+                    }
+
+                    return $isAuthorized
+                        && $this->resource instanceof OrderModel
+                        && $this->resource->exists
+                        && $this->getEntity($this->resource)->isWaitingForDeliveryPrice();
+                }),
 
             // 2. Подтвердить платёж
-            // TODO
+            // TODO только для физиков, выставить флаг is_paid
 
             // 3. Назначить курьера
             // TODO
         ];
+    }
+
+    private function getEntity(OrderModel $resource): OrderEntity
+    {
+        return OrderEntity::get($resource->id);
     }
 }

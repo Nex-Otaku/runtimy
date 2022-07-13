@@ -159,6 +159,11 @@ class Order implements PaymentOrder
         return $items;
     }
 
+    public function isWaitingForDeliveryPrice(): bool
+    {
+        return OrderStatus::get($this)->isWaitingForDeliveryPrice();
+    }
+
     public function setDeliveryPrice(Money $price): void
     {
         $this->order->delivery_price = $price->toString();

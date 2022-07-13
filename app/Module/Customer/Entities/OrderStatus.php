@@ -341,4 +341,9 @@ class OrderStatus
 
         return implode(' — ', $result);
     }
+
+    public function isWaitingForDeliveryPrice(): bool
+    {
+        return $this->orderStatus->phase === self::PHASE_WAITING_FOR_PRICE;
+    }
 }
