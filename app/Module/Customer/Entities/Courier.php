@@ -2,9 +2,9 @@
 
 namespace App\Module\Customer\Entities;
 
+use App\Module\Common\ModuleSystem;
 use App\Module\Common\PhoneNumber;
 use App\Module\Customer\Contracts\CourierAccount;
-use App\Module\Customer\Contracts\CourierAccountRegistry;
 use App\Module\Customer\Models\Courier as CourierModel;
 use Faker\Factory;
 
@@ -19,12 +19,11 @@ class Courier implements CourierAccount
         $this->courier = $Courier;
     }
 
-    public static function createRandom(CourierAccountRegistry $courierAccountRegistry): self
+    public static function createRandom(): self
     {
         $faker = Factory::create();
 
         return self::create(
-            $courierAccountRegistry,
             $faker->name(),
             $faker->imageUrl(),
             PhoneNumber::fromFakerString($faker->phoneNumber())
@@ -32,13 +31,11 @@ class Courier implements CourierAccount
     }
 
     public static function createFromLk(
-        CourierAccountRegistry $courierAccountRegistry,
         string $name,
         PhoneNumber $phoneNumber
     ): self
     {
         return self::create(
-            $courierAccountRegistry,
             $name,
             null,
             $phoneNumber
@@ -46,12 +43,12 @@ class Courier implements CourierAccount
     }
 
     private static function create(
-        CourierAccountRegistry $courierAccountRegistry,
         string $name,
         ?string $url,
         PhoneNumber $phoneNumber
     ): self
     {
+        $courierAccountRegistry = ModuleSystem::instance()->getCourierAccountRegistry();
         $courierAccount = $courierAccountRegistry->registerCourier();
 
         $courier = new CourierModel(
@@ -106,8 +103,9 @@ class Courier implements CourierAccount
         return $this->courier->id;
     }
 
-    public function remove(CourierAccountRegistry $courierAccountRegistry): void
+    public function remove(): void
     {
+        $courierAccountRegistry = ModuleSystem::instance()->getCourierAccountRegistry();
         $courierAccountRegistry->removeCourier($this);
         $this->courier->delete();
     }

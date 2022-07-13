@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Module\Admin\LkAccountRegistry;
 use App\Module\Customer\Entities\Courier;
 use Illuminate\Database\Seeder;
 
@@ -15,6 +14,6 @@ class CouriersTableSeeder extends Seeder
      */
     public function run()
     {
-        Courier::createRandom(LkAccountRegistry::instance());
+        Courier::createRandom();
     }
 }

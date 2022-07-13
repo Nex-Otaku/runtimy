@@ -32,7 +32,7 @@ class RemoveCourierAction extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            Courier::getByModelId($model->id)->remove(LkAccountRegistry::instance());
+            Courier::getByModelId($model->id)->remove();
         }
     }
 

@@ -4,6 +4,7 @@ namespace App\Module\Admin\Commands;
 
 use App\Module\Admin\LkAccountRegistry;
 use App\Module\Admin\Vo\Role;
+use App\Module\Common\ModuleSystem;
 use Illuminate\Console\Command;
 
 class RegisterAccount extends Command
@@ -35,7 +36,8 @@ class RegisterAccount extends Command
         $roleCode = $this->choice('Роль', Role::getLkChoices());
         $role = Role::fromString($roleCode);
 
-        LkAccountRegistry::instance()->registerLkAccount($name, $email, $password, $role);
+        ModuleSystem::instance()->getCourierAccountRegistry()
+                                ->registerLkAccount($name, $email, $password, $role);
 
         $this->info('Аккаунт создан.');
 

@@ -35,7 +35,7 @@ class AddCourierAction extends Action
     {
         $name = $fields->get('name');
         $phoneNumber = PhoneNumber::fromInputString($fields->get('phone_number'));
-        Courier::createFromLk(LkAccountRegistry::instance(), $name, $phoneNumber);
+        Courier::createFromLk($name, $phoneNumber);
     }
 
     /**

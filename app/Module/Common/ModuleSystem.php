@@ -3,6 +3,7 @@
 namespace App\Module\Common;
 
 use App\Module\Admin\LkAccountRegistry;
+use App\Module\Customer\Contracts\CourierAccountRegistry;
 use App\Module\MobileAuth\Contracts\MobileAccountRegistry;
 use App\Nova\Contracts\NovaUserRegistry;
 
@@ -23,6 +24,11 @@ class ModuleSystem
     }
 
     public function getNovaUserRegistry(): NovaUserRegistry
+    {
+        return LkAccountRegistry::instance();
+    }
+
+    public function getCourierAccountRegistry(): CourierAccountRegistry
     {
         return LkAccountRegistry::instance();
     }
