@@ -155,9 +155,9 @@ module.exports = configure(function (ctx) {
 
 
       manifest: {
-        name: `Runtimy Delivery`,
-        short_name: `Runtimy Delivery`,
-        description: `Delivery App`,
+        name: `Runtimy`,
+        short_name: `Runtimy`,
+        description: `Runtimy Delivery App`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

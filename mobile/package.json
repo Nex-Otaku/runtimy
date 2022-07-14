@@ -1,8 +1,8 @@
 {
   "name": "runtimy",
   "version": "0.0.1",
-  "description": "Delivery App",
-  "productName": "Runtimy Delivery",
+  "description": "Runtimy Delivery App",
+  "productName": "Runtimy",
   "author": "Nex <nex@otaku.ru>",
   "private": true,
   "scripts": {

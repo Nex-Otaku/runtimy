@@ -1,6 +1,6 @@
-# Runtimy Delivery (runtimy)
+# Runtimy (runtimy)
 
-Delivery App
+Runtimy Delivery App
 
 ## Install the dependencies
 ```bash
