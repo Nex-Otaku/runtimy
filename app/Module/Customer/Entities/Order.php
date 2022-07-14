@@ -161,19 +161,19 @@ class Order implements PaymentOrder
 
     public function isWaitingForDeliveryPrice(): bool
     {
-        return OrderStatus::get($this)->isWaitingForDeliveryPrice();
+        return $this->getStatus()->isWaitingForDeliveryPrice();
     }
 
     public function setDeliveryPrice(Money $price): void
     {
         $this->order->delivery_price = $price->toString();
         $this->order->saveOrFail();
-        OrderStatus::get($this)->markPriceWasAssigned();
+        $this->getStatus()->markPriceWasAssigned();
     }
 
     public function confirmPayment(): void
     {
-        OrderStatus::get($this)->confirmPayment();
+        $this->getStatus()->confirmPayment();
     }
 
     public function serializeInfo(): array
@@ -318,6 +318,6 @@ class Order implements PaymentOrder
 
     public function isWaitingForCourierAssign(): bool
     {
-        return OrderStatus::get($this)->isWaitingForCourierAssign();
+        return $this->getStatus()->isWaitingForCourierAssign();
     }
 }
