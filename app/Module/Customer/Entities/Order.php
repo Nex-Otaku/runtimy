@@ -320,4 +320,9 @@ class Order implements PaymentOrder
     {
         return $this->getStatus()->isWaitingForCourierAssign();
     }
+
+    public function canBeCanceled(): bool
+    {
+        return $this->getStatus()->canBeCanceled();
+    }
 }
