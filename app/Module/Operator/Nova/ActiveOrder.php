@@ -17,7 +17,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Module\Customer\Entities\Order as OrderEntity;
 use App\Module\Customer\Models\Order as OrderModel;
 
-class Order extends Resource
+class ActiveOrder extends Resource
 {
     /**
      * The logical group associated with the resource.
@@ -88,6 +88,12 @@ class Order extends Resource
     public static $search = [
         'id',
     ];
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return $query->join('order_statuses', 'orders.id', '=', 'order_statuses.order_id')
+                     ->where('order_statuses.is_active', 1);
+    }
 
     /**
      * Get the fields displayed by the resource.
