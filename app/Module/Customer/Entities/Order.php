@@ -325,4 +325,14 @@ class Order implements PaymentOrder
     {
         return $this->getStatus()->canBeCanceled();
     }
+
+    public function complete(): void
+    {
+        $this->getStatus()->setCompleted();
+    }
+
+    public function canBeCompleted(): bool
+    {
+        return $this->getStatus()->canBeCompleted();
+    }
 }

@@ -114,4 +114,11 @@ class LkAccess
             || $this->lkAccount->isOwner()
             || $this->lkAccount->isDeveloper();
     }
+
+    public function canCompleteOrder(): bool
+    {
+        return $this->lkAccount->isOperator()
+            || $this->lkAccount->isOwner()
+            || $this->lkAccount->isDeveloper();
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Module\Operator\Nova;
 use App\Module\Admin\Access\LkAccess;
 use App\Module\Operator\Actions\AssignOrderCourierAction;
 use App\Module\Operator\Actions\CancelOrderAction;
+use App\Module\Operator\Actions\CompleteOrderAction;
 use App\Module\Operator\Actions\SetOrderPriceAction;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
@@ -249,6 +250,21 @@ class Order extends Resource
                         && $this->resource instanceof OrderModel
                         && $this->resource->exists
                         && $this->getEntity($this->resource)->canBeCanceled();
+                }),
+
+            CompleteOrderAction::make()
+                ->showInline()
+                ->canSee(function ($request) {
+                    $isAuthorized = LkAccess::of($request->user()->user_id)->canCompleteOrder();
+
+                    if ($request instanceof ActionRequest) {
+                        return $isAuthorized;
+                    }
+
+                    return $isAuthorized
+                        && $this->resource instanceof OrderModel
+                        && $this->resource->exists
+                        && $this->getEntity($this->resource)->canBeCompleted();
                 }),
 
 

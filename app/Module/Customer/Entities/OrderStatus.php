@@ -242,6 +242,13 @@ class OrderStatus
         $this->orderStatus->saveOrFail();
     }
 
+    public function setCompleted(): void
+    {
+        $this->orderStatus->phase = self::PHASE_COMPLETED;
+        $this->orderStatus->is_active = false;
+        $this->orderStatus->saveOrFail();
+    }
+
     public function setIsComing(): void
     {
         $this->orderStatus->phase = self::PHASE_COMING;
@@ -303,15 +310,22 @@ class OrderStatus
 
     public function canBeCanceled(): bool
     {
-        return !in_array(
-            $this->orderStatus->phase,
-            [self::PHASE_CANCELED, self::PHASE_COMPLETED]
-        );
+        return !$this->isFinalState();
+    }
+
+    public function canBeCompleted(): bool
+    {
+        return !$this->isFinalState();
     }
 
     public function canBeEdited(): bool
     {
-        return !in_array(
+        return !$this->isFinalState();
+    }
+
+    private function isFinalState(): bool
+    {
+        return in_array(
             $this->orderStatus->phase,
             [self::PHASE_CANCELED, self::PHASE_COMPLETED]
         );
