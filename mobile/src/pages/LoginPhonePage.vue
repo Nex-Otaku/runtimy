@@ -7,9 +7,10 @@
             v-model="authFormStore.phoneNumber"
             label="Телефон"
             type="tel"
-            mask="+7 (###) ### - ####"
+            mask="+7 (###) ### - #####"
             fill-mask
             unmasked-value
+            @update:model-value="phoneInputValueAboutToChange"
           />
           <div class="row justify-center q-mt-md">
             <q-btn
@@ -29,6 +30,7 @@ import {defineComponent, nextTick, ref} from "vue";
 import {useAuth} from "stores/auth";
 import {useAuthForm} from "stores/auth-form";
 import {useRouter} from "vue-router";
+import {useQuasar} from "quasar";
 
 export default defineComponent({
   name: 'LoginPhonePage',
@@ -66,10 +68,19 @@ export default defineComponent({
       })
     }
 
+    const phoneInputValueAboutToChange = (value) => {
+      if ((value.length > 0) && (['7', '8'].includes(value.substring(0, 1)))) {
+        nextTick(function () {
+          authFormStore.phoneNumber = value.substring(1);
+        })
+      }
+    }
+
     return {
       authFormStore,
       phoneLoginForm,
       phoneSubmitClicked,
+      phoneInputValueAboutToChange,
     }
   }
 })
