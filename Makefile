@@ -42,7 +42,7 @@ seed:
 	$(ARTISAN) migrate:fresh --seed
 
 tinker:
-	docker exec -ti runtimy_php_container php artisan tinker
+	docker exec -ti ${PHP_CONTAINER} php artisan tinker
 
 # -------------- Deploy to Prod -------------------
 
